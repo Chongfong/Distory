@@ -8,10 +8,12 @@ import {
 import TextEditor from '../components/TextEditor';
 import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
 import { db } from '../firestore/firestore';
+import PhotoEditor from '../components/ImageEditor';
 
 export default function CreateNewDiary() {
   const [titleValue, setTitleValue] = useState('Please enter the title');
   const [diaryContentValue, setDiaryContentValue] = useState();
+  const [imageUrl, setImageUrl] = useState();
   const diarydoc = doc(collection(db, 'articles'));
 
   const saveNewDiaryDB = () => {
@@ -32,8 +34,15 @@ export default function CreateNewDiary() {
       <TextEditor
         diaryContentValue={diaryContentValue}
         setDiaryContentValue={setDiaryContentValue}
+        imageUrl={imageUrl}
       />
       <br />
+      <PhotoEditor
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+        diaryContentValue={diaryContentValue}
+        setDiaryContentValue={setDiaryContentValue}
+      />
       <div
         onClick={saveNewDiaryDB}
         onKeyUp={saveNewDiaryDB}

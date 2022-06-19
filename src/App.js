@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Hello World</h1>
+        <h1>發布新文章</h1>
         <CreateNewDiary />
       </header>
     </div>
