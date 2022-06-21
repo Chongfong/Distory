@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 
 export const firebaseApp = initializeApp({
@@ -10,5 +11,7 @@ export const firebaseApp = initializeApp({
   appId: process.env.REACT_APP_FIREBASE_MESSAGING_APP_ID,
   measurementId: process.env.REACT_APP_FIREBASE_MESSAGING_MEASUREMENT_ID,
 });
+
+export const storage = getStorage(firebaseApp);
 
 export const db = getFirestore(firebaseApp);
