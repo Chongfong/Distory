@@ -10,7 +10,7 @@ class CustomQuill extends ReactQuill {
     this.unhookEditor(this.editor);
   }
 }
-export default function TextEditor({ diaryContentValue, setDiaryContentValue }) {
+export default function TextEditor({ diaryContentValue, setDiaryContentValue, textEditorRef }) {
   const modules = {
     toolbar: [
       [{ size: ['small', false, 'large', 'huge'] }],
@@ -37,16 +37,18 @@ export default function TextEditor({ diaryContentValue, setDiaryContentValue }) 
   };
 
   return (
-    <CustomQuill theme="snow" value={diaryContentValue} modules={modules} onChange={setDiaryContentValue} />
+    <CustomQuill theme="snow" ref={textEditorRef} value={diaryContentValue} modules={modules} onChange={setDiaryContentValue} />
   );
 }
 
 TextEditor.propTypes = {
   diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
+  textEditorRef: PropTypes.string,
 };
 
 TextEditor.defaultProps = {
   diaryContentValue: '',
   setDiaryContentValue: () => {},
+  textEditorRef: '',
 };
