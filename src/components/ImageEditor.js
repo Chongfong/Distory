@@ -1,30 +1,65 @@
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
-import React, {
-  useEffect, useRef,
-} from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import myTheme from './imageEditorTheme';
 
+import { storage } from '../firestore/firestore';
+
 export default function PhotoEditor({
-  setImageUrl, diaryContentValue, setDiaryContentValue,
-  outputImage, imageUrl, openImageEditor,
+  diaryContentValue, setDiaryContentValue,
+  imageUrl, openImageEditor, setOpenImageEditor,
 }) {
   const editorRef = useRef();
   const imageRef = useRef();
+  const testURL = useRef();
 
   imageRef.current = '';
 
-  const logImageContent = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
     const editorInstance = editorRef.current.getInstance();
     const dataURL = editorInstance.toDataURL();
-    setImageUrl(dataURL);
-    setDiaryContentValue(`${diaryContentValue} <img src="${dataURL}">`);
-  };
 
-  useEffect(() => {
-    imageRef.current = outputImage;
-  }, [outputImage]);
+    const metadata = {
+      contentType: 'image/jpeg',
+    };
+
+    fetch(dataURL)
+      .then((res) => res.blob())
+      .then((imageBlob) => {
+        testURL.current = imageBlob;
+
+        const file = testURL.current;
+        const storageRef = ref(storage, `files/picture${file.size}`);
+        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+        uploadTask.on(
+          'state_changed',
+          () => {},
+          (error) => {
+            switch (error.code) {
+              case 'storage/unauthorized':
+                break;
+              case 'storage/canceled':
+                break;
+              case 'storage/unknown':
+                break;
+              default:
+                break;
+            }
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setDiaryContentValue(`${diaryContentValue} <img src="${downloadURL}">`);
+              setOpenImageEditor(false);
+            });
+          },
+        );
+      });
+  };
 
   return (
     <>
@@ -82,8 +117,9 @@ export default function PhotoEditor({
                 usageStatistics: false,
               }}
             />
-            <button type="button" onClick={logImageContent}>完成編輯</button>
-
+            <form onSubmit={handleSubmit}>
+              <button type="submit">完成編輯</button>
+            </form>
           </>
         )
         : (
@@ -92,25 +128,23 @@ export default function PhotoEditor({
             style={{ display: 'none' }}
           />
         ) }
-      <button type="button">Click</button>
+      <button type="button">Delete</button>
     </>
   );
 }
 
 PhotoEditor.propTypes = {
   diaryContentValue: PropTypes.string,
-  setImageUrl: PropTypes.func,
   setDiaryContentValue: PropTypes.func,
-  outputImage: PropTypes.string,
   imageUrl: PropTypes.string,
   openImageEditor: PropTypes.bool,
+  setOpenImageEditor: PropTypes.func,
 };
 
 PhotoEditor.defaultProps = {
   diaryContentValue: '',
-  setImageUrl: () => {},
   setDiaryContentValue: () => {},
-  outputImage: '',
   imageUrl: '',
   openImageEditor: false,
+  setOpenImageEditor: () => {},
 };

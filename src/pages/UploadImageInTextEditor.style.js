@@ -46,7 +46,7 @@ const ListItem = styled('li')`
 `;
 
 export default function DropDownButton(
-  { setLoadFromFile, setLoadFromUrl, setImgUrl },
+  { setLoadFromFile, setLoadFromUrl, setImageUrl },
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -54,7 +54,7 @@ export default function DropDownButton(
   const toggling = () => setIsOpen(!isOpen);
 
   const uploadFromFile = () => {
-    setImgUrl();
+    setImageUrl();
     setSelectedOption('上傳圖片');
     setLoadFromUrl(false);
     setLoadFromFile(true);
@@ -62,7 +62,7 @@ export default function DropDownButton(
   };
 
   const uploadFromUrl = () => {
-    setImgUrl();
+    setImageUrl();
     setSelectedOption('圖片網址');
     setLoadFromFile(false);
     setLoadFromUrl(true);
@@ -93,11 +93,11 @@ export default function DropDownButton(
 DropDownButton.propTypes = {
   setLoadFromFile: PropTypes.func,
   setLoadFromUrl: PropTypes.func,
-  setImgUrl: PropTypes.func,
+  setImageUrl: PropTypes.func,
 };
 
 DropDownButton.defaultProps = {
   setLoadFromFile: () => {},
   setLoadFromUrl: () => {},
-  setImgUrl: () => {},
+  setImageUrl: () => {},
 };

@@ -20,8 +20,6 @@ export default function CreateNewDiary() {
   const [loadFromFile, setLoadFromFile] = useState();
   const [loadFromUrl, setLoadFromUrl] = useState();
 
-  const [outputImage, setOutputImage] = useState();
-
   const [openImageEditor, setOpenImageEditor] = useState(false);
 
   const textEditorRef = useRef();
@@ -65,14 +63,11 @@ export default function CreateNewDiary() {
         setOpenImageEditor={setOpenImageEditor}
       />
       <PhotoEditor
-        outputImage={outputImage}
-        setOutputImage={setOutputImage}
-        setImageUrl={setImageUrl}
         diaryContentValue={diaryContentValue}
         setDiaryContentValue={setDiaryContentValue}
         imageUrl={imageUrl}
         openImageEditor={openImageEditor}
-        textEditorRef={textEditorRef}
+        setOpenImageEditor={setOpenImageEditor}
       />
       <div
         onClick={saveNewDiaryDB}

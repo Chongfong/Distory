@@ -1,62 +1,42 @@
 import React, { useState } from 'react';
-
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import PropTypes from 'prop-types';
-import { storage } from '../firestore/firestore';
 
 export default function UploadImageInTextEditor({
   loadFromFile, loadFromUrl, imageUrl, setImageUrl, setOpenImageEditor,
 }) {
   const [url, setUrl] = useState();
 
-  const metadata = {
-    contentType: 'image/jpeg',
+  const convertBase64 = (file) => new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+
+  const uploadImage = async (event) => {
+    const file = event.target.files[0];
+    const base64 = await convertBase64(file);
+    setImageUrl(base64);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const file = e.target[0]?.files[0];
-    const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'svg'];
-    if (!file) return;
-    if (!imageTypes.includes(file.type.slice(6))) {
-      alert('Please upload the image file');
-      return;
-    }
-    const storageRef = ref(storage, `files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
-    uploadTask.on(
-      'state_changed',
-      () => {},
-      (error) => {
-        switch (error.code) {
-          case 'storage/unauthorized':
-            break;
-          case 'storage/canceled':
-            break;
-          case 'storage/unknown':
-            break;
-          default:
-            break;
-        }
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImageUrl(downloadURL);
-        });
-      },
-    );
-  };
   return (
     <>
       {loadFromFile
       && (
-      <form onSubmit={handleSubmit}>
+      <form>
         <input
           type="file"
           accept="image/*"
+          onChange={(e) => {
+            uploadImage(e);
+          }}
         />
-        <button type="submit">upload to firebase</button>
       </form>
       )}
       {loadFromUrl
