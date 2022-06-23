@@ -9,7 +9,7 @@ import { storage } from '../firestore/firestore';
 
 export default function PhotoEditor({
   diaryContentValue, setDiaryContentValue,
-  imageUrl, openImageEditor, setOpenImageEditor,
+  imageUrl, setImageUrl, openImageEditor, setOpenImageEditor,
 }) {
   const editorRef = useRef();
   const imageRef = useRef();
@@ -55,6 +55,7 @@ export default function PhotoEditor({
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               setDiaryContentValue(`${diaryContentValue} <img src="${downloadURL}">`);
               setOpenImageEditor(false);
+              setImageUrl();
             });
           },
         );
@@ -137,6 +138,7 @@ PhotoEditor.propTypes = {
   diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
   imageUrl: PropTypes.string,
+  setImageUrl: PropTypes.func,
   openImageEditor: PropTypes.bool,
   setOpenImageEditor: PropTypes.func,
 };
@@ -145,6 +147,7 @@ PhotoEditor.defaultProps = {
   diaryContentValue: '',
   setDiaryContentValue: () => {},
   imageUrl: '',
+  setImageUrl: () => {},
   openImageEditor: false,
   setOpenImageEditor: () => {},
 };

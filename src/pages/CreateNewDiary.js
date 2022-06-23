@@ -66,6 +66,7 @@ export default function CreateNewDiary() {
         diaryContentValue={diaryContentValue}
         setDiaryContentValue={setDiaryContentValue}
         imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
         openImageEditor={openImageEditor}
         setOpenImageEditor={setOpenImageEditor}
       />
