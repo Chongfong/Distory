@@ -19,6 +19,7 @@ export default function CreateNewDiary() {
 
   const [loadFromFile, setLoadFromFile] = useState();
   const [loadFromUrl, setLoadFromUrl] = useState();
+  const [url, setUrl] = useState();
 
   const [openImageEditor, setOpenImageEditor] = useState(false);
 
@@ -61,6 +62,8 @@ export default function CreateNewDiary() {
         imageUrl={imageUrl}
         setImageUrl={setImageUrl}
         setOpenImageEditor={setOpenImageEditor}
+        url={url}
+        setUrl={setUrl}
       />
       <PhotoEditor
         diaryContentValue={diaryContentValue}
@@ -69,6 +72,8 @@ export default function CreateNewDiary() {
         setImageUrl={setImageUrl}
         openImageEditor={openImageEditor}
         setOpenImageEditor={setOpenImageEditor}
+        url={url}
+        setUrl={setUrl}
       />
       <div
         onClick={saveNewDiaryDB}

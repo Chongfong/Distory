@@ -44,7 +44,7 @@ export default function TextEditor({ diaryContentValue, setDiaryContentValue, te
 TextEditor.propTypes = {
   diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
-  textEditorRef: PropTypes.string,
+  textEditorRef: PropTypes.shape({}),
 };
 
 TextEditor.defaultProps = {

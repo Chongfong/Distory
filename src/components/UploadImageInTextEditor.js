@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function UploadImageInTextEditor({
-  loadFromFile, loadFromUrl, imageUrl, setImageUrl, setOpenImageEditor,
+  loadFromFile, loadFromUrl, imageUrl, setImageUrl, setOpenImageEditor, url, setUrl,
 }) {
-  const [url, setUrl] = useState();
-
   const convertBase64 = (file) => new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
@@ -77,6 +75,8 @@ UploadImageInTextEditor.propTypes = {
   imageUrl: PropTypes.string,
   setImageUrl: PropTypes.func,
   setOpenImageEditor: PropTypes.func,
+  url: PropTypes.string,
+  setUrl: PropTypes.func,
 };
 
 UploadImageInTextEditor.defaultProps = {
@@ -85,4 +85,6 @@ UploadImageInTextEditor.defaultProps = {
   imageUrl: '',
   setImageUrl: () => {},
   setOpenImageEditor: () => {},
+  url: '',
+  setUrl: () => {},
 };

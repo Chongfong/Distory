@@ -9,8 +9,20 @@ import { storage } from '../firestore/firestore';
 
 export default function PhotoEditor({
   diaryContentValue, setDiaryContentValue,
-  imageUrl, setImageUrl, openImageEditor, setOpenImageEditor,
+  imageUrl, setImageUrl, openImageEditor, setOpenImageEditor, setUrl,
 }) {
+  function uuid() {
+    let d = Date.now();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+      d += performance.now();
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (d + Math.random() * 16) % 16 || 0;
+      d = Math.floor(d / 16);
+      return (c === 'x' ? r : ((r && 0x3) || 0x8)).toString(16);
+    });
+  }
+
   const editorRef = useRef();
   const imageRef = useRef();
   const testURL = useRef();
@@ -33,7 +45,7 @@ export default function PhotoEditor({
         testURL.current = imageBlob;
 
         const file = testURL.current;
-        const storageRef = ref(storage, `files/picture${file.size}`);
+        const storageRef = ref(storage, `files/${uuid()}`);
         const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
         uploadTask.on(
@@ -56,6 +68,7 @@ export default function PhotoEditor({
               setDiaryContentValue(`${diaryContentValue} <img src="${downloadURL}">`);
               setOpenImageEditor(false);
               setImageUrl();
+              setUrl();
             });
           },
         );
@@ -141,6 +154,7 @@ PhotoEditor.propTypes = {
   setImageUrl: PropTypes.func,
   openImageEditor: PropTypes.bool,
   setOpenImageEditor: PropTypes.func,
+  setUrl: PropTypes.func,
 };
 
 PhotoEditor.defaultProps = {
@@ -150,4 +164,5 @@ PhotoEditor.defaultProps = {
   setImageUrl: () => {},
   openImageEditor: false,
   setOpenImageEditor: () => {},
+  setUrl: () => {},
 };
