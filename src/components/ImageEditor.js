@@ -1,16 +1,69 @@
+/* eslint-disable max-classes-per-file */
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
 import React, { useRef } from 'react';
+import { Quill } from 'react-quill';
 import PropTypes from 'prop-types';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import myTheme from './imageEditorTheme';
+import '../css/textEditor.css';
 
 import { storage } from '../firestore/firestore';
 
 export default function PhotoEditor({
   diaryContentValue, setDiaryContentValue,
   imageUrl, setImageUrl, openImageEditor, setOpenImageEditor, setUrl,
+  textEditorRef,
 }) {
+  const editorRef = useRef();
+  const BlockEmbed = Quill.import('blots/block/embed');
+  const Block = Quill.import('blots/block');
+
+  class ClickButtonBlot extends Block {
+    static create(value) {
+      const node = super.create();
+      node.setAttribute('src', value.url);
+      node.setAttribute('class', value.class);
+      node.addEventListener('click', (e) => {
+        e.preventDefault();
+        setOpenImageEditor(true);
+        setImageUrl(value.url);
+      }, false);
+      return node;
+    }
+
+    static value(node) {
+      return {
+        url: node.getAttribute('src'),
+        class: node.getAttribute('class'),
+      };
+    }
+  }
+  class ImageBlot extends BlockEmbed {
+    static create(value) {
+      const node = super.create();
+      node.setAttribute('alt', value.alt);
+      node.setAttribute('src', value.url);
+      node.setAttribute('class', value.class);
+      return node;
+    }
+
+    static value(node) {
+      return {
+        alt: node.getAttribute('alt'),
+        url: node.getAttribute('src'),
+        class: node.getAttribute('class'),
+
+      };
+    }
+  }
+  ImageBlot.blotName = 'image';
+  ImageBlot.tagName = 'img';
+  ClickButtonBlot.blotName = 'clickButton';
+  ClickButtonBlot.tagName = 'clickButton';
+  Quill.register(ImageBlot);
+  Quill.register(ClickButtonBlot);
+
   function uuid() {
     let d = Date.now();
     if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
@@ -23,7 +76,6 @@ export default function PhotoEditor({
     });
   }
 
-  const editorRef = useRef();
   const imageRef = useRef();
   const testURL = useRef();
 
@@ -31,6 +83,15 @@ export default function PhotoEditor({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    let cursorPosition;
+    if (textEditorRef.current.editor.getSelection()) {
+      cursorPosition = textEditorRef.current.editor.getSelection().index;
+    } else {
+      cursorPosition = 0;
+    }
+    textEditorRef.current.editor.deleteText(cursorPosition - 1, 4);
+    textEditorRef.current.editor.setSelection(cursorPosition - 1);
 
     const editorInstance = editorRef.current.getInstance();
     const dataURL = editorInstance.toDataURL();
@@ -133,16 +194,14 @@ export default function PhotoEditor({
             />
             <form onSubmit={handleSubmit}>
               <button type="submit">完成編輯</button>
+              <button type="button" onClick={() => setOpenImageEditor(false)}>取消關閉</button>
             </form>
           </>
         )
         : (
-          <ImageEditor
-            ref={editorRef}
-            style={{ display: 'none' }}
-          />
+          <div />
         ) }
-      <button type="button">Delete</button>
+      <div />
     </>
   );
 }
@@ -155,6 +214,7 @@ PhotoEditor.propTypes = {
   openImageEditor: PropTypes.bool,
   setOpenImageEditor: PropTypes.func,
   setUrl: PropTypes.func,
+  textEditorRef: PropTypes.string,
 };
 
 PhotoEditor.defaultProps = {
@@ -165,4 +225,5 @@ PhotoEditor.defaultProps = {
   openImageEditor: false,
   setOpenImageEditor: () => {},
   setUrl: () => {},
+  textEditorRef: '',
 };

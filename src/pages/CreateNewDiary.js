@@ -59,11 +59,10 @@ export default function CreateNewDiary() {
       <UploadImageInTextEditor
         loadFromFile={loadFromFile}
         loadFromUrl={loadFromUrl}
-        imageUrl={imageUrl}
         setImageUrl={setImageUrl}
-        setOpenImageEditor={setOpenImageEditor}
         url={url}
         setUrl={setUrl}
+        textEditorRef={textEditorRef}
       />
       <PhotoEditor
         diaryContentValue={diaryContentValue}
@@ -74,6 +73,7 @@ export default function CreateNewDiary() {
         setOpenImageEditor={setOpenImageEditor}
         url={url}
         setUrl={setUrl}
+        textEditorRef={textEditorRef}
       />
       <div
         onClick={saveNewDiaryDB}

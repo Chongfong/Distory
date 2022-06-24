@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+import { Quill } from 'react-quill';
 
 export default function UploadImageInTextEditor({
-  loadFromFile, loadFromUrl, imageUrl, setImageUrl, setOpenImageEditor, url, setUrl,
+  loadFromFile, loadFromUrl, setImageUrl, url, setUrl,
+  textEditorRef,
+
 }) {
+  const base64ImageUrl = useRef();
+  const insertEditablePhoto = (uploadImageUrl) => {
+    let cursorPosition;
+    if (textEditorRef.current.editor.getSelection()) {
+      cursorPosition = textEditorRef.current.editor.getSelection().index;
+    } else {
+      cursorPosition = 0;
+    }
+    textEditorRef.current.editor.insertEmbed(cursorPosition + 1, 'image', {
+      alt: `image${Date.now()}`,
+      url: uploadImageUrl,
+      class: 'diary_image',
+    }, Quill.sources.USER);
+    textEditorRef.current.editor.insertEmbed(cursorPosition + 1, 'clickButton', {
+      url: uploadImageUrl,
+      class: 'diary_click_button',
+    }, Quill.sources.USER);
+
+    textEditorRef.current.editor.setSelection(cursorPosition);
+  };
+
   const convertBase64 = (file) => new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
@@ -21,6 +45,8 @@ export default function UploadImageInTextEditor({
     const file = event.target.files[0];
     const base64 = await convertBase64(file);
     setImageUrl(base64);
+    base64ImageUrl.current = base64;
+    insertEditablePhoto(base64ImageUrl.current);
   };
 
   return (
@@ -49,6 +75,7 @@ export default function UploadImageInTextEditor({
           type="button"
           onClick={() => {
             setImageUrl(url);
+            insertEditablePhoto(url);
           }}
         >
           Load
@@ -56,15 +83,6 @@ export default function UploadImageInTextEditor({
         </button>
       </form>
       )}
-      {
-        imageUrl
-            && (
-            <>
-              <img src={imageUrl} alt="uploaded file" height={200} />
-              <button type="button" onClick={() => { setOpenImageEditor(true); }}>編輯</button>
-            </>
-            )
-          }
     </>
   );
 }
@@ -72,19 +90,17 @@ export default function UploadImageInTextEditor({
 UploadImageInTextEditor.propTypes = {
   loadFromFile: PropTypes.bool,
   loadFromUrl: PropTypes.bool,
-  imageUrl: PropTypes.string,
   setImageUrl: PropTypes.func,
-  setOpenImageEditor: PropTypes.func,
   url: PropTypes.string,
   setUrl: PropTypes.func,
+  textEditorRef: PropTypes.string,
 };
 
 UploadImageInTextEditor.defaultProps = {
   loadFromFile: false,
   loadFromUrl: false,
-  imageUrl: '',
   setImageUrl: () => {},
-  setOpenImageEditor: () => {},
   url: '',
   setUrl: () => {},
+  textEditorRef: '',
 };
