@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   collection,
   doc,
   Timestamp,
   setDoc,
 } from 'firebase/firestore';
+import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
 import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
 import { db } from '../firestore/firestore';
-import PhotoEditor from '../components/ImageEditor';
+import DropDownButton from './UploadImageInTextEditor.style';
+import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
 
 export default function CreateNewDiary() {
   const [titleValue, setTitleValue] = useState('Please enter the title');
   const [diaryContentValue, setDiaryContentValue] = useState();
   const [imageUrl, setImageUrl] = useState();
+
+  const [loadFromFile, setLoadFromFile] = useState();
+  const [loadFromUrl, setLoadFromUrl] = useState();
+  const [url, setUrl] = useState();
+
+  const [openImageEditor, setOpenImageEditor] = useState(false);
+
+  const textEditorRef = useRef();
+
+  const imageRef = useRef();
   const diarydoc = doc(collection(db, 'articles'));
 
   const saveNewDiaryDB = () => {
@@ -35,13 +47,33 @@ export default function CreateNewDiary() {
         diaryContentValue={diaryContentValue}
         setDiaryContentValue={setDiaryContentValue}
         imageUrl={imageUrl}
+        imageRef={imageRef}
+        textEditorRef={textEditorRef}
       />
       <br />
-      <PhotoEditor
-        imageUrl={imageUrl}
+      <DropDownButton
+        setLoadFromFile={setLoadFromFile}
+        setLoadFromUrl={setLoadFromUrl}
         setImageUrl={setImageUrl}
+      />
+      <UploadImageInTextEditor
+        loadFromFile={loadFromFile}
+        loadFromUrl={loadFromUrl}
+        setImageUrl={setImageUrl}
+        url={url}
+        setUrl={setUrl}
+        textEditorRef={textEditorRef}
+      />
+      <PhotoEditor
         diaryContentValue={diaryContentValue}
         setDiaryContentValue={setDiaryContentValue}
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+        openImageEditor={openImageEditor}
+        setOpenImageEditor={setOpenImageEditor}
+        url={url}
+        setUrl={setUrl}
+        textEditorRef={textEditorRef}
       />
       <div
         onClick={saveNewDiaryDB}
