@@ -1,14 +1,26 @@
 import React from 'react';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from 'react-router-dom';
+import Home from './pages/Home';
 import CreateNewDiary from './pages/CreateNewDiary';
+import EditDiary from './pages/EditDiary';
+import LoadDiaries from './pages/LoadDiaries';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>發布新文章</h1>
-        <CreateNewDiary />
-      </header>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Diaries" element={<LoadDiaries />} />
+          <Route path="/create" element={<CreateNewDiary />} />
+          <Route path="/edit/:diaryID" element={<EditDiary />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

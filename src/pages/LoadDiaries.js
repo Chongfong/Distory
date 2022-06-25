@@ -6,9 +6,9 @@ import {
   getDocs,
   doc,
   deleteDoc,
-  updateDoc,
 } from 'firebase/firestore';
 import DOMPurify from 'dompurify';
+import { Link } from 'react-router-dom';
 import { db } from '../firestore/firestore';
 import '../css/loadDiary.css';
 
@@ -18,8 +18,8 @@ export default function LoadDiaries() {
     resolve(querySnapshot);
   });
 
-  const [userData, setUserData] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
+  const [allDiaries, setAllDiaries] = useState([]);
+  const [isLogin] = useState(false);
 
   const loadDiaries = useCallback(() => {
     const loadingDiaries = async () => {
@@ -28,7 +28,7 @@ export default function LoadDiaries() {
         querySnapshot.forEach((querySnapshotdoc) => {
           output.push(querySnapshotdoc.data());
         });
-        setUserData([...output]);
+        setAllDiaries([...output]);
       });
 
       return (output);
@@ -41,43 +41,29 @@ export default function LoadDiaries() {
   }, [loadDiaries]);
 
   function deleteDiary(id) {
-    const updatedDiarys = [...userData].filter((diary) => diary.id !== id);
-    setUserData(updatedDiarys);
-  }
-
-  function editDiaryTitle(id, e) {
-    const updatedDiaryTitle = [...userData]
-      .map((diary) => (diary.id === id ? { ...diary, title: e.target.value } : diary));
-    setUserData(updatedDiaryTitle);
+    const updatedDiarys = [...allDiaries].filter((diary) => diary.diaryID !== id);
+    setAllDiaries(updatedDiarys);
   }
 
   return (
     <ul>
-      {userData.map((eachUser) => (
+      {allDiaries.map((eachDiary) => (
         <div className="diary">
           {
-            isEditing
+            isLogin
               ? (
-                <form>
-                  <input
-                    type="text"
-                    onBlur={(e) => {
-                      editDiaryTitle(eachUser.id, e);
-                      const docRef = doc(db, 'users', eachUser.id);
-                      updateDoc(docRef, { title: e.target.value });
-                    }}
-                    defaultValue={eachUser.title}
-                  />
-                </form>
+                <h1>{eachDiary.title}</h1>
               )
-              : <h1 onDoubleClick={() => setIsEditing(true)}>{eachUser.title}</h1>
+              : (
+                <h1>{eachDiary.title}</h1>
+              )
             }
           <button
             type="button"
             onClick={() => {
-              const docRef = doc(db, 'users', eachUser.id);
+              const docRef = doc(db, 'users', eachDiary.id);
               deleteDoc(docRef).then(console.log('delete the diary'));
-              deleteDiary(eachUser.id);
+              deleteDiary(eachDiary.id);
             }}
           >
             X
@@ -86,10 +72,16 @@ export default function LoadDiaries() {
           <div
             onDoubleClick={() => console.log('haha')}
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(eachUser.content),
+              __html: DOMPurify.sanitize(eachDiary.content),
             }}
           />
-          <h5>{new Date(eachUser.publishAt.seconds * 1000).toString()}</h5>
+          <Link
+            to={`/edit/${eachDiary.diaryID}`}
+          >
+            💗
+
+          </Link>
+          <h5>{new Date(eachDiary.publishAt.seconds * 1000).toString()}</h5>
           <hr />
         </div>
       ))}
