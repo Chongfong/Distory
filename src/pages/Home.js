@@ -13,6 +13,11 @@ export default function Home() {
         <button type="button">Diaries</button>
 
       </Link>
+
+      <Link to="/signup">
+        <button type="button">Signup</button>
+
+      </Link>
     </>
   );
 }

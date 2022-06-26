@@ -13,6 +13,8 @@ import EditBlog from './pages/EditBlog';
 import SignUp from './pages/SignUp';
 import LogIn from './pages/Login';
 import StatusBar from './pages/StatusBar';
+import SettingId from './pages/SettingId';
+import Welcome from './pages/Welcome';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/status" element={<StatusBar />} />
+          <Route path="/settingid" element={<SettingId />} />
+          <Route path="/welcome" element={<Welcome />} />
         </Routes>
       </Router>
     </div>

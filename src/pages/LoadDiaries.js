@@ -62,7 +62,7 @@ export default function LoadDiaries() {
             type="button"
             onClick={() => {
               const docRef = doc(db, 'users', eachDiary.id);
-              deleteDoc(docRef).then(console.log('delete the diary'));
+              deleteDoc(docRef).then();
               deleteDiary(eachDiary.id);
             }}
           >
@@ -70,7 +70,7 @@ export default function LoadDiaries() {
 
           </button>
           <div
-            onDoubleClick={() => console.log('haha')}
+            onDoubleClick={() => {}}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(eachDiary.content),
             }}

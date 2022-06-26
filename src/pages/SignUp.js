@@ -7,20 +7,18 @@ export default function SignUp() {
   const [signUpEmail, setSignUpEmail] = useState();
   const [signUpPassword, setSignUpPassword] = useState();
   const [signupImageUrl] = useState('https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png');
-  const [signUpName, setSignUpName] = useState('主人翁');
 
   const navigate = useNavigate();
 
-  const handleSignUp = (email, password, nickName, profileImg) => {
+  const handleSignUp = (email, password, profileImg) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((cred) => {
         window.localStorage.setItem('jwtToken', cred.user.accessToken);
 
         updateProfile(auth.currentUser, {
-          displayName: nickName, photoURL: profileImg,
+          photoURL: profileImg,
         }).then(() => {
-          alert('You are signed up');
-          navigate('/diaries');
+          navigate('/settingid');
         }).catch((error) => {
           alert(error.message);
         });
@@ -51,18 +49,11 @@ export default function SignUp() {
         onChange={(e) => setSignUpPassword(e.target.value)}
       />
 
-      <div>暱稱</div>
-      <input
-        type="text"
-        value={signUpName}
-        onChange={(e) => setSignUpName(e.target.value)}
-      />
-
       <div
         onClick={() => {
-          handleSignUp(signUpEmail, signUpPassword, signUpName, signupImageUrl);
+          handleSignUp(signUpEmail, signUpPassword, signupImageUrl);
         }}
-        onKeyUp={() => handleSignUp(signUpEmail, signUpPassword)}
+        onKeyUp={() => { handleSignUp(signUpEmail, signUpPassword, signupImageUrl); }}
         role="button"
         tabIndex={0}
       >
