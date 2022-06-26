@@ -15,6 +15,8 @@ import LogIn from './pages/Login';
 import StatusBar from './pages/StatusBar';
 import SettingId from './pages/SettingId';
 import Welcome from './pages/Welcome';
+import MyBlog from './pages/MyBlog';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -22,15 +24,17 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Diaries" element={<LoadDiaries />} />
-          <Route path="/create" element={<CreateNewDiary />} />
-          <Route path="/edit/:diaryID" element={<EditDiary />} />
-          <Route path="/blogedit" element={<EditBlog />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/status" element={<StatusBar />} />
           <Route path="/settingid" element={<SettingId />} />
           <Route path="/welcome" element={<Welcome />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/:userID" element={<MyBlog />} />
+          <Route path="/:userID/blogedit" element={<EditBlog />} />
+          <Route path="/:userID/profile" element={<Profile />} />
+          <Route path="/:userID/create" element={<CreateNewDiary />} />
+          <Route path="/:userID/edit/:diaryID" element={<EditDiary />} />
+          <Route path="/Diaries" element={<LoadDiaries />} />
+          <Route path="/status" element={<StatusBar />} />
         </Routes>
       </Router>
     </div>

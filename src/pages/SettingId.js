@@ -18,9 +18,10 @@ export default function SettingId() {
   const [settingName, setSettingName] = useState('主人翁');
 
   const navigate = useNavigate();
-  const userdoc = doc(collection(db, 'users'));
+  const userCollection = collection(db, 'users');
 
   const saveNewUserDB = (uid) => {
+    const userdoc = doc(userCollection, uid);
     const userData = {
       distoryId: settingId,
       userImage: settingImageUrl,
@@ -56,7 +57,7 @@ export default function SettingId() {
       alert('此ID已有人使用');
       return false;
     } catch (e) {
-      console.error('Error querying document: ', e);
+      alert('Error querying document: ', e);
       return e.response;
     }
   }
