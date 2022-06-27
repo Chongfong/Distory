@@ -2,7 +2,6 @@ import React, {
   useState, useRef, useEffect, useCallback,
 } from 'react';
 import {
-  collection,
   getDoc,
   doc,
   Timestamp,
@@ -20,7 +19,7 @@ import '../css/loadDiary.css';
 export default function EditDiary() {
   const [titleValue, setTitleValue] = useState();
   const [diaryContentValue, setDiaryContentValue] = useState();
-  const { diaryID } = useParams();
+  const { userID, diaryID } = useParams();
   const [editingDiary, setEditingDiary] = useState();
   const docRef = doc(db, 'articles', diaryID);
 
@@ -59,15 +58,13 @@ export default function EditDiary() {
   const textEditorRef = useRef();
 
   const imageRef = useRef();
-  const diarydoc = doc(collection(db, 'articles'));
 
   const updateDiaryDB = () => {
     const data = {
       title: titleValue,
       content: diaryContentValue,
       status: 'published',
-      publishAt: Timestamp.now().toDate(),
-      diaryID: diarydoc.id,
+      updateAt: Timestamp.now().toDate(),
     };
     updateDoc(docRef, { ...data });
     alert('文章已修改');
@@ -110,7 +107,7 @@ export default function EditDiary() {
             setUrl={setUrl}
             textEditorRef={textEditorRef}
           />
-          <Link to="/diaries">
+          <Link to={`/${userID}`}>
             <div
               onClick={() => {
                 updateDiaryDB();

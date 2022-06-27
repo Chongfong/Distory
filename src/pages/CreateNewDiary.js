@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   collection,
   doc,
@@ -26,6 +27,8 @@ export default function CreateNewDiary() {
   const textEditorRef = useRef();
 
   const imageRef = useRef();
+  const navigate = useNavigate();
+  const { userID } = useParams();
   const diarydoc = doc(collection(db, 'articles'));
 
   const saveNewDiaryDB = () => {
@@ -35,6 +38,7 @@ export default function CreateNewDiary() {
       status: 'published',
       publishAt: Timestamp.now().toDate(),
       diaryID: diarydoc.id,
+      author: userID,
     };
     setDoc(diarydoc, { ...data });
     alert('文章已發布');
@@ -76,8 +80,14 @@ export default function CreateNewDiary() {
         textEditorRef={textEditorRef}
       />
       <div
-        onClick={saveNewDiaryDB}
-        onKeyUp={saveNewDiaryDB}
+        onClick={() => {
+          saveNewDiaryDB();
+          navigate(`/${userID}`);
+        }}
+        onKeyUp={() => {
+          saveNewDiaryDB();
+          navigate(`/${userID}`);
+        }}
         role="button"
         tabIndex={0}
       >

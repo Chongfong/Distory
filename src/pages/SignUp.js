@@ -61,6 +61,15 @@ export default function SignUp() {
 
       </div>
 
+      <div
+        onClick={() => { navigate('/login'); }}
+        onKeyUp={() => { navigate('/login'); }}
+        role="button"
+        tabIndex={0}
+      >
+        Login
+      </div>
+
     </>
   );
 }

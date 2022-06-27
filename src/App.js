@@ -17,6 +17,7 @@ import SettingId from './pages/SettingId';
 import Welcome from './pages/Welcome';
 import MyBlog from './pages/MyBlog';
 import Profile from './pages/Profile';
+import BlogArticle from './pages/BlogArticle';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/login" element={<LogIn />} />
           <Route path="/:userID" element={<MyBlog />} />
           <Route path="/:userID/blogedit" element={<EditBlog />} />
+          <Route path="/:userID/:diaryID" element={<BlogArticle />} />
           <Route path="/:userID/profile" element={<Profile />} />
           <Route path="/:userID/create" element={<CreateNewDiary />} />
           <Route path="/:userID/edit/:diaryID" element={<EditDiary />} />
