@@ -83,7 +83,7 @@ export default function Home() {
               }}
               />
             </div>
-            <h5>{new Date(eachDiary.publishAt.seconds * 1000).toString()}</h5>
+            <h5>{ new Date(eachDiary.publishAt.seconds * 1000).toString()}</h5>
             <hr />
           </div>
         ))}
