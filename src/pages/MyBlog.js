@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   doc, getDoc, getDocs, collection, query, where, deleteDoc, updateDoc,
+  Timestamp,
+  setDoc,
 } from 'firebase/firestore';
 import DOMPurify from 'dompurify';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -19,13 +21,87 @@ export default function MyBlog() {
   const [currentUserImage, setCurrentUserImage] = useState();
   const [checkLoadBlogImage, setCheckLoadBlogImage] = useState(false);
   const [checkLoadUserImage, setCheckLoadUserImage] = useState(false);
-  const changeUser = () => {
-    onAuthStateChanged(auth, (user) => { setCurrentUser(user); });
-  };
+  const [visitMyHomeAll, setVisitMyHomeAll] = useState();
+
   const navigate = useNavigate();
   const { userID } = useParams();
   const inputUserImage = useRef();
   const inputBlogImage = useRef();
+
+  const userCollection = collection(db, 'users');
+
+  const fetchUserWhoVisited = () => new Promise((resolve) => {
+    const docRef = doc(db, 'users', userID);
+    const querySnapshot = getDoc(docRef);
+    resolve(querySnapshot);
+  });
+
+  const loadUserWhoVisited = useCallback((userCamedoc, userCameEditData) => {
+    const loadingUserWhoVisited = async () => {
+      let nowWhoVisited = {};
+      fetchUserWhoVisited().then((querySnapshot) => {
+        nowWhoVisited = querySnapshot.data();
+        if (nowWhoVisited.come) {
+          if (nowWhoVisited.come.userUid) {
+            updateDoc(userCamedoc, { ...userCameEditData });
+          }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
+        }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
+      });
+      return (nowWhoVisited);
+    };
+    loadingUserWhoVisited();
+  }, []);
+
+  const saveUserCameDB = (userUid) => {
+    const userCameDoc = doc(userCollection, userUid);
+    const userCameData = { [currentUser.uid]: Timestamp.now().toDate() };
+    const userCameEditData = { come: userCameData };
+    loadUserWhoVisited(userCameDoc, userCameEditData);
+  };
+
+  const visitMyHomeFunc = () => {
+    if (currentUserData) {
+      const visitMyHomeUsersArray = Object.entries(currentUserData.come);
+      const visitMyHomeUsersObject = [];
+      visitMyHomeUsersArray.map((eachVisitor) => {
+        async function gettingUserVisits(visitorArray) {
+          try {
+            const urlsRef = collection(db, 'users');
+            const q = query(urlsRef, where('userUID', '==', visitorArray[0]));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((querySnapshotEach) => {
+              if (!querySnapshotEach.empty) {
+                visitMyHomeUsersObject.push({
+                  visitorID: querySnapshotEach.data().userUID,
+                  visitorImage: querySnapshotEach.data().userImage,
+                  visitorNickName: querySnapshotEach.data().distoryId,
+                  visitAt: visitorArray[1],
+                });
+              }
+            });
+            setVisitMyHomeAll(visitMyHomeUsersObject);
+          } catch (e) {
+            alert('Error querying document: ', e);
+            return e.response;
+          } return true;
+        }
+        gettingUserVisits(eachVisitor);
+        return visitMyHomeUsersObject;
+      });
+    }
+  };
+
+  const whoComes = () => {
+    if (currentUser) {
+      if (currentUser.uid === userID) {
+      } else {
+        saveUserCameDB(userID);
+      }
+    }
+  };
+  const changeUser = () => {
+    onAuthStateChanged(auth, (user) => { setCurrentUser(user); });
+  };
 
   const onUserImageClick = () => {
     inputUserImage.current.click();
@@ -40,8 +116,6 @@ export default function MyBlog() {
     const updatedDiarys = [...userDiaries].filter((diary) => diary.diaryID !== id);
     setUserDiaries(updatedDiarys);
   }
-
-  const userCollection = collection(db, 'users');
 
   const saveUserSettingsDB = (uid, downloadURL, option) => {
     const userSettingdoc = doc(userCollection, uid);
@@ -153,6 +227,13 @@ export default function MyBlog() {
     changeUser();
   }, []);
 
+  useEffect(() => {
+    whoComes();
+  }, [currentUser]);
+
+  useEffect(() => {
+    visitMyHomeFunc();
+  }, [currentUserData]);
   return (
     <>
       {currentUser && currentUserData ? (
@@ -222,7 +303,7 @@ export default function MyBlog() {
               <input
                 type="file"
                 accept="image/*"
-                id="blog-image"
+                id="user-image"
                 ref={inputUserImage}
                 style={{ display: 'none' }}
                 onChange={(e) => {
@@ -262,6 +343,20 @@ export default function MyBlog() {
           <p>{`文章樣式：${currentUserData.blogContentLayout}`}</p>
           <p>{`成立於　${new Date(currentUserData.createBlogAt.seconds * 1000).toString()}`}</p>
 
+          {visitMyHomeAll ? (
+            visitMyHomeAll.map((eachVisitor) => (
+              <>
+                <p>{eachVisitor.visitorNickName}</p>
+                <img
+                  style={{ width: '30px', height: '30px' }}
+                  src={eachVisitor.visitorImage}
+                  alt="visitor"
+                />
+                <p>{new Date(eachVisitor.visitAt.seconds * 1000).toString()}</p>
+              </>
+
+            ))) : ('')}
+
           {currentUser.uid === userID ? (
             <>
               <button
@@ -287,7 +382,7 @@ export default function MyBlog() {
           ) : ('')}
           <ul>
             {userDiaries.map((eachDiary) => (
-              <div className="diary">
+              <div className="diary" key={Date.now()}>
                 <div
                   role="button"
                   tabIndex={0}
