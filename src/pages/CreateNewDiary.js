@@ -34,6 +34,7 @@ export default function CreateNewDiary() {
   const saveNewDiaryDB = () => {
     const data = {
       title: titleValue,
+      titleText: [...titleValue.replace(' ', '')],
       content: diaryContentValue,
       status: 'published',
       publishAt: Timestamp.now().toDate(),
