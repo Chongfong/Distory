@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useCallback, useState, useEffect, useRef,
@@ -8,6 +9,8 @@ import {
   doc, getDoc, getDocs, collection, query, where, deleteDoc, updateDoc,
   Timestamp,
   setDoc,
+  arrayUnion,
+  arrayRemove,
 } from 'firebase/firestore';
 import DOMPurify from 'dompurify';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -22,6 +25,8 @@ export default function MyBlog() {
   const [checkLoadBlogImage, setCheckLoadBlogImage] = useState(false);
   const [checkLoadUserImage, setCheckLoadUserImage] = useState(false);
   const [visitMyHomeAll, setVisitMyHomeAll] = useState();
+  const [followingUsers, setFollowingUsers] = useState();
+  const [loginUserData, setLoginUserData] = useState();
 
   const navigate = useNavigate();
   const { userID } = useParams();
@@ -99,8 +104,31 @@ export default function MyBlog() {
       }
     }
   };
+
+  const fetchLoginUserInfo = (user) => new Promise((resolve) => {
+    const loginUserRef = doc(db, 'users', user.uid);
+    const querySnapshot = getDoc(loginUserRef);
+    resolve(querySnapshot);
+  });
+
+  const getLoginUserInfo = useCallback((user) => {
+    const gettingLoginUserInfo = async () => {
+      let nowLoginUserInfo = {};
+      fetchLoginUserInfo(user).then((querySnapshot) => {
+        nowLoginUserInfo = querySnapshot.data();
+        setLoginUserData(querySnapshot.data());
+        setFollowingUsers(querySnapshot.data().following);
+      });
+      return (nowLoginUserInfo);
+    };
+    gettingLoginUserInfo(user);
+  }, []);
+
   const changeUser = () => {
-    onAuthStateChanged(auth, (user) => { setCurrentUser(user); });
+    onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      getLoginUserInfo(user);
+    });
   };
 
   const onUserImageClick = () => {
@@ -221,6 +249,42 @@ export default function MyBlog() {
     gettingUserDiaries();
   }, []);
 
+  const saveFollowerDB = () => {
+    const userFollowdoc = doc(userCollection, currentUser.uid);
+    updateDoc(
+      userFollowdoc,
+      {
+        following: arrayUnion(userID),
+      },
+    );
+    alert('已關注');
+  };
+
+  const unFollowerDB = () => {
+    const userFollowdoc = doc(userCollection, currentUser.uid);
+    updateDoc(
+      userFollowdoc,
+      {
+        following: arrayRemove(userID),
+      },
+    );
+    alert('已取消關注');
+  };
+
+  const followThisUser = () => {
+    setFollowingUsers(userID);
+    saveFollowerDB();
+    getLoginUserInfo(currentUser);
+  };
+
+  const unFollowThisUser = () => {
+    const updatedFollwingUsers = [...followingUsers]
+      .filter((eachFollowingUser) => eachFollowingUser !== userID);
+    setFollowingUsers(updatedFollwingUsers);
+    unFollowerDB();
+    getLoginUserInfo(currentUser);
+  };
+
   useEffect(() => {
     loadUserBlogSettings();
     getUserDiaries();
@@ -250,7 +314,7 @@ export default function MyBlog() {
           <div role="button" tabIndex={0} onClick={() => { navigate(`/${userID}`); }} onKeyUp={() => { navigate(`/${userID}`); }}>
             <h1>{currentUserData.blogTitle}</h1>
           </div>
-          <p>{currentUserData.blogInto}</p>
+          <p>{currentUserData.blogIntro}</p>
           <div
             onClick={() => {
               onBlogImageClick();
@@ -342,6 +406,28 @@ export default function MyBlog() {
           <p>{`部落格樣式：${currentUserData.blogLayout}`}</p>
           <p>{`文章樣式：${currentUserData.blogContentLayout}`}</p>
           <p>{`成立於　${new Date(currentUserData.createBlogAt.seconds * 1000).toString()}`}</p>
+
+          {loginUserData ? (
+            loginUserData.userUID !== userID
+          && !(loginUserData.following.includes(userID)) ? (
+            <button
+              type="button"
+              onClick={() => {
+                followThisUser();
+              }}
+            >
+              關注用戶
+            </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    unFollowThisUser();
+                  }}
+                >
+                  取消關注
+                </button>
+              )) : ('') }
 
           {visitMyHomeAll ? (
             visitMyHomeAll.map((eachVisitor) => (
