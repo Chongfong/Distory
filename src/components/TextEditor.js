@@ -2,7 +2,8 @@ import React
   from 'react';
 import ReactQuill from 'react-quill';
 import PropTypes from 'prop-types';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
+import '../css/textEditor.css';
 
 class CustomQuill extends ReactQuill {
   destroyEditor() {

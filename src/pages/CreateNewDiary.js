@@ -8,7 +8,8 @@ import {
 } from 'firebase/firestore';
 import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
-import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
+// import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
+import { CreateDiaryBody, CreateDiaryTitle, CreateDiaryPublish } from './CreateNewDiaries.style';
 import { db } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
 import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
@@ -46,8 +47,8 @@ export default function CreateNewDiary() {
   };
 
   return (
-    <>
-      <CreateNewDiaryTitle titleValue={titleValue} setTitleValue={setTitleValue} />
+    <CreateDiaryBody>
+      <CreateDiaryTitle titleValue={titleValue} setTitleValue={setTitleValue} />
       <TextEditor
         diaryContentValue={diaryContentValue}
         setDiaryContentValue={setDiaryContentValue}
@@ -80,7 +81,7 @@ export default function CreateNewDiary() {
         setUrl={setUrl}
         textEditorRef={textEditorRef}
       />
-      <div
+      <CreateDiaryPublish
         onClick={() => {
           saveNewDiaryDB();
           navigate(`/${userID}`);
@@ -92,9 +93,9 @@ export default function CreateNewDiary() {
         role="button"
         tabIndex={0}
       >
-        Publish
+        ✓
 
-      </div>
-    </>
+      </CreateDiaryPublish>
+    </CreateDiaryBody>
   );
 }

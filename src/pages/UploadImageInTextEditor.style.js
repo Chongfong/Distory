@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import addImageIcon from '../img/add-image.png';
 
-const DropDownContainer = styled('div')`
-  width: 10.5em;
-  margin: 0 auto;
+const CreateDiaryUploadImage = styled('div')`
+  width: 50px;
+  height: 50px; 
+  position: absolute;
+  right: 20px;
+  bottom: 90px;
+  border-radius: 50%;
+  border: #BDC0BA 2px solid;
+  background-color: white;
+  text-align: center;
+  font-size: 25px;
+  line-height: 50px;
 `;
 
-const DropDownHeader = styled('div')`
-  margin-bottom: 0em;
-  padding: 0.4em 2em 0.4em 1em;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-  font-weight: 500;
-  font-size: 1.3rem;
-  color: #3faffa;
+const CreateDiaryUploadImageIcon = styled.img`
+  width: 25px;
+  height: 25px;
+  line-height: 50px;
+  color: #ccc
 `;
 
 const DropDownListContainer = styled('div')`
@@ -49,7 +57,7 @@ export default function DropDownButton(
   { setLoadFromFile, setLoadFromUrl, setImageUrl },
 ) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [, setSelectedOption] = useState(null);
 
   const toggling = () => setIsOpen(!isOpen);
 
@@ -70,10 +78,10 @@ export default function DropDownButton(
   };
 
   return (
-    <DropDownContainer>
-      <DropDownHeader onClick={toggling}>
-        {selectedOption || '插入圖片'}
-      </DropDownHeader>
+    <>
+      <CreateDiaryUploadImage onClick={toggling} onKeyUp={toggling} role="button" tabIndex={0}>
+        <CreateDiaryUploadImageIcon src={addImageIcon} alt="addImageIcon" />
+      </CreateDiaryUploadImage>
       {isOpen && (
       <DropDownListContainer>
         <DropDownList>
@@ -86,7 +94,7 @@ export default function DropDownButton(
         </DropDownList>
       </DropDownListContainer>
       )}
-    </DropDownContainer>
+    </>
   );
 }
 

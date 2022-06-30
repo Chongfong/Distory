@@ -1,3 +1,19 @@
+.quill {
+  margin: 20px auto;
+  margin-top: 0;
+  width: 95%;
+  text-align: left;
+  position: relative;
+}
+
+.ql-toolbar{
+  border: none;
+}
+
+.ql-snow{
+  border: none;
+}
+
 .diary_click_button::after {
     content: '💗';
     position: relative;
