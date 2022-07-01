@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import addImageIcon from '../img/add-image.png';
@@ -6,15 +6,16 @@ import addImageIcon from '../img/add-image.png';
 const CreateDiaryUploadImage = styled('div')`
   width: 50px;
   height: 50px; 
-  position: absolute;
+  position: fixed;
   right: 20px;
-  bottom: 90px;
+  bottom: 100px;
   border-radius: 50%;
   border: #BDC0BA 2px solid;
   background-color: white;
   text-align: center;
   font-size: 25px;
   line-height: 50px;
+  cursor: pointer;
 `;
 
 const CreateDiaryUploadImageIcon = styled.img`
@@ -24,88 +25,83 @@ const CreateDiaryUploadImageIcon = styled.img`
   color: #ccc
 `;
 
-const DropDownListContainer = styled('div')`
-  position: absolute;
-  z-index: 100;
-  width: 10.5em;
+export const UploadImageTitle = styled.div`
+  font-size: 1.2rem;
+  text-align: left;
+  margin-bottom: 20px;
+  flex-basis: 100%;
 `;
 
-const DropDownList = styled('ul')`
-  padding: 0;
-  margin: 0;
-  padding-left: 1em;
-  background: #ffffff;
-  border: 2px solid #e5e5e5;
-  box-sizing: border-box;
-  color: #3faffa;
-  font-size: 1.3rem;
-  font-weight: 500;
-  &:first-child {
-    padding-top: 0.8em;
+export const UploadNavBar = styled.div`
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+`;
+
+export const UploadImageNavButtom = styled.div`
+  width: 50%;
+  text-align: center;
+  border-bottom: 2px solid #ccc;
+  cursor: pointer;
+  :hover, :focus, :active {
+    border-bottom: 4px solid #ccc;
   }
 `;
 
-const ListItem = styled('li')`
-  list-style: none;
-  margin-bottom: 0.8em;
-  &:hover {
-    color: #fd9e46;
-  }
+export const FlexBox = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content:flex-start;
+  justify-content: flex-end;
+`;
+
+export const UploadImageContainer = styled.div`
+  width: 100%;
+  margin-top: 15px;
+  height: 73%;
+  border: solid 1px #ccc;
+  border-radius: 20px;
+
+`;
+
+export const UploadImageFromUrl = styled.input`
+  width: 80%;
+  height: 25px;
+  border:none;
+  border-bottom: solid 1px #ccc;
+  margin-top: 30px;
+`;
+
+export const UploadImagePreviewImage = styled.img`
+  max-width: 80%;
+  max-height: 160px;
+  margin-top: 10px;
 `;
 
 export default function DropDownButton(
-  { setLoadFromFile, setLoadFromUrl, setImageUrl },
+  {
+    isOpen, setIsOpen,
+  },
 ) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [, setSelectedOption] = useState(null);
-
   const toggling = () => setIsOpen(!isOpen);
 
-  const uploadFromFile = () => {
-    setImageUrl();
-    setSelectedOption('上傳圖片');
-    setLoadFromUrl(false);
-    setLoadFromFile(true);
-    setIsOpen(false);
-  };
-
-  const uploadFromUrl = () => {
-    setImageUrl();
-    setSelectedOption('圖片網址');
-    setLoadFromFile(false);
-    setLoadFromUrl(true);
-    setIsOpen(false);
-  };
-
   return (
-    <>
-      <CreateDiaryUploadImage onClick={toggling} onKeyUp={toggling} role="button" tabIndex={0}>
-        <CreateDiaryUploadImageIcon src={addImageIcon} alt="addImageIcon" />
-      </CreateDiaryUploadImage>
-      {isOpen && (
-      <DropDownListContainer>
-        <DropDownList>
-          <ListItem onClick={uploadFromFile} key={Math.random()}>
-            上傳圖片
-          </ListItem>
-          <ListItem onClick={uploadFromUrl} key={Math.random()}>
-            圖片網址
-          </ListItem>
-        </DropDownList>
-      </DropDownListContainer>
-      )}
-    </>
+    <CreateDiaryUploadImage onClick={toggling} onKeyUp={toggling} role="button" tabIndex={0}>
+      <CreateDiaryUploadImageIcon src={addImageIcon} alt="addImageIcon" />
+    </CreateDiaryUploadImage>
   );
 }
 
 DropDownButton.propTypes = {
-  setLoadFromFile: PropTypes.func,
-  setLoadFromUrl: PropTypes.func,
-  setImageUrl: PropTypes.func,
+  isOpen: PropTypes.bool,
+  setIsOpen: PropTypes.func,
 };
 
 DropDownButton.defaultProps = {
-  setLoadFromFile: () => {},
-  setLoadFromUrl: () => {},
-  setImageUrl: () => {},
+  isOpen: false,
+  setIsOpen: () => {},
 };

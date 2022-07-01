@@ -8,8 +8,9 @@ import {
 } from 'firebase/firestore';
 import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
-// import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
-import { CreateDiaryBody, CreateDiaryTitle, CreateDiaryPublish } from './CreateNewDiaries.style';
+import {
+  CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryTitle, CreateDiaryPublish,
+} from './CreateNewDiaries.style';
 import { db } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
 import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
@@ -18,6 +19,8 @@ export default function CreateNewDiary() {
   const [titleValue, setTitleValue] = useState('Please enter the title');
   const [diaryContentValue, setDiaryContentValue] = useState();
   const [imageUrl, setImageUrl] = useState();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const [loadFromFile, setLoadFromFile] = useState();
   const [loadFromUrl, setLoadFromUrl] = useState();
@@ -48,54 +51,62 @@ export default function CreateNewDiary() {
 
   return (
     <CreateDiaryBody>
-      <CreateDiaryTitle titleValue={titleValue} setTitleValue={setTitleValue} />
-      <TextEditor
-        diaryContentValue={diaryContentValue}
-        setDiaryContentValue={setDiaryContentValue}
-        imageUrl={imageUrl}
-        imageRef={imageRef}
-        textEditorRef={textEditorRef}
-      />
-      <br />
-      <DropDownButton
-        setLoadFromFile={setLoadFromFile}
-        setLoadFromUrl={setLoadFromUrl}
-        setImageUrl={setImageUrl}
-      />
-      <UploadImageInTextEditor
-        loadFromFile={loadFromFile}
-        loadFromUrl={loadFromUrl}
-        setImageUrl={setImageUrl}
-        url={url}
-        setUrl={setUrl}
-        textEditorRef={textEditorRef}
-      />
-      <PhotoEditor
-        diaryContentValue={diaryContentValue}
-        setDiaryContentValue={setDiaryContentValue}
-        imageUrl={imageUrl}
-        setImageUrl={setImageUrl}
-        openImageEditor={openImageEditor}
-        setOpenImageEditor={setOpenImageEditor}
-        url={url}
-        setUrl={setUrl}
-        textEditorRef={textEditorRef}
-      />
-      <CreateDiaryPublish
-        onClick={() => {
-          saveNewDiaryDB();
-          navigate(`/${userID}`);
-        }}
-        onKeyUp={() => {
-          saveNewDiaryDB();
-          navigate(`/${userID}`);
-        }}
-        role="button"
-        tabIndex={0}
-      >
-        ✓
+      <CreateDiaryInsideBody>
+        <CreateDiaryNavTitle>發表新文章</CreateDiaryNavTitle>
+        <CreateDiaryTitle titleValue={titleValue} setTitleValue={setTitleValue} placeholder="請輸入標題" />
+        <TextEditor
+          diaryContentValue={diaryContentValue}
+          setDiaryContentValue={setDiaryContentValue}
+          imageUrl={imageUrl}
+          imageRef={imageRef}
+          textEditorRef={textEditorRef}
+        />
+        <br />
+        <DropDownButton
+          setLoadFromFile={setLoadFromFile}
+          setLoadFromUrl={setLoadFromUrl}
+          setImageUrl={setImageUrl}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
 
-      </CreateDiaryPublish>
+        />
+        <UploadImageInTextEditor
+          loadFromFile={loadFromFile}
+          loadFromUrl={loadFromUrl}
+          setImageUrl={setImageUrl}
+          url={url}
+          setUrl={setUrl}
+          textEditorRef={textEditorRef}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+        <PhotoEditor
+          diaryContentValue={diaryContentValue}
+          setDiaryContentValue={setDiaryContentValue}
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+          openImageEditor={openImageEditor}
+          setOpenImageEditor={setOpenImageEditor}
+          url={url}
+          setUrl={setUrl}
+          textEditorRef={textEditorRef}
+        />
+        <CreateDiaryPublish
+          onClick={() => {
+            saveNewDiaryDB();
+            navigate(`/${userID}`);
+          }}
+          onKeyUp={() => {
+            saveNewDiaryDB();
+            navigate(`/${userID}`);
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          ✓
+
+        </CreateDiaryPublish>
+      </CreateDiaryInsideBody>
     </CreateDiaryBody>
   );
 }
