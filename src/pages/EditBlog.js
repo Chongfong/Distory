@@ -1,40 +1,64 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useCallback, useEffect } from 'react';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
-  collection, doc, updateDoc, Timestamp,
+  collection, doc, updateDoc,
+  getDoc,
 } from 'firebase/firestore';
 import { auth, storage, db } from '../firestore/firestore';
 
 import layoutImage from '../img/layout.png';
 import contentLayout from '../img/content-layout.png';
+import {
+  CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryTitle, CreateDiaryPublish,
+} from './CreateNewDiaries.style';
+import { EditBlogTitle, EditBlogLayout, EditBlogFlex } from './EditBlog.style';
+import { CircleButton } from './ImageEditor.style';
 
 export default function EditBlog() {
   const [blogTitle, setBlogTitle] = useState();
   const [blogIntro, setBlogIntro] = useState();
   const [blogImage, setBlogImage] = useState();
+  const [blogImageFile, setBlogImageFile] = useState();
   const [, setBlogImageUrl] = useState();
   const [blogLayout, setBlogLayout] = useState();
   const [blogContentLayout, setBlogContentLayout] = useState();
   const navigate = useNavigate();
+  const [currentUserData, setCurrentUserData] = useState();
 
   const [currentUser, setCurrentUser] = useState();
-  onAuthStateChanged(auth, (user) => { setCurrentUser(user); });
+
+  const changeUser = () => {
+    onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+  };
+
+  const { userID } = useParams();
 
   const userCollection = collection(db, 'users');
 
   const saveBlogSettingsDB = (uid, downloadURL) => {
     const userBlogdoc = doc(userCollection, uid);
-    const userBlogData = {
-      blogTitle,
-      blogIntro,
-      blogImage: downloadURL,
-      blogLayout,
-      blogContentLayout,
-      createBlogAt: Timestamp.now().toDate(),
-      userUID: uid,
-    };
+    let userBlogData = {};
+    if (downloadURL) {
+      userBlogData = {
+        blogTitle,
+        blogIntro,
+        blogImage: downloadURL,
+        blogLayout,
+        blogContentLayout,
+      };
+    } else {
+      userBlogData = {
+        blogTitle,
+        blogIntro,
+        blogLayout,
+        blogContentLayout,
+      };
+    }
     updateDoc(userBlogdoc, { ...userBlogData });
   };
 
@@ -42,10 +66,29 @@ export default function EditBlog() {
     contentType: 'image/jpeg',
   };
 
-  const imagePreview = (e) => {
-    e.preventDefault();
-    setBlogImage(e.target.files[0]);
-  };
+  const thisUserRef = doc(db, 'users', userID);
+
+  const fetchUserBlogSettings = () => new Promise((resolve) => {
+    const querySnapshot = getDoc(thisUserRef);
+    resolve(querySnapshot);
+  });
+
+  const loadUserBlogSettings = useCallback(() => {
+    const loadingUserBlogSettings = async () => {
+      let nowBlogSettings = {};
+      fetchUserBlogSettings().then((querySnapshot) => {
+        nowBlogSettings = querySnapshot.data();
+        setCurrentUserData(querySnapshot.data());
+        setBlogTitle(querySnapshot.data().blogTitle);
+        setBlogIntro(querySnapshot.data().blogIntro);
+        setBlogImage(querySnapshot.data().blogImage);
+        setBlogLayout(querySnapshot.data().blogLayout);
+        setBlogContentLayout(querySnapshot.data().blogContentLayout);
+      });
+      return (nowBlogSettings);
+    };
+    loadingUserBlogSettings();
+  }, []);
 
   const handleSubmit = (imageFile, uid) => {
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
@@ -75,93 +118,174 @@ export default function EditBlog() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setBlogImageUrl(downloadURL);
           saveBlogSettingsDB(uid, downloadURL);
+          navigate(`/${currentUser.uid}`);
         });
       },
     );
   };
 
+  useEffect(() => {
+    loadUserBlogSettings();
+    changeUser();
+  }, []);
+
   return (
     <>
-      {currentUser ? (
-        <>
-          <div>部落格標題</div>
-          <input
+      {currentUserData ? (
+        <CreateDiaryInsideBody style={{ textAlign: 'left', padding: '0px 10px 50px 10px' }}>
+          <CreateDiaryNavTitle style={{ paddingLeft: '0px' }}>部落格編輯</CreateDiaryNavTitle>
+          <EditBlogTitle>部落格標題</EditBlogTitle>
+          <CreateDiaryTitle
             type="text"
             value={blogTitle}
             onChange={(e) => setBlogTitle(e.target.value)}
           />
-          <div>部落格介紹</div>
-          <input
+          <EditBlogTitle>部落格介紹</EditBlogTitle>
+          <CreateDiaryTitle
             type="text"
             value={blogIntro}
             onChange={(e) => setBlogIntro(e.target.value)}
           />
-          <div>進版畫面設定</div>
-          <form>
+          <EditBlogTitle>進版畫面設定</EditBlogTitle>
+
+          <label
+            htmlFor="upload-blogImage"
+            style={{
+              width: '100%',
+              height: '70%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              position: 'relative',
+            }}
+          >
             <input
               type="file"
               accept="image/*"
-              onChange={imagePreview}
+              style={{ display: 'none' }}
+              id="upload-blogImage"
+              onChange={(e) => {
+                setBlogImage(URL.createObjectURL(e.target.files[0]));
+                setBlogImageFile(e.target.files[0]);
+              }}
             />
+            {blogImageFile ? (
+              <CircleButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setBlogImageFile();
+                  setBlogImage(currentUserData.blogImage);
+                }}
+                style={{
+                  fontSize: '25px', position: 'absolute', bottom: '10px', right: '20px',
+                }}
+              >
+                ×
+
+              </CircleButton>
+            ) : (
+              <CircleButton
+                style={{
+                  fontSize: '25px',
+                  position: 'absolute',
+                  bottom: '10px',
+                  right: '20px',
+                  transform: 'scaleX(-1)',
+                }}
+              >
+                ✎
+
+              </CircleButton>
+            )}
             <img
-              src={blogImage ? URL.createObjectURL(blogImage) : null}
-              alt={blogImage ? blogImage.name : null}
+              alt="background"
+              src={blogImage}
+              style={{
+                width: '100%', height: '70%', maxHeight: '400px', borderRadius: '25px',
+              }}
             />
-          </form>
-          <div>基本版面設定</div>
-          <div
-            onClick={() => setBlogLayout('A')}
-            onKeyUp={() => setBlogLayout('A')}
-            role="button"
-            tabIndex={0}
-          >
-            <img alt="layout-left" src={layoutImage} />
+          </label>
 
-          </div>
-          <div
-            onClick={() => setBlogLayout('B')}
-            onKeyUp={() => setBlogLayout('B')}
-            role="button"
-            tabIndex={0}
-          >
-            <img style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={layoutImage} />
+          <EditBlogTitle>基本版面設定</EditBlogTitle>
+          <EditBlogFlex>
+            <div
+              onClick={() => setBlogLayout('A')}
+              onKeyUp={() => setBlogLayout('A')}
+              role="button"
+              tabIndex={0}
+            >
+              <EditBlogLayout isToggled={blogLayout === 'A'} alt="layout-left" src={layoutImage} />
 
-          </div>
-          <div>文章版面設定</div>
-          <div
-            onClick={() => setBlogContentLayout('A')}
-            onKeyUp={() => setBlogContentLayout('A')}
-            role="button"
-            tabIndex={0}
-          >
-            <img alt="layout-left" src={contentLayout} />
+            </div>
+            <div
+              onClick={() => setBlogLayout('B')}
+              onKeyUp={() => setBlogLayout('B')}
+              role="button"
+              tabIndex={0}
+            >
+              <EditBlogLayout isToggled={blogLayout === 'B'} style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={layoutImage} />
 
-          </div>
-          <div
-            onClick={() => setBlogContentLayout('B')}
-            onKeyUp={() => setBlogContentLayout('B')}
-            role="button"
-            tabIndex={0}
-          >
-            <img style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={contentLayout} />
+            </div>
+          </EditBlogFlex>
+          <EditBlogTitle>文章版面設定</EditBlogTitle>
+          <EditBlogFlex>
+            <div
+              onClick={() => setBlogContentLayout('A')}
+              onKeyUp={() => setBlogContentLayout('A')}
+              role="button"
+              tabIndex={0}
+            >
+              <EditBlogLayout isToggled={blogContentLayout === 'A'} alt="layout-left" src={contentLayout} />
 
-          </div>
-          <div
-            onClick={() => {
-              handleSubmit(blogImage, currentUser.uid);
-              navigate(`/${currentUser.uid}`);
-            }}
-            onKeyUp={() => {
-              handleSubmit(blogImage, currentUser.uid);
-              navigate(`/${currentUser.uid}`);
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            完成設定
+            </div>
+            <div
+              onClick={() => setBlogContentLayout('B')}
+              onKeyUp={() => setBlogContentLayout('B')}
+              role="button"
+              tabIndex={0}
 
-          </div>
-        </>
+            >
+              <EditBlogLayout isToggled={blogContentLayout === 'B'} style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={contentLayout} />
+            </div>
+          </EditBlogFlex>
+          <br />
+          {blogImageFile ? (
+            <CreateDiaryPublish
+              onClick={() => {
+                handleSubmit(blogImageFile, currentUser.uid);
+              }}
+              onKeyUp={() => {
+                handleSubmit(blogImageFile, currentUser.uid);
+                navigate(`/${currentUser.uid}`);
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              ✓
+
+            </CreateDiaryPublish>
+          ) : (
+            <CreateDiaryPublish
+              onClick={() => {
+                saveBlogSettingsDB(currentUser.uid);
+                navigate(`/${currentUser.uid}`);
+              }}
+              onKeyUp={() => {
+                saveBlogSettingsDB(currentUser.uid);
+                navigate(`/${currentUser.uid}`);
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              ✓
+
+            </CreateDiaryPublish>
+          ) }
+
+        </CreateDiaryInsideBody>
       ) : (
         <div>Now Loading...</div>
       )}

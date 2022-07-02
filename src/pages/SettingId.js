@@ -27,6 +27,12 @@ export default function SettingId() {
       userImage: settingImageUrl,
       createAt: Timestamp.now().toDate(),
       userUID: uid,
+      blogImage: 'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/background%2Fbeach.png?alt=media&token=58223990-f103-4a62-92d9-67a7ed83ca8a',
+      blogTitle: `${settingId}的部落格`,
+      blogIntro: `Hello I'm ${settingId}`,
+      blogLayout: 'A',
+      blogContentLayout: 'A',
+      createBlogAt: Timestamp.now().toDate(),
     };
     setDoc(userdoc, { ...userData });
   };

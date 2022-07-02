@@ -19,7 +19,7 @@ export const CreateDiaryInsideBody = styled.div`
 `;
 
 export const CreateDiaryNavTitle = styled.div`
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   padding: 40px 0px 10px 10px;
   text-align: left;
 `;
@@ -46,4 +46,5 @@ export const CreateDiaryPublish = styled.div`
   position: fixed;
   right: 20px;
   bottom: 30px;
+  cursor: pointer;
 `;

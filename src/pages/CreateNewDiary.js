@@ -53,7 +53,7 @@ export default function CreateNewDiary() {
     <CreateDiaryBody>
       <CreateDiaryInsideBody>
         <CreateDiaryNavTitle>發表新文章</CreateDiaryNavTitle>
-        <CreateDiaryTitle titleValue={titleValue} setTitleValue={setTitleValue} placeholder="請輸入標題" />
+        <CreateDiaryTitle titleValue={titleValue} onChange={(e) => { setTitleValue(e.target.value); }} setTitleValue={setTitleValue} placeholder="請輸入標題" />
         <TextEditor
           diaryContentValue={diaryContentValue}
           setDiaryContentValue={setDiaryContentValue}

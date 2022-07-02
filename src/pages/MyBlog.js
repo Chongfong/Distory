@@ -67,33 +67,35 @@ export default function MyBlog() {
 
   const visitMyHomeFunc = () => {
     if (currentUserData) {
-      const visitMyHomeUsersArray = Object.entries(currentUserData.come);
-      const visitMyHomeUsersObject = [];
-      visitMyHomeUsersArray.map((eachVisitor) => {
-        async function gettingUserVisits(visitorArray) {
-          try {
-            const urlsRef = collection(db, 'users');
-            const q = query(urlsRef, where('userUID', '==', visitorArray[0]));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((querySnapshotEach) => {
-              if (!querySnapshotEach.empty) {
-                visitMyHomeUsersObject.push({
-                  visitorID: querySnapshotEach.data().userUID,
-                  visitorImage: querySnapshotEach.data().userImage,
-                  visitorNickName: querySnapshotEach.data().distoryId,
-                  visitAt: visitorArray[1],
-                });
-              }
-            });
-            setVisitMyHomeAll(visitMyHomeUsersObject);
-          } catch (e) {
-            alert('Error querying document: ', e);
-            return e.response;
-          } return true;
-        }
-        gettingUserVisits(eachVisitor);
-        return visitMyHomeUsersObject;
-      });
+      if (currentUserData.come) {
+        const visitMyHomeUsersArray = Object.entries(currentUserData.come);
+        const visitMyHomeUsersObject = [];
+        visitMyHomeUsersArray.map((eachVisitor) => {
+          async function gettingUserVisits(visitorArray) {
+            try {
+              const urlsRef = collection(db, 'users');
+              const q = query(urlsRef, where('userUID', '==', visitorArray[0]));
+              const querySnapshot = await getDocs(q);
+              querySnapshot.forEach((querySnapshotEach) => {
+                if (!querySnapshotEach.empty) {
+                  visitMyHomeUsersObject.push({
+                    visitorID: querySnapshotEach.data().userUID,
+                    visitorImage: querySnapshotEach.data().userImage,
+                    visitorNickName: querySnapshotEach.data().distoryId,
+                    visitAt: visitorArray[1],
+                  });
+                }
+              });
+              setVisitMyHomeAll(visitMyHomeUsersObject);
+            } catch (e) {
+              alert('Error querying document: ', e);
+              return e.response;
+            } return true;
+          }
+          gettingUserVisits(eachVisitor);
+          return visitMyHomeUsersObject;
+        });
+      }
     }
   };
 
