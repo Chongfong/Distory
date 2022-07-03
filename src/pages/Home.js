@@ -8,7 +8,6 @@ import {
 import DOMPurify from 'dompurify';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
-import '../css/loadDiary.css';
 
 export default function Home() {
   const fetchDiaries = () => new Promise((resolve) => {

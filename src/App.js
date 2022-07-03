@@ -18,6 +18,8 @@ import Welcome from './pages/Welcome';
 import MyBlog from './pages/MyBlog';
 import Profile from './pages/Profile';
 import BlogArticle from './pages/BlogArticle';
+import Pagination from './pages/Pagination';
+import Search from './pages/Search';
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           <Route path="/:userID/edit/:diaryID" element={<EditDiary />} />
           <Route path="/Diaries" element={<LoadDiaries />} />
           <Route path="/status" element={<StatusBar />} />
+          <Route path="/pagination" element={<Pagination />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
       </Router>
     </div>

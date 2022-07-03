@@ -27,6 +27,7 @@ export default function MyBlog() {
   const [visitMyHomeAll, setVisitMyHomeAll] = useState();
   const [followingUsers, setFollowingUsers] = useState();
   const [loginUserData, setLoginUserData] = useState();
+  const [likeUsers, setLikeUsers] = useState([]);
 
   const navigate = useNavigate();
   const { userID } = useParams();
@@ -237,8 +238,17 @@ export default function MyBlog() {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const userDiariesAll = [];
-          querySnapshot.forEach((eachDiary) => userDiariesAll.push(eachDiary.data()));
+          const diaryLikeUsers = [];
+          querySnapshot.forEach((eachDiary) => {
+            userDiariesAll.push(eachDiary.data());
+            if (eachDiary.data().likeDiary) {
+              diaryLikeUsers.push(eachDiary.data().likeDiary);
+            } else {
+              diaryLikeUsers.push([]);
+            }
+          });
           setUserDiaries(userDiariesAll);
+          setLikeUsers(diaryLikeUsers);
           return userDiariesAll;
         }
       } catch (e) {
@@ -283,6 +293,57 @@ export default function MyBlog() {
     setFollowingUsers(updatedFollwingUsers);
     unFollowerDB();
     getLoginUserInfo(currentUser);
+  };
+
+  const saveLikerDB = (articleID) => {
+    const articlesCollection = collection(db, 'articles');
+    const likeDiarydoc = doc(articlesCollection, articleID);
+    updateDoc(
+      likeDiarydoc,
+      {
+        likeDiary: arrayUnion(currentUser.uid),
+      },
+    );
+  };
+
+  const saveUnLikerDB = (articleID) => {
+    const articlesCollection = collection(db, 'articles');
+    const likeDiarydoc = doc(articlesCollection, articleID);
+    updateDoc(
+      likeDiarydoc,
+      {
+        likeDiary: arrayRemove(currentUser.uid),
+      },
+    );
+  };
+
+  const likeDiary = (index, articleID) => {
+    if (currentUser) {
+      const likeUsersCopy = [...likeUsers];
+      if (!likeUsersCopy[index].includes(currentUser.uid)) {
+        const likeUsersCopyOfIndex = [...likeUsersCopy[index], currentUser.uid];
+        likeUsersCopy[index] = likeUsersCopyOfIndex;
+        setLikeUsers(likeUsersCopy);
+        saveLikerDB(articleID);
+      }
+    } else if (currentUser.uid === userID) {
+
+    } else {
+      alert('請先登入');
+    }
+  };
+
+  const unlikeDiary = (index, articleID) => {
+    if (currentUser) {
+      const likeUsersCopy = [...likeUsers];
+      if (likeUsersCopy[index].includes(currentUser.uid)) {
+        const likeUsersCopyOfIndex = [...likeUsersCopy[index]]
+          .filter((eachLikeUser) => eachLikeUser !== currentUser.uid);
+        likeUsersCopy[index] = likeUsersCopyOfIndex;
+        setLikeUsers(likeUsersCopy);
+        saveUnLikerDB(articleID);
+      }
+    } else { alert('請先登入'); }
   };
 
   useEffect(() => {
@@ -467,8 +528,8 @@ export default function MyBlog() {
             </>
           ) : ('')}
           <ul>
-            {userDiaries.map((eachDiary) => (
-              <div className="diary" key={Date.now()}>
+            {userDiaries.map((eachDiary, index) => (
+              <div className="diary" key={new Date(eachDiary.publishAt.seconds * 1000)}>
                 <div
                   role="button"
                   tabIndex={0}
@@ -524,6 +585,35 @@ export default function MyBlog() {
                   </button>
                 ) : ('')}
                 <h5>{new Date(eachDiary.publishAt.seconds * 1000).toString()}</h5>
+                { likeUsers ? (
+                  likeUsers[index].includes(currentUser.uid) ? (
+                    <div
+                      onClick={() => { unlikeDiary(index, eachDiary.diaryID); }}
+                      onKeyUp={() => { unlikeDiary(index, eachDiary.diaryID); }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      按讚人數
+                      {likeUsers[index].length}
+                    </div>
+                  ) : (currentUser.uid === userID ? (
+                    <div>
+                      按讚人數
+                      {likeUsers[index].length}
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => { likeDiary(index, eachDiary.diaryID); }}
+                      onKeyUp={() => { likeDiary(index, eachDiary.diaryID); }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      按讚人數
+                      {likeUsers[index].length}
+                    </div>
+                  )
+
+                  )) : ('')}
                 <hr />
 
               </div>
