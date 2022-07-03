@@ -23,6 +23,7 @@ import {
   MyBlogBottomLine, MyBlogProfileSubTitle, MyBlogComeHomeUsers, MyBlogButtonLight,
 } from './MyBlog.style';
 
+import BlogArticle from './BlogArticle';
 import Pagination from './Pagination';
 
 export default function MyBlog() {
@@ -36,10 +37,10 @@ export default function MyBlog() {
   const [visitMyHomeAll, setVisitMyHomeAll] = useState();
   const [followingUsers, setFollowingUsers] = useState();
   const [loginUserData, setLoginUserData] = useState();
-  const [likeUsers, setLikeUsers] = useState([]);
+  const [, setLikeUsers] = useState([]);
 
   const navigate = useNavigate();
-  const { userID } = useParams();
+  const { userID, diaryID } = useParams();
   const inputUserImage = useRef();
   const inputBlogImage = useRef();
 
@@ -305,56 +306,56 @@ export default function MyBlog() {
     getLoginUserInfo(currentUser);
   };
 
-  const saveLikerDB = (articleID) => {
-    const articlesCollection = collection(db, 'articles');
-    const likeDiarydoc = doc(articlesCollection, articleID);
-    updateDoc(
-      likeDiarydoc,
-      {
-        likeDiary: arrayUnion(currentUser.uid),
-      },
-    );
-  };
+  // const saveLikerDB = (articleID) => {
+  //   const articlesCollection = collection(db, 'articles');
+  //   const likeDiarydoc = doc(articlesCollection, articleID);
+  //   updateDoc(
+  //     likeDiarydoc,
+  //     {
+  //       likeDiary: arrayUnion(currentUser.uid),
+  //     },
+  //   );
+  // };
 
-  const saveUnLikerDB = (articleID) => {
-    const articlesCollection = collection(db, 'articles');
-    const likeDiarydoc = doc(articlesCollection, articleID);
-    updateDoc(
-      likeDiarydoc,
-      {
-        likeDiary: arrayRemove(currentUser.uid),
-      },
-    );
-  };
+  // const saveUnLikerDB = (articleID) => {
+  //   const articlesCollection = collection(db, 'articles');
+  //   const likeDiarydoc = doc(articlesCollection, articleID);
+  //   updateDoc(
+  //     likeDiarydoc,
+  //     {
+  //       likeDiary: arrayRemove(currentUser.uid),
+  //     },
+  //   );
+  // };
 
-  const likeDiary = (index, articleID) => {
-    if (currentUser) {
-      const likeUsersCopy = [...likeUsers];
-      if (!likeUsersCopy[index].includes(currentUser.uid)) {
-        const likeUsersCopyOfIndex = [...likeUsersCopy[index], currentUser.uid];
-        likeUsersCopy[index] = likeUsersCopyOfIndex;
-        setLikeUsers(likeUsersCopy);
-        saveLikerDB(articleID);
-      }
-    } else if (currentUser.uid === userID) {
+  // const likeDiary = (index, articleID) => {
+  //   if (currentUser) {
+  //     const likeUsersCopy = [...likeUsers];
+  //     if (!likeUsersCopy[index].includes(currentUser.uid)) {
+  //       const likeUsersCopyOfIndex = [...likeUsersCopy[index], currentUser.uid];
+  //       likeUsersCopy[index] = likeUsersCopyOfIndex;
+  //       setLikeUsers(likeUsersCopy);
+  //       saveLikerDB(articleID);
+  //     }
+  //   } else if (currentUser.uid === userID) {
 
-    } else {
-      alert('請先登入');
-    }
-  };
+  //   } else {
+  //     alert('請先登入');
+  //   }
+  // };
 
-  const unlikeDiary = (index, articleID) => {
-    if (currentUser) {
-      const likeUsersCopy = [...likeUsers];
-      if (likeUsersCopy[index].includes(currentUser.uid)) {
-        const likeUsersCopyOfIndex = [...likeUsersCopy[index]]
-          .filter((eachLikeUser) => eachLikeUser !== currentUser.uid);
-        likeUsersCopy[index] = likeUsersCopyOfIndex;
-        setLikeUsers(likeUsersCopy);
-        saveUnLikerDB(articleID);
-      }
-    } else { alert('請先登入'); }
-  };
+  // const unlikeDiary = (index, articleID) => {
+  //   if (currentUser) {
+  //     const likeUsersCopy = [...likeUsers];
+  //     if (likeUsersCopy[index].includes(currentUser.uid)) {
+  //       const likeUsersCopyOfIndex = [...likeUsersCopy[index]]
+  //         .filter((eachLikeUser) => eachLikeUser !== currentUser.uid);
+  //       likeUsersCopy[index] = likeUsersCopyOfIndex;
+  //       setLikeUsers(likeUsersCopy);
+  //       saveUnLikerDB(articleID);
+  //     }
+  //   } else { alert('請先登入'); }
+  // };
 
   useEffect(() => {
     loadUserBlogSettings();
@@ -568,8 +569,13 @@ export default function MyBlog() {
                 ) : ('')}
               </MyBlogFLexLeft>
               <MyBlogFLexRight>
-                <MyBlogProfileSubTitle>所有文章</MyBlogProfileSubTitle>
-                <Pagination userID={userID} currentUserData={currentUserData} />
+                {diaryID ? (<BlogArticle />) : (
+                  <>
+                    <MyBlogProfileSubTitle>所有文章</MyBlogProfileSubTitle>
+                    <Pagination userID={userID} currentUserData={currentUserData} />
+                  </>
+                )}
+
               </MyBlogFLexRight>
             </MyBlogFLexContainer>
           </CreateDiaryInsideBody>
