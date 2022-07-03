@@ -14,7 +14,9 @@ import contentLayout from '../img/content-layout.png';
 import {
   CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryTitle, CreateDiaryPublish,
 } from './CreateNewDiaries.style';
-import { EditBlogTitle, EditBlogLayout, EditBlogFlex } from './EditBlog.style';
+import {
+  EditBlogTitle, EditBlogLayout, EditBlogFlex, BlogBackgroundImage,
+} from './EditBlog.style';
 import { CircleButton } from './ImageEditor.style';
 
 export default function EditBlog() {
@@ -200,7 +202,7 @@ export default function EditBlog() {
 
               </CircleButton>
             )}
-            <img
+            <BlogBackgroundImage
               alt="background"
               src={blogImage}
               style={{

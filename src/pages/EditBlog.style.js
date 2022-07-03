@@ -21,3 +21,10 @@ export const EditBlogFlex = styled.div`
   flex-wrap: nowrap;
   align-items: flex-start;
 `;
+
+export const BlogBackgroundImage = styled.img`
+  width: 100%;
+  height: 70%;
+  max-height: 400px;
+  border-radius: 25px;
+`;
