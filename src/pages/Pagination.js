@@ -70,7 +70,7 @@ export default function Pagination({ userID, currentUserData }) {
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;
-              {doc.likes}
+              {doc.likeDiary ? doc.likeDiary.length : 0}
             </DiaryLikes>
           </DiaryContainerFlex>
         ))) : ((list.slice(0, 2).map((doc) => (
@@ -92,7 +92,7 @@ export default function Pagination({ userID, currentUserData }) {
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;
-              {doc.likes}
+              {doc.likeDiary ? doc.likeDiary.length : 0}
             </DiaryLikes>
           </DiaryContainerFlex>
         ))))}

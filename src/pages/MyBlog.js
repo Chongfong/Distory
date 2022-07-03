@@ -305,58 +305,6 @@ export default function MyBlog() {
     unFollowerDB();
     getLoginUserInfo(currentUser);
   };
-
-  // const saveLikerDB = (articleID) => {
-  //   const articlesCollection = collection(db, 'articles');
-  //   const likeDiarydoc = doc(articlesCollection, articleID);
-  //   updateDoc(
-  //     likeDiarydoc,
-  //     {
-  //       likeDiary: arrayUnion(currentUser.uid),
-  //     },
-  //   );
-  // };
-
-  // const saveUnLikerDB = (articleID) => {
-  //   const articlesCollection = collection(db, 'articles');
-  //   const likeDiarydoc = doc(articlesCollection, articleID);
-  //   updateDoc(
-  //     likeDiarydoc,
-  //     {
-  //       likeDiary: arrayRemove(currentUser.uid),
-  //     },
-  //   );
-  // };
-
-  // const likeDiary = (index, articleID) => {
-  //   if (currentUser) {
-  //     const likeUsersCopy = [...likeUsers];
-  //     if (!likeUsersCopy[index].includes(currentUser.uid)) {
-  //       const likeUsersCopyOfIndex = [...likeUsersCopy[index], currentUser.uid];
-  //       likeUsersCopy[index] = likeUsersCopyOfIndex;
-  //       setLikeUsers(likeUsersCopy);
-  //       saveLikerDB(articleID);
-  //     }
-  //   } else if (currentUser.uid === userID) {
-
-  //   } else {
-  //     alert('請先登入');
-  //   }
-  // };
-
-  // const unlikeDiary = (index, articleID) => {
-  //   if (currentUser) {
-  //     const likeUsersCopy = [...likeUsers];
-  //     if (likeUsersCopy[index].includes(currentUser.uid)) {
-  //       const likeUsersCopyOfIndex = [...likeUsersCopy[index]]
-  //         .filter((eachLikeUser) => eachLikeUser !== currentUser.uid);
-  //       likeUsersCopy[index] = likeUsersCopyOfIndex;
-  //       setLikeUsers(likeUsersCopy);
-  //       saveUnLikerDB(articleID);
-  //     }
-  //   } else { alert('請先登入'); }
-  // };
-
   useEffect(() => {
     loadUserBlogSettings();
     getUserDiaries();

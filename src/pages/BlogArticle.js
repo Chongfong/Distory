@@ -10,10 +10,19 @@ import { auth, db } from '../firestore/firestore';
 
 import { BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer } from './BlogArticle.style';
 
+import { MyBlogBottomLine } from './MyBlog.style';
+
+import Comment from './Comment';
+import Like from './Like';
+
 export default function BlogArticle() {
   const [currentUser, setCurrentUser] = useState();
   const [currentUserData, setCurrentUserData] = useState();
   const [userDiaries, setUserDiaries] = useState([]);
+  const [commentAll, setCommentAll] = useState();
+  const [loginUserDate, setLoginUserData] = useState();
+  const [commentAuthor, setCommentAuthor] = useState();
+
   const { userID, diaryID } = useParams();
 
   const docRef = doc(db, 'users', userID);
@@ -53,6 +62,8 @@ export default function BlogArticle() {
       let nowLoginUser = {};
       fetchLoginUser().then((querySnapshot) => {
         nowLoginUser = querySnapshot.data();
+        setLoginUserData(querySnapshot.data());
+        setCommentAuthor(querySnapshot.data().distoryId);
       });
       return (nowLoginUser);
     };
@@ -70,6 +81,9 @@ export default function BlogArticle() {
           const userDiariesAll = [];
           querySnapshot.forEach((eachDiary) => {
             userDiariesAll.push(eachDiary.data());
+            const CommentAllSort = [].concat(eachDiary.data().comments)
+              .sort((a, b) => (b.commentTime.seconds - a.commentTime.seconds));
+            setCommentAll(CommentAllSort);
           });
           setUserDiaries(userDiariesAll);
           return userDiariesAll;
@@ -95,23 +109,35 @@ export default function BlogArticle() {
     loadUserBlogSettings();
     loadLoginUser();
     getUserDiaries();
-  }, []);
+  }, [currentUser]);
 
   return (
     <>
       {currentUser && currentUserData ? (
         <ul>
           {userDiaries.map((eachDiary) => (
-            <div className="diary">
-              <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
-              <BlogArticleDate>
-                {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
-              </BlogArticleDate>
-              <BlogAtricleDetailContainer dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(eachDiary.content),
-              }}
+            <>
+              <div className="diary">
+                <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
+                <BlogArticleDate>
+                  {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+                </BlogArticleDate>
+                <BlogAtricleDetailContainer dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(eachDiary.content),
+                }}
+                />
+              </div>
+              <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+              <MyBlogBottomLine style={{ width: '97%' }} />
+              <Comment
+                currentUser={currentUser}
+                setCommentAll={setCommentAll}
+                commentAuthor={commentAuthor}
+                commentAll={commentAll}
+                loginUserDate={loginUserDate}
+                setCommentAuthor={setCommentAuthor}
               />
-            </div>
+            </>
           ))}
         </ul>
       ) : <div>Now Loading...</div>}
