@@ -11,11 +11,16 @@ import {
   getDocs,
 } from 'firebase/firestore';
 import { db, auth } from '../firestore/firestore';
+import {
+  SignUpBody, SignUpContainer, SignUpTitle, SignUpSubTitle,
+  SignUpInfoTitle, SignUpInput, SignUpInfoDetail, SignUpFlowIconContainer,
+} from './SignUp.style';
+
+import { CircleButton } from './ImageEditor.style';
 
 export default function SettingId() {
   const [settingId, setSettingId] = useState();
   const [settingImageUrl] = useState('https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png');
-  const [settingName, setSettingName] = useState('主人翁');
 
   const navigate = useNavigate();
   const userCollection = collection(db, 'users');
@@ -56,7 +61,7 @@ export default function SettingId() {
 
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
-        handleSettingIdName(settingId, settingName);
+        handleSettingIdName(settingId);
         navigate('/welcome');
         return true;
       }
@@ -69,42 +74,39 @@ export default function SettingId() {
   }
 
   return (
-    <>
-      <img
-        style={{ width: '100px', height: '100px' }}
-        src="https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png"
-        alt="default_image"
-      />
 
-      <div>Distory ID</div>
-      <p>此ID無法更改，將顯示在部落格中</p>
-      <input
-        type="text"
-        value={settingId}
-        onChange={(e) => setSettingId(e.target.value)}
-      />
+    <SignUpBody>
+      <SignUpContainer>
+        <SignUpTitle>Distory</SignUpTitle>
+        <SignUpSubTitle>設定使用者名稱</SignUpSubTitle>
+        <SignUpInfoTitle>Distory ID</SignUpInfoTitle>
 
-      <div>暱稱</div>
-      <input
-        type="text"
-        value={settingName}
-        onChange={(e) => setSettingName(e.target.value)}
-      />
+        <SignUpInput
+          type="text"
+          value={settingId}
+          onChange={(e) => setSettingId(e.target.value)}
+        />
+        <SignUpInfoDetail>此ID無法更改　將顯示在部落格中</SignUpInfoDetail>
+        <SignUpFlowIconContainer style={{ justifyContent: 'flex-end' }}>
+          <div>
+            <CircleButton
+              onClick={() => {
+                checkDuplicateIdAndSaveDB();
+              }}
+              onKeyUp={() => {
+                checkDuplicateIdAndSaveDB();
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              ➔
 
-      <div
-        onClick={() => {
-          checkDuplicateIdAndSaveDB();
-        }}
-        onKeyUp={() => {
-          checkDuplicateIdAndSaveDB();
-        }}
-        role="button"
-        tabIndex={0}
-      >
-        下一步
+            </CircleButton>
+            <div>完成</div>
+          </div>
+        </SignUpFlowIconContainer>
 
-      </div>
-
-    </>
+      </SignUpContainer>
+    </SignUpBody>
   );
 }
