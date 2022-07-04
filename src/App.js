@@ -20,11 +20,14 @@ import Profile from './pages/Profile';
 import BlogArticle from './pages/BlogArticle';
 import Pagination from './pages/Pagination';
 import Search from './pages/Search';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <div className="App">
       <Router>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
@@ -41,8 +44,9 @@ function App() {
           <Route path="/Diaries" element={<LoadDiaries />} />
           <Route path="/status" element={<StatusBar />} />
           <Route path="/pagination" element={<Pagination />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search/:searchkey" element={<Search />} />
         </Routes>
+        <Footer />
       </Router>
     </div>
   );

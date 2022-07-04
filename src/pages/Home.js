@@ -13,6 +13,7 @@ import {
   DiaryTitleInsideBox, DiaryImageInsideBox, HomeImageFirst, HomeImageNormal,
   DiaryPublishTime, DiaryTitle, DiaryOutContainer, DiarySmallContainer,
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
+  HomeWelcomeWords,
 } from './Home.style';
 
 import { MyBlogProfileSubTitle } from './MyBlog.style';
@@ -44,7 +45,7 @@ export default function Home() {
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
     const formatted = `${t.getFullYear()}.
-    ${(`0${t.getMonth()}`).slice(-2)}.
+    ${(`0${t.getMonth()}+1`).slice(-2)}.
     ${(`0${t.getDate()}`).slice(-2)}`;
     return formatted;
   };
@@ -55,20 +56,6 @@ export default function Home() {
 
   return (
     <HomeBody>
-      <div>歡迎光臨</div>
-      <Link to="/create">
-        <button type="button">Create</button>
-
-      </Link>
-      <Link to="/diaries">
-        <button type="button">Diaries</button>
-
-      </Link>
-
-      <Link to="/signup">
-        <button type="button">Signup</button>
-
-      </Link>
 
       <DiaryOutContainer>
         <div className="diary" style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -78,6 +65,13 @@ export default function Home() {
               index === 0
                 ? (
                   <>
+                    <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                      <HomeWelcomeWords>
+                        「　寫下你的專屬故事　」
+                      </HomeWelcomeWords>
+
+                    </div>
+
                     <MyBlogProfileSubTitle>網友熱議</MyBlogProfileSubTitle>
                     <DiaryContainer
                       role="button"
@@ -150,22 +144,7 @@ export default function Home() {
                   </DiarySmallContainer>
                 )
             }
-              {/* <div
-              role="button"
-              tabIndex={0}
-              onClick={() => {
-                navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-              }}
-              onKeyUp={() => {
-                navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-              }}
-            >
-              <div dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(eachDiary.content),
-              }}
-              />
-            </div>
-             */}
+              {}
             </>
           ))}
 

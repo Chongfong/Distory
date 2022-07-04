@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const HomeBody = styled.div`
   width: 70%;
   height:70%;
-  margin: 0px auto;
+  margin: 0px auto 150px;
 `;
 
 export const DiaryOutContainer = styled.div`
@@ -20,8 +20,12 @@ export const DiarySmallContainer = styled.div`
   justify-content: center;
   padding: 20px;
   border-radius: 25px;
-  border: 2px solid #ccc;
+  border-right: 2px solid #ccc;
+  border-bottom: 3px solid #ccc;
   cursor: pointer;
+  :hover, :active, :focus{
+    opacity: 0.7
+  }
   @media (max-width: 912px) {
     flex: 0 1 100%;
 
@@ -35,6 +39,9 @@ export const DiaryContainer = styled.div`
   padding: 50px 50px 25px;
   align-items: center;
   cursor: pointer;
+  :hover, :active, :focus{
+    opacity: 0.7
+  }
 `;
 
 export const DiaryImageBox = styled.div`
@@ -134,4 +141,11 @@ export const HomeAuthorImage = styled.img`
       width: 50px;
       height:50px;
 }
+`;
+
+export const HomeWelcomeWords = styled.p`
+  font-size: 25px;
+  font-weight: bold;
+  top: 50px;
+  line-height: 200px;
 `;
