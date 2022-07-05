@@ -26,6 +26,8 @@ import boy from '../img/boy.png';
 
 import { MyBlogProfileSubTitle } from './MyBlog.style';
 
+import { changeHTMLToPureText } from '../components/ShareFunctions';
+
 const previewImagesArray = [preview1, preview2, preview3, preview4, preview5];
 
 export default function Home() {
@@ -112,7 +114,7 @@ export default function Home() {
                             {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                           </DiaryPublishTime>
                           <DiaryContent>
-                            {eachDiary.content.slice(0, 80)}
+                            {changeHTMLToPureText(eachDiary.content).slice(0, 80)}
                           </DiaryContent>
                         </DiaryTitleInsideBox>
 

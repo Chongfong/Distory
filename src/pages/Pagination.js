@@ -13,6 +13,8 @@ import {
 
 import postImage from '../img/post2.png';
 
+import { changeHTMLToPureText } from '../components/ShareFunctions';
+
 export default function Pagination({ userID, currentUserData }) {
   const [list, setList] = useState([]);
   const [page, setPage] = useState(0);
@@ -68,7 +70,7 @@ export default function Pagination({ userID, currentUserData }) {
             <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
               <DiaryTitle>{doc.title}</DiaryTitle>
-              <DiaryContent>{doc.content.slice(0, 80)}</DiaryContent>
+              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;
@@ -90,7 +92,7 @@ export default function Pagination({ userID, currentUserData }) {
             <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
               <DiaryTitle>{doc.title}</DiaryTitle>
-              <DiaryContent>{doc.content.slice(0, 80)}</DiaryContent>
+              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;

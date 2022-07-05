@@ -15,6 +15,8 @@ import { db } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
 import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
 
+import { removeClickButtonsTag } from '../components/ShareFunctions';
+
 export default function CreateNewDiary() {
   const [titleValue, setTitleValue] = useState('Please enter the title');
   const [diaryContentValue, setDiaryContentValue] = useState();
@@ -39,7 +41,7 @@ export default function CreateNewDiary() {
     const data = {
       title: titleValue,
       titleText: [...titleValue.replace(' ', '')],
-      content: diaryContentValue,
+      content: removeClickButtonsTag(diaryContentValue),
       status: 'published',
       publishAt: Timestamp.now().toDate(),
       diaryID: diarydoc.id,
