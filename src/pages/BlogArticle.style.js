@@ -16,3 +16,10 @@ export const BlogAtricleDetailContainer = styled.div`
   text-align: left;
   margin: 20px 10px;
 `;
+
+export const BlogArticleLikesContainer = styled.div`
+  text-align: left;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-bottom: 30px;
+`;

@@ -2,7 +2,8 @@ import React
   from 'react';
 import ReactQuill from 'react-quill';
 import PropTypes from 'prop-types';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
+import '../css/textEditor.css';
 
 class CustomQuill extends ReactQuill {
   destroyEditor() {
@@ -14,7 +15,6 @@ export default function TextEditor({ diaryContentValue, setDiaryContentValue, te
   const modules = {
     toolbar: [
       [{ size: ['small', false, 'large', 'huge'] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ font: [] }],
       [{ color: [] }, { background: [] }],
       ['bold', 'italic', 'underline', 'strike'],
@@ -27,7 +27,7 @@ export default function TextEditor({ diaryContentValue, setDiaryContentValue, te
 
       [{ align: [] }],
 
-      ['link', 'image', 'video'],
+      ['link', 'video'],
 
       ['clean'],
     ],

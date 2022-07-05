@@ -318,32 +318,32 @@
   .diary .ql-color-purple {
     color: #93f;
   }
-  .diary .ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
+  .diary .ql-font-serif ,.quill .ql-font-serif {
+    font-family: "Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", serif;
   }
-  .diary .ql-font-monospace {
+  .diary .ql-font-monospace , .quill .ql-font-monospace{
     font-family: Monaco, Courier New, monospace;
   }
-  .diary .ql-size-small {
+  .diary .ql-size-small , .quill .ql-size-small{
     font-size: 0.75em;
   }
-  .diary .ql-size-large {
+  .diary .ql-size-large , .quill .ql-size-large{
     font-size: 1.5em;
   }
-  .diary .ql-size-huge {
+  .diary .ql-size-huge , .quill .ql-size-huge{
     font-size: 2.5em;
   }
   .diary .ql-direction-rtl {
     direction: rtl;
     text-align: inherit;
   }
-  .diary .ql-align-center {
+  .diary .ql-align-center, .quill .ql-align-center{
     text-align: center;
   }
-  .diary .ql-align-justify {
+  .diary .ql-align-justify, .quill .ql-align-justify{
     text-align: justify;
   }
-  .diary .ql-align-right {
+  .diary .ql-align-right, .quill .ql-align-right{
     text-align: right;
   }
   .diary.ql-blank::before {
@@ -572,7 +572,7 @@
   .ql-snow .diary a {
     text-decoration: underline;
   }
-  .ql-snow .diary blockquote {
+  .ql-snow .diary blockquote, .quill blockquote {
     border-left: 4px solid #ccc;
     margin-bottom: 5px;
     margin-top: 5px;
@@ -593,7 +593,7 @@
     font-size: 85%;
     padding: 2px 4px;
   }
-  .ql-snow .diary pre.ql-syntax {
+  .ql-snow .diary pre.ql-syntax, .quill .ql-syntax {
     background-color: #23241f;
     color: #f8f8f2;
     overflow: visible;
@@ -806,16 +806,21 @@
     background-color: #000;
   }
   .ql-toolbar.ql-snow {
-    border: 1px solid #ccc;
+    text-align: left;
     box-sizing: border-box;
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    /* font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; */
     padding: 8px;
+    /* max-width: 600px; */
+    margin-bottom: 8px;;
   }
   .ql-toolbar.ql-snow .ql-formats {
     margin-right: 15px;
   }
   .ql-toolbar.ql-snow .ql-picker-label {
     border: 1px solid transparent;
+  }
+  .ql-toolbar.ql-snow + .ql-container.ql-snow{
+    border: 1px #ccc solid;
   }
   .ql-toolbar.ql-snow .ql-picker-options {
     border: 1px solid transparent;
@@ -830,9 +835,6 @@
   .ql-toolbar.ql-snow .ql-color-picker .ql-picker-item.ql-selected,
   .ql-toolbar.ql-snow .ql-color-picker .ql-picker-item:hover {
     border-color: #000;
-  }
-  .ql-toolbar.ql-snow + .ql-container.ql-snow {
-    border-top: 0px;
   }
   .ql-snow .ql-tooltip {
     background-color: #fff;
@@ -902,5 +904,22 @@
   }
   .ql-container.ql-snow {
     border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 100%;
   }
+
+  .ql-editor {
+    box-sizing: border-box;
+    line-height: 1.42;
+    height: 100%;
+    outline: none;
+    overflow-y: auto;
+    padding: 12px 15px;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   

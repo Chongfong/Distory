@@ -20,28 +20,33 @@ import Profile from './pages/Profile';
 import BlogArticle from './pages/BlogArticle';
 import Pagination from './pages/Pagination';
 import Search from './pages/Search';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <div className="App">
       <Router>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/settingid" element={<SettingId />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/login" element={<LogIn />} />
-          <Route path="/:userID" element={<MyBlog />} />
+          <Route path="/:userID" element={<MyBlog />}>
+            <Route path=":diaryID" element={<BlogArticle />} />
+          </Route>
           <Route path="/:userID/blogedit" element={<EditBlog />} />
-          <Route path="/:userID/:diaryID" element={<BlogArticle />} />
           <Route path="/:userID/profile" element={<Profile />} />
           <Route path="/:userID/create" element={<CreateNewDiary />} />
           <Route path="/:userID/edit/:diaryID" element={<EditDiary />} />
           <Route path="/Diaries" element={<LoadDiaries />} />
           <Route path="/status" element={<StatusBar />} />
           <Route path="/pagination" element={<Pagination />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search/:searchkey" element={<Search />} />
         </Routes>
+        <Footer />
       </Router>
     </div>
   );
