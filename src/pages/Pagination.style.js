@@ -18,6 +18,10 @@ export const DiaryImageDefault = styled.img`
   background-color: #ffead7;
   border: 1px solid #ccc;
   margin-right: 20px;
+  cursor:pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
 `;
 
 export const DiaryContentFlex = styled.div`
@@ -25,6 +29,9 @@ export const DiaryContentFlex = styled.div`
   flex-wrap: wrap;
   max-width: 70%;
   cursor:pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
   @media (max-width: 912px) {
     max-width: 65%;
 }

@@ -4,6 +4,7 @@ export const CommentDivContainer = styled.div`
   display:flex;
   align-items: center;
   width: 90%;
+  margin-top: 15px;
 `;
 
 export const CommentDetailDiv = styled.div`

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -7,6 +7,12 @@ export const HeaderContainer = styled.div`
   align-items: flex-end;
   text-align: left;
   margin-top: 10px;
+`;
+
+const bookmark = keyframes`
+  0%   {transform: rotate(10deg);}
+  70% {transform: rotate(0deg);}
+  100% {transform: rotate(10deg);}
 `;
 
 export const HeaderTitleContainer = styled.img`
@@ -30,6 +36,9 @@ export const HeaderTitle = styled.div`
   width: 140px;
   margin-left: 40px;
   cursor: pointer;
+  animation: ${bookmark} 10s ease 0s infinite;
+  transform-origin: top center; 
+  position: fixed;
   :hover, :active, :focus{
     opacity: 0.5;
   }

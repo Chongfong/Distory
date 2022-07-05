@@ -11,6 +11,8 @@ import {
   DiaryLikes,
 } from './Pagination.style';
 
+import postImage from '../img/post2.png';
+
 export default function Pagination({ userID, currentUserData }) {
   const [list, setList] = useState([]);
   const [page, setPage] = useState(0);
@@ -63,7 +65,7 @@ export default function Pagination({ userID, currentUserData }) {
               navigate(`${doc.diaryID}`);
             }}
           >
-            <DiaryImageDefault src="https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/blog_images%2F12230.png?alt=media&token=8a7679cf-1e33-49f9-81dd-73ae6aab9bc8" alt="preview-diary" />
+            <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
               <DiaryTitle>{doc.title}</DiaryTitle>
               <DiaryContent>{doc.content.slice(0, 80)}</DiaryContent>
@@ -85,7 +87,7 @@ export default function Pagination({ userID, currentUserData }) {
               navigate(`${doc.diaryID}`);
             }}
           >
-            <DiaryImageDefault src="https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/blog_images%2F12230.png?alt=media&token=8a7679cf-1e33-49f9-81dd-73ae6aab9bc8" alt="preview-diary" />
+            <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
               <DiaryTitle>{doc.title}</DiaryTitle>
               <DiaryContent>{doc.content.slice(0, 80)}</DiaryContent>

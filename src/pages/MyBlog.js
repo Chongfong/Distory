@@ -206,6 +206,14 @@ export default function MyBlog() {
     );
   };
 
+  const transformTimeToDate = (seconds) => {
+    const t = new Date(seconds);
+    const formatted = `${t.getFullYear()}.
+    ${(`0${t.getMonth() + 1}`).slice(-2)}.
+    ${(`0${t.getDate()}`).slice(-2)}`;
+    return formatted;
+  };
+
   const renderUploadImage = (imageFile, option) => {
     if (option === 'blog') {
       if (typeof (imageFile) === 'object') {
@@ -321,30 +329,63 @@ export default function MyBlog() {
   return (
     <>
       {currentUser && currentUserData ? (
-        <>
-          <button
-            type="button"
-            onClick={() => {
-              navigate('/');
-            }}
+        <CreateDiaryInsideBody>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => { navigate(`/${userID}`); }}
+            onKeyUp={() => { navigate(`/${userID}`); }}
+            style={{ cursor: 'pointer' }}
           >
-            回首頁
-
-          </button>
-          <CreateDiaryInsideBody>
             <div
+              onClick={() => {
+                onBlogImageClick();
+              }}
+              onKeyUp={() => {
+                onBlogImageClick();
+              }}
               role="button"
               tabIndex={0}
-              onClick={() => { navigate(`/${userID}`); }}
-              onKeyUp={() => { navigate(`/${userID}`); }}
-              style={{ cursor: 'pointer' }}
             >
+              {currentUser.uid === userID ? (
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="blog-image"
+                  ref={inputBlogImage}
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    if (e.target.files[0]) { setCurrentBlogImage(e.target.files[0]); }
+                  }}
+                />
+              ) : ('') }
+              {currentBlogImage ? (
+                <>
+                  <BlogBackgroundImage
+                    src={renderUploadImage(currentBlogImage, 'blog')}
+                    alt={currentBlogImage ? currentBlogImage.name : null}
+                  />
+                  {!checkLoadBlogImage ? (
+                    <>
+                      <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(currentBlogImage, userID, 'blog'); setCheckLoadBlogImage(true); }}>確認</button>
+                      <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentBlogImage(); }}>取消</button>
+                    </>
+                  ) : ('')}
+                </>
+              ) : (<BlogBackgroundImage src={currentUserData.blogImage} alt="blogImage" />)}
+              <h1>{currentUserData.blogTitle}</h1>
+              <p>{currentUserData.blogIntro}</p>
+            </div>
+          </div>
+          <MyBlogBottomLine style={{ width: '100%' }} />
+          <MyBlogFLexContainer blogLayoutOrder={currentUserData.blogLayout === 'A'}>
+            <MyBlogFLexLeft>
               <div
                 onClick={() => {
-                  onBlogImageClick();
+                  onUserImageClick();
                 }}
                 onKeyUp={() => {
-                  onBlogImageClick();
+                  onUserImageClick();
                 }}
                 role="button"
                 tabIndex={0}
@@ -353,90 +394,46 @@ export default function MyBlog() {
                   <input
                     type="file"
                     accept="image/*"
-                    id="blog-image"
-                    ref={inputBlogImage}
+                    id="user-image"
+                    ref={inputUserImage}
                     style={{ display: 'none' }}
                     onChange={(e) => {
-                      if (e.target.files[0]) { setCurrentBlogImage(e.target.files[0]); }
+                      if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
                     }}
                   />
                 ) : ('') }
-                {currentBlogImage ? (
+                {currentUserImage ? (
                   <>
-                    <BlogBackgroundImage
-                      src={renderUploadImage(currentBlogImage, 'blog')}
-                      alt={currentBlogImage ? currentBlogImage.name : null}
+                    <img
+                      style={{
+                        width: '100px', height: '100px', borderRadius: '50%', border: 'black solid 2px',
+                      }}
+                      src={renderUploadImage(currentUserImage, 'user')}
+                      alt={currentUserImage ? currentUserImage.name : null}
                     />
-                    {!checkLoadBlogImage ? (
+                    {!checkLoadUserImage ? (
                       <>
-                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(currentBlogImage, userID, 'blog'); setCheckLoadBlogImage(true); }}>確認</button>
-                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentBlogImage(); }}>取消</button>
+                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(currentUserImage, userID, 'user'); setCheckLoadUserImage(true); }}>確認</button>
+                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentUserImage(); }}>取消</button>
                       </>
                     ) : ('')}
                   </>
-                ) : (<BlogBackgroundImage src={currentUserData.blogImage} alt="blogImage" />)}
-                <h1>{currentUserData.blogTitle}</h1>
-                <p>{currentUserData.blogIntro}</p>
+                ) : (
+                  <img
+                    style={{
+                      width: '100px', height: '100px', borderRadius: '50%',
+                    }}
+                    src={currentUserData.userImage}
+                    alt="userImage"
+                  />
+                ) }
               </div>
-            </div>
-            <MyBlogBottomLine style={{ width: '100%' }} />
-            <MyBlogFLexContainer blogLayoutOrder={currentUserData.blogLayout === 'A'}>
-              <MyBlogFLexLeft>
-                <div
-                  onClick={() => {
-                    onUserImageClick();
-                  }}
-                  onKeyUp={() => {
-                    onUserImageClick();
-                  }}
-                  role="button"
-                  tabIndex={0}
-                >
-                  {currentUser.uid === userID ? (
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="user-image"
-                      ref={inputUserImage}
-                      style={{ display: 'none' }}
-                      onChange={(e) => {
-                        if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
-                      }}
-                    />
-                  ) : ('') }
-                  {currentUserImage ? (
-                    <>
-                      <img
-                        style={{
-                          width: '100px', height: '100px', borderRadius: '50%', border: 'black solid 2px',
-                        }}
-                        src={renderUploadImage(currentUserImage, 'user')}
-                        alt={currentUserImage ? currentUserImage.name : null}
-                      />
-                      {!checkLoadUserImage ? (
-                        <>
-                          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(currentUserImage, userID, 'user'); setCheckLoadUserImage(true); }}>確認</button>
-                          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentUserImage(); }}>取消</button>
-                        </>
-                      ) : ('')}
-                    </>
-                  ) : (
-                    <img
-                      style={{
-                        width: '100px', height: '100px', borderRadius: '50%',
-                      }}
-                      src={currentUserData.userImage}
-                      alt="userImage"
-                    />
-                  ) }
-                </div>
-                <MyBlogUserName>{currentUserData.distoryId}</MyBlogUserName>
-                <br />
-                <p>{`文章樣式：${currentUserData.blogContentLayout}`}</p>
-                <p>{`成立於　${new Date(currentUserData.createBlogAt.seconds * 1000).toString()}`}</p>
+              <MyBlogUserName>{currentUserData.distoryId}</MyBlogUserName>
+              <br />
+              <p>{`Since　${transformTimeToDate(currentUserData.createBlogAt.seconds * 1000).toString()}`}</p>
 
-                {loginUserData ? (
-                  loginUserData.userUID !== userID
+              {loginUserData ? (loginUserData.following ? (
+                loginUserData.userUID !== userID
           && !(loginUserData.following.includes(userID)) ? (
             <MyBlogButton
               type="button"
@@ -446,22 +443,22 @@ export default function MyBlog() {
             >
               關注用戶
             </MyBlogButton>
-                    ) : (
-                      <>
-                        <MyBlogButton
-                          type="button"
-                          onClick={() => {
-                            unFollowThisUser();
-                          }}
-                        >
-                          取消關注
-                        </MyBlogButton>
-                        <br />
+                  ) : (
+                    <>
+                      <MyBlogButton
+                        type="button"
+                        onClick={() => {
+                          unFollowThisUser();
+                        }}
+                      >
+                        取消關注
+                      </MyBlogButton>
+                      <br />
 
-                      </>
-                    )) : ('') }
-                <MyBlogBottomLine />
-                {visitMyHomeAll && (
+                    </>
+                  )) : ('')) : ('') }
+              <MyBlogBottomLine />
+              {visitMyHomeAll && (
                 <>
                   <MyBlogProfileSubTitle>Visitors</MyBlogProfileSubTitle>
                   <MyBlogVisitorContainer>
@@ -490,44 +487,43 @@ export default function MyBlog() {
                   </MyBlogVisitorContainer>
                   <MyBlogBottomLine />
                 </>
-                )}
+              )}
 
-                {currentUser.uid === userID ? (
-                  <>
-                    <MyBlogButtonLight
-                      type="button"
-                      onClick={() => {
-                        navigate('create');
-                      }}
-                    >
-                      發布新文章
+              {currentUser.uid === userID ? (
+                <>
+                  <MyBlogButtonLight
+                    type="button"
+                    onClick={() => {
+                      navigate('create');
+                    }}
+                  >
+                    發布新文章
 
-                    </MyBlogButtonLight>
-                    <MyBlogButtonLight
-                      type="button"
-                      onClick={() => {
-                        navigate('blogedit');
-                      }}
-                    >
-                      編輯設定
+                  </MyBlogButtonLight>
+                  <MyBlogButtonLight
+                    type="button"
+                    onClick={() => {
+                      navigate('blogedit');
+                    }}
+                  >
+                    編輯設定
 
-                    </MyBlogButtonLight>
+                  </MyBlogButtonLight>
 
-                  </>
-                ) : ('')}
-              </MyBlogFLexLeft>
-              <MyBlogFLexRight>
-                {diaryID ? (<BlogArticle />) : (
-                  <>
-                    <MyBlogProfileSubTitle>所有文章</MyBlogProfileSubTitle>
-                    <Pagination userID={userID} currentUserData={currentUserData} />
-                  </>
-                )}
+                </>
+              ) : ('')}
+            </MyBlogFLexLeft>
+            <MyBlogFLexRight>
+              {diaryID ? (<BlogArticle />) : (
+                <>
+                  <MyBlogProfileSubTitle>所有文章</MyBlogProfileSubTitle>
+                  <Pagination userID={userID} currentUserData={currentUserData} />
+                </>
+              )}
 
-              </MyBlogFLexRight>
-            </MyBlogFLexContainer>
-          </CreateDiaryInsideBody>
-        </>
+            </MyBlogFLexRight>
+          </MyBlogFLexContainer>
+        </CreateDiaryInsideBody>
       ) : <div>Now Loading...</div>}
       <div />
     </>

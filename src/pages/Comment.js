@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
@@ -21,7 +22,7 @@ export default function Comment({
 }) {
   const [commentContent, setCommentContent] = useState();
 
-  const { userID, diaryID } = useParams();
+  const { diaryID } = useParams();
 
   const diaryRef = doc(db, 'articles', diaryID);
   const fetchDiaryComments = () => new Promise((resolve) => {
@@ -76,19 +77,21 @@ export default function Comment({
         <CommentsContainer>
           {commentAll.map((eachComment) => (
             <>
-              {currentUser.uid === userID ? (<button type="button">X</button>) : ('')}
-              <CommentDivContainer>
-                <img src={loginUserDate.userImage} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
-                <CommentDetailDiv>
-                  <div>
-                    <CommentNickName>{eachComment.commentAuthor}</CommentNickName>
-                    <CommentTime>
-                      {transformTimeToDate(eachComment.commentTime.seconds * 1000)}
-                    </CommentTime>
-                  </div>
-                  <CommentDetail>{eachComment.commentContent}</CommentDetail>
-                </CommentDetailDiv>
-              </CommentDivContainer>
+              {/* {currentUser.uid === userID ? (<button type="button">X</button>) : ('')} */}
+              {eachComment ? (
+                <CommentDivContainer>
+                  <img src={loginUserDate.userImage} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                  <CommentDetailDiv>
+                    <div>
+                      <CommentNickName>{eachComment?.commentAuthor}</CommentNickName>
+                      <CommentTime>
+                        {transformTimeToDate(eachComment.commentTime.seconds * 1000)}
+                      </CommentTime>
+                    </div>
+                    <CommentDetail>{eachComment?.commentContent}</CommentDetail>
+                  </CommentDetailDiv>
+                </CommentDivContainer>
+              ) : ('') }
             </>
           ))}
 

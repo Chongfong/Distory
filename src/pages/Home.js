@@ -13,10 +13,20 @@ import {
   DiaryTitleInsideBox, DiaryImageInsideBox, HomeImageFirst, HomeImageNormal,
   DiaryPublishTime, DiaryTitle, DiaryOutContainer, DiarySmallContainer,
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
-  HomeWelcomeWords,
+  HomeWelcomeWords, DiaryContent, DiaryImageBoxNormal, DiaryTitleFirst, DiaryProfileImageBoxNormal,
 } from './Home.style';
 
+import preview1 from '../img/preview-1.jpg';
+import preview2 from '../img/preview-2.jpg';
+import preview3 from '../img/preview-3.jpg';
+import preview4 from '../img/preview-4.jpg';
+import preview5 from '../img/preview-5.jpg';
+
+import boy from '../img/boy.png';
+
 import { MyBlogProfileSubTitle } from './MyBlog.style';
+
+const previewImagesArray = [preview1, preview2, preview3, preview4, preview5];
 
 export default function Home() {
   const fetchDiaries = () => new Promise((resolve) => {
@@ -45,7 +55,7 @@ export default function Home() {
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
     const formatted = `${t.getFullYear()}.
-    ${(`0${t.getMonth()}+1`).slice(-2)}.
+    ${(`0${t.getMonth() + 1}`).slice(-2)}.
     ${(`0${t.getDate()}`).slice(-2)}`;
     return formatted;
   };
@@ -58,7 +68,12 @@ export default function Home() {
     <HomeBody>
 
       <DiaryOutContainer>
-        <div className="diary" style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <div
+          className="diary"
+          style={{
+            display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',
+          }}
+        >
           {allDiaries.map((eachDiary, index) => (
             <>
               {
@@ -83,20 +98,24 @@ export default function Home() {
                         navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
                       }}
                     >
-                      <DiaryImageBox><HomeImageFirst src="https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/blog_images%2F12230.png?alt=media&token=8a7679cf-1e33-49f9-81dd-73ae6aab9bc8" alt={`diary-${index}`} /></DiaryImageBox>
+                      <DiaryImageBox><HomeImageFirst src={previewImagesArray[0]} alt={`diary-${index}`} /></DiaryImageBox>
                       <DiaryInfoBox>
-                        <DiaryTitleInsideBox>
-                          <DiaryTitle>{eachDiary.title}</DiaryTitle>
-                          <DiaryPublishTime>
-                            {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
-                          </DiaryPublishTime>
-                        </DiaryTitleInsideBox>
                         <DiaryImageInsideBox>
                           <HomeAuthorImage
                             alt="author"
-                            src="https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png"
+                            src={boy}
                           />
                         </DiaryImageInsideBox>
+                        <DiaryTitleInsideBox>
+                          <DiaryTitleFirst>{eachDiary.title}</DiaryTitleFirst>
+                          <DiaryPublishTime>
+                            {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+                          </DiaryPublishTime>
+                          <DiaryContent>
+                            {eachDiary.content.slice(0, 80)}
+                          </DiaryContent>
+                        </DiaryTitleInsideBox>
+
                       </DiaryInfoBox>
 
                     </DiaryContainer>
@@ -126,7 +145,7 @@ export default function Home() {
                       navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
                     }}
                   >
-                    <HomeImageNormal src="https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/blog_images%2F12230.png?alt=media&token=8a7679cf-1e33-49f9-81dd-73ae6aab9bc8" alt={`diary-${index}`} />
+                    <DiaryImageBoxNormal><HomeImageNormal src={previewImagesArray[(index % 5)]} alt={`diary-${index}`} /></DiaryImageBoxNormal>
                     <DiaryInfoBox>
                       <DiaryTitleInsideBox>
                         <DiaryTitle>{eachDiary.title}</DiaryTitle>
@@ -135,11 +154,13 @@ export default function Home() {
                         </DiaryPublishTime>
                       </DiaryTitleInsideBox>
 
-                      <img
-                        alt="author"
-                        style={{ width: '50px', height: '50px' }}
-                        src="https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png"
-                      />
+                      <DiaryProfileImageBoxNormal>
+                        <img
+                          alt="author"
+                          style={{ width: '50px', height: '50px' }}
+                          src={boy}
+                        />
+                      </DiaryProfileImageBoxNormal>
                     </DiaryInfoBox>
                   </DiarySmallContainer>
                 )
