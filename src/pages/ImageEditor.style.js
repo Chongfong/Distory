@@ -19,6 +19,7 @@ export const PopUpContainerDiv = styled.div`
   margin: 20px auto;
   padding: 20px;
   border-radius: 20px;
+  position: relative;
   
 `;
 

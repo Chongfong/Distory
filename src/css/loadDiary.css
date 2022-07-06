@@ -922,4 +922,15 @@
     word-wrap: break-word;
   }
 
+  .ql-editor::-webkit-scrollbar {
+    height: 3px;
+    width: 10px;
+    cursor: grab;
+    }
+  
+  .ql-editor::-webkit-scrollbar-thumb {
+    background: #cabeba;
+    border-radius: 10px;
+  }
+
   

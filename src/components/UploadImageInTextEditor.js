@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Quill } from 'react-quill';
@@ -6,6 +7,8 @@ import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage,
 } from '../pages/UploadImageInTextEditor.style';
+
+import ImageEditorDefaultImage from './ImageEditorDefaultImage';
 import addUploadImage from '../img/image.png';
 
 export default function UploadImageInTextEditor({
@@ -15,9 +18,10 @@ export default function UploadImageInTextEditor({
   setIsOpen,
 
 }) {
-  const [uploadFromFile, setUploadFromFile] = useState(false);
+  const [uploadFromFile, setUploadFromFile] = useState('default');
   const [imageFileUrl, setImageFileUrl] = useState();
   const [imageFile, setImageFile] = useState();
+  const [uploadImageMethod] = useState(false);
   const base64ImageUrl = useRef();
   const insertEditablePhoto = (uploadImageUrl) => {
     let cursorPosition;
@@ -70,23 +74,39 @@ export default function UploadImageInTextEditor({
               插入圖片
             </UploadImageTitle>
             <UploadNavBar>
-              <UploadImageNavButtom onClick={() => {
-                setUploadFromFile(true);
-              }}
+              <UploadImageNavButtom
+                selected={uploadFromFile === 'file'}
+                uploadImageMethod={uploadImageMethod}
+                onClick={() => {
+                  setUploadFromFile('file');
+                }}
               >
                 上傳
 
               </UploadImageNavButtom>
-              <UploadImageNavButtom onClick={() => {
-                setUploadFromFile(false);
-              }}
+              <UploadImageNavButtom
+                selected={uploadFromFile === 'url'}
+                uploadImageMethod={uploadImageMethod}
+                onClick={() => {
+                  setUploadFromFile('url');
+                }}
               >
                 網址
 
               </UploadImageNavButtom>
+              <UploadImageNavButtom
+                selected={uploadFromFile === 'default'}
+                uploadImageMethod={uploadImageMethod}
+                onClick={() => {
+                  setUploadFromFile('default');
+                }}
+              >
+                預設圖片
+
+              </UploadImageNavButtom>
             </UploadNavBar>
             <UploadImageContainer>
-              {uploadFromFile
+              {uploadFromFile === 'file'
                 ? (
                   <form>
                     <label
@@ -127,7 +147,7 @@ export default function UploadImageInTextEditor({
 
                   </form>
                 )
-                : (
+                : (uploadFromFile === 'url' ? (
                   <form>
                     <UploadImageFromUrl
                       type="text"
@@ -138,9 +158,13 @@ export default function UploadImageInTextEditor({
                     <br />
                     {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
                   </form>
+                ) : (
+                  <ImageEditorDefaultImage url={url} setUrl={setUrl} />
+                )
+
                 )}
             </UploadImageContainer>
-            {uploadFromFile ? (
+            {uploadFromFile === 'file' ? (
               <>
                 <CircleButton
                   onClick={() => {

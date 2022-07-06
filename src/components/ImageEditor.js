@@ -5,10 +5,12 @@ import React, { useRef } from 'react';
 import { Quill } from 'react-quill';
 import PropTypes from 'prop-types';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import myTheme from './imageEditorTheme';
+import { myTheme, ImageEditorSubmitButtonsForm } from './imageEditorTheme';
 import '../css/textEditor.css';
 import '../css/imageEditor.css';
 import { PopUpBackDiv, PopUpContainerDiv, CircleButton } from '../pages/ImageEditor.style';
+
+import StickerRow from './ImageEditorSticker';
 
 import { storage } from '../firestore/firestore';
 
@@ -82,6 +84,12 @@ export default function PhotoEditor({
   const testURL = useRef();
 
   imageRef.current = '';
+
+  const addSticker = (path) => {
+    const editorInstance = editorRef.current.getInstance();
+
+    editorInstance.addImageObject(path);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -180,7 +188,6 @@ export default function PhotoEditor({
                     'mask',
                     'filter',
                   ],
-                  initMenu: 'draw',
                   uiSize: {
                     width: '100%',
                     height: '95%',
@@ -195,10 +202,11 @@ export default function PhotoEditor({
                   usageStatistics: false,
                 }}
               />
-              <form onSubmit={handleSubmit}>
+              <StickerRow onStickerSelected={(path) => addSticker(path)} />
+              <ImageEditorSubmitButtonsForm onSubmit={handleSubmit}>
                 <CircleButton type="submit">✓</CircleButton>
                 <CircleButton type="button" style={{ fontSize: '25px' }} onClick={() => setOpenImageEditor(false)}>×</CircleButton>
-              </form>
+              </ImageEditorSubmitButtonsForm>
             </PopUpContainerDiv>
           </PopUpBackDiv>
         )

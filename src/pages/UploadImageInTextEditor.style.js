@@ -43,7 +43,7 @@ export const UploadNavBar = styled.div`
 export const UploadImageNavButtom = styled.div`
   width: 50%;
   text-align: center;
-  border-bottom: 2px solid #ccc;
+  border-bottom: ${({ selected }) => (selected ? '4px solid #ccc' : '2px solid #ccc')};
   cursor: pointer;
   :hover, :focus, :active {
     border-bottom: 4px solid #ccc;
@@ -65,7 +65,15 @@ export const UploadImageContainer = styled.div`
   height: 73%;
   border: solid 1px #ccc;
   border-radius: 20px;
-
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+  height: 3px;
+  width: 7px;
+  }
+  ::-webkit-scrollbar-thumb {
+  background: #cabeba;
+  border-radius: 10px;
+}
 `;
 
 export const UploadImageFromUrl = styled.input`
