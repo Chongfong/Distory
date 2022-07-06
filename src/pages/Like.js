@@ -6,7 +6,10 @@ import {
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { db } from '../firestore/firestore';
-import { BlogArticleLikesContainer } from './BlogArticle.style';
+import { BlogArticleLikesContainer, InteractiveImage, NonInteractiveImage } from './BlogArticle.style';
+
+import heart from '../img/heart.png';
+import heartPink from '../img/heart-pink.png';
 
 export default function Like({ currentUser, nowlikeUsers }) {
   const [likeUsers, setLikeUsers] = useState(nowlikeUsers);
@@ -73,12 +76,14 @@ export default function Like({ currentUser, nowlikeUsers }) {
         role="button"
         tabIndex={0}
       >
-        💗&nbsp;
+        <InteractiveImage src={heartPink} alt="heart-pink" />
+&nbsp;
         {likeUsers.length}
       </BlogArticleLikesContainer>
         ) : (currentUser.uid === userID ? (
           <BlogArticleLikesContainer>
-            💗&nbsp;
+            <NonInteractiveImage src={heartPink} alt="heart-pink" />
+&nbsp;
             {likeUsers.length}
           </BlogArticleLikesContainer>
         ) : (
@@ -88,7 +93,8 @@ export default function Like({ currentUser, nowlikeUsers }) {
             role="button"
             tabIndex={0}
           >
-            💗&nbsp;
+            <InteractiveImage src={heart} alt="heart" />
+&nbsp;
             {likeUsers.length}
           </BlogArticleLikesContainer>
         )

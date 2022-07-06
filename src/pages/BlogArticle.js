@@ -11,9 +11,12 @@ import { auth, db } from '../firestore/firestore';
 import {
   BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
   BlogArticleEditImage, BlogArticleEditImageContainer,
+  BlogArticleInteractiveContainer, BlogArticleInteractiveButtonContainer,
 } from './BlogArticle.style';
 
 import { MyBlogBottomLine } from './MyBlog.style';
+
+import Share from '../components/Share';
 
 import Comment from './Comment';
 import Like from './Like';
@@ -147,7 +150,14 @@ export default function BlogArticle() {
                 }}
                 />
               </div>
-              <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+              <BlogArticleInteractiveContainer>
+                <BlogArticleInteractiveButtonContainer>
+                  <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+                </BlogArticleInteractiveButtonContainer>
+                <BlogArticleInteractiveButtonContainer>
+                  <Share url={window.location.href} title={eachDiary.title} />
+                </BlogArticleInteractiveButtonContainer>
+              </BlogArticleInteractiveContainer>
               <MyBlogBottomLine style={{ width: '97%' }} />
               <Comment
                 currentUser={currentUser}
