@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   doc, getDoc, getDocs, collection, query, where,
@@ -8,12 +8,16 @@ import {
 import DOMPurify from 'dompurify';
 import { auth, db } from '../firestore/firestore';
 
-import { BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer } from './BlogArticle.style';
+import {
+  BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
+  BlogArticleEditImage, BlogArticleEditImageContainer,
+} from './BlogArticle.style';
 
 import { MyBlogBottomLine } from './MyBlog.style';
 
 import Comment from './Comment';
 import Like from './Like';
+import edit from '../img/edit.png';
 
 export default function BlogArticle() {
   const [currentUser, setCurrentUser] = useState();
@@ -24,6 +28,7 @@ export default function BlogArticle() {
   const [commentAuthor, setCommentAuthor] = useState();
 
   const { userID, diaryID } = useParams();
+  const navigate = useNavigate();
 
   const docRef = doc(db, 'users', userID);
 
@@ -117,8 +122,23 @@ export default function BlogArticle() {
         <ul>
           {userDiaries.map((eachDiary) => (
             <>
-              <div className="diary">
+              <div className="diary" style={{ position: 'relative' }}>
                 <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
+                {userID === currentUser.uid && (
+                <BlogArticleEditImageContainer
+                  onClick={() => {
+                    navigate(`/${userID}/edit/${diaryID}`);
+                  }}
+                  onKeyUp={() => {
+                    navigate(`/${userID}/edit/${diaryID}`);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <BlogArticleEditImage src={edit} alt="edit" />
+
+                </BlogArticleEditImageContainer>
+                ) }
                 <BlogArticleDate>
                   {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                 </BlogArticleDate>

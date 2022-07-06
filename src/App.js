@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -24,6 +24,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="App">
       <Router>
@@ -39,8 +41,8 @@ function App() {
           </Route>
           <Route path="/:userID/blogedit" element={<EditBlog />} />
           <Route path="/:userID/profile" element={<Profile />} />
-          <Route path="/:userID/create" element={<CreateNewDiary />} />
-          <Route path="/:userID/edit/:diaryID" element={<EditDiary />} />
+          <Route path="/:userID/create" element={<CreateNewDiary isOpen={isOpen} setIsOpen={setIsOpen} />} />
+          <Route path="/:userID/edit/:diaryID" element={<EditDiary isOpen={isOpen} setIsOpen={setIsOpen} />} />
           <Route path="/Diaries" element={<LoadDiaries />} />
           <Route path="/status" element={<StatusBar />} />
           <Route path="/pagination" element={<Pagination />} />

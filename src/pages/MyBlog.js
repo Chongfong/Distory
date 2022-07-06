@@ -57,11 +57,13 @@ export default function MyBlog() {
       let nowWhoVisited = {};
       fetchUserWhoVisited().then((querySnapshot) => {
         nowWhoVisited = querySnapshot.data();
-        if (nowWhoVisited.come) {
-          if (nowWhoVisited.come.userUid) {
-            updateDoc(userCamedoc, { ...userCameEditData });
+        if (nowWhoVisited) {
+          if (nowWhoVisited.come) {
+            if (nowWhoVisited.come.userUid) {
+              updateDoc(userCamedoc, { ...userCameEditData });
+            }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
           }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
-        }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
+        }
       });
       return (nowWhoVisited);
     };

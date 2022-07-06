@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { CreateDiaryTitle } from '../pages/CreateNewDiaries.style';
+
 export default function CreateNewDiaryTitle({ titleValue, setTitleValue }) {
   return (
-    <input onChange={(e) => setTitleValue(e.target.value)} defaultValue={titleValue} />
+    <CreateDiaryTitle
+      onChange={(e) => setTitleValue(e.target.value)}
+      placeholder={titleValue}
+    />
   );
 }
 

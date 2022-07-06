@@ -69,7 +69,7 @@ export default function Pagination({ userID, currentUserData }) {
           >
             <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
-              <DiaryTitle>{doc.title}</DiaryTitle>
+              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
               <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
@@ -91,7 +91,7 @@ export default function Pagination({ userID, currentUserData }) {
           >
             <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
-              <DiaryTitle>{doc.title}</DiaryTitle>
+              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
               <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>

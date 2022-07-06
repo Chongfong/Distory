@@ -8,7 +8,7 @@ const CreateDiaryUploadImage = styled('div')`
   height: 50px; 
   position: fixed;
   right: 20px;
-  bottom: 100px;
+  bottom: 170px;
   border-radius: 50%;
   border: #BDC0BA 2px solid;
   background-color: white;

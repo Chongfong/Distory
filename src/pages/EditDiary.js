@@ -7,21 +7,29 @@ import {
   Timestamp,
   updateDoc,
 } from 'firebase/firestore';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
-import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
 import { db } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
 import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
 import '../css/loadDiary.css';
+import {
+  CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryPublish,
+  CreateDiarySave,
+} from './CreateNewDiaries.style';
 
-export default function EditDiary() {
+import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
+
+export default function EditDiary({ isOpen, setIsOpen }) {
   const [titleValue, setTitleValue] = useState();
   const [diaryContentValue, setDiaryContentValue] = useState();
   const { userID, diaryID } = useParams();
   const [editingDiary, setEditingDiary] = useState();
   const docRef = doc(db, 'articles', diaryID);
+
+  const navigate = useNavigate();
 
   const fetchDiary = () => new Promise((resolve) => {
     const querySnapshot = getDoc(docRef);
@@ -73,56 +81,74 @@ export default function EditDiary() {
   return (
     <>
       { editingDiary ? (
-        <>
-          <CreateNewDiaryTitle titleValue={titleValue} setTitleValue={setTitleValue} />
-          <TextEditor
-            diaryContentValue={diaryContentValue}
-            setDiaryContentValue={setDiaryContentValue}
-            imageUrl={imageUrl}
-            imageRef={imageRef}
-            textEditorRef={textEditorRef}
-          />
-          <br />
-          <DropDownButton
-            setLoadFromFile={setLoadFromFile}
-            setLoadFromUrl={setLoadFromUrl}
-            setImageUrl={setImageUrl}
-          />
-          <UploadImageInTextEditor
-            loadFromFile={loadFromFile}
-            loadFromUrl={loadFromUrl}
-            setImageUrl={setImageUrl}
-            url={url}
-            setUrl={setUrl}
-            textEditorRef={textEditorRef}
-          />
-          <PhotoEditor
-            diaryContentValue={diaryContentValue}
-            setDiaryContentValue={setDiaryContentValue}
-            imageUrl={imageUrl}
-            setImageUrl={setImageUrl}
-            openImageEditor={openImageEditor}
-            setOpenImageEditor={setOpenImageEditor}
-            url={url}
-            setUrl={setUrl}
-            textEditorRef={textEditorRef}
-          />
-          <Link to={`/${userID}`}>
-            <div
+        <CreateDiaryBody>
+          <CreateDiaryInsideBody>
+            <CreateDiaryNavTitle>編輯貼文</CreateDiaryNavTitle>
+            <CreateNewDiaryTitle titleValue={titleValue} setTitleValue={setTitleValue} />
+            <TextEditor
+              diaryContentValue={diaryContentValue}
+              setDiaryContentValue={setDiaryContentValue}
+              imageUrl={imageUrl}
+              imageRef={imageRef}
+              textEditorRef={textEditorRef}
+            />
+            <br />
+            <DropDownButton
+              setLoadFromFile={setLoadFromFile}
+              setLoadFromUrl={setLoadFromUrl}
+              setImageUrl={setImageUrl}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
+            <UploadImageInTextEditor
+              loadFromFile={loadFromFile}
+              loadFromUrl={loadFromUrl}
+              setImageUrl={setImageUrl}
+              url={url}
+              setUrl={setUrl}
+              textEditorRef={textEditorRef}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
+            <PhotoEditor
+              diaryContentValue={diaryContentValue}
+              setDiaryContentValue={setDiaryContentValue}
+              imageUrl={imageUrl}
+              setImageUrl={setImageUrl}
+              openImageEditor={openImageEditor}
+              setOpenImageEditor={setOpenImageEditor}
+              url={url}
+              setUrl={setUrl}
+              textEditorRef={textEditorRef}
+            />
+            <CreateDiarySave
+              style={{ fontSize: '30px' }}
+              onClick={() => {
+                navigate(`/${userID}`);
+              }}
+              onKeyUp={() => {
+                navigate(`/${userID}`);
+              }}
+            >
+              ×
+            </CreateDiarySave>
+            <CreateDiaryPublish
               onClick={() => {
                 updateDiaryDB();
+                navigate(`/${userID}`);
               }}
               onKeyUp={() => {
                 updateDiaryDB();
+                navigate(`/${userID}`);
               }}
               role="button"
               tabIndex={0}
             >
-              Update
-            </div>
-          </Link>
+              ✓
+            </CreateDiaryPublish>
 
-        </>
+          </CreateDiaryInsideBody>
+        </CreateDiaryBody>
       ) : (
         <div>Now Loading...</div>
       ) }
@@ -130,3 +156,13 @@ export default function EditDiary() {
     </>
   );
 }
+
+EditDiary.propTypes = {
+  isOpen: PropTypes.string,
+  setIsOpen: PropTypes.func,
+};
+
+EditDiary.defaultProps = {
+  isOpen: '',
+  setIsOpen: () => {},
+};
