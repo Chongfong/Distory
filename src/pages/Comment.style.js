@@ -15,7 +15,7 @@ export const CommentDetailDiv = styled.div`
 
 export const CommentNickName = styled.p`
   text-align: left;
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin: 3px 3px 3px 10px;
   color: #b8b8b8;
 `;
@@ -37,7 +37,7 @@ export const CommentTime = styled.p`
   transform: scale(1,1.1);
   color: #b8b8b8;
   font-size: 1rem;
-  margin: 5px;
+  margin: 3px 3px 3px 10px;
 `;
 
 export const CommentDetail = styled.p`
@@ -73,5 +73,12 @@ export const CommentButton = styled.div`
   :hover, :active, :focus{
     background-color: #b8b8b8;
     color: white; 
+  }
+`;
+
+export const CommentAuthorImgContainer = styled.div`
+  cursor: pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
   }
 `;

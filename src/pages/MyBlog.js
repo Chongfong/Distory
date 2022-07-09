@@ -330,7 +330,7 @@ export default function MyBlog() {
   }, [currentUserData]);
   return (
     <>
-      {currentUser && currentUserData ? (
+      {currentUserData ? (
         <CreateDiaryInsideBody>
           <div
             role="button"
@@ -349,7 +349,7 @@ export default function MyBlog() {
               role="button"
               tabIndex={0}
             >
-              {currentUser.uid === userID ? (
+              {currentUser ? (currentUser.uid === userID ? (
                 <input
                   type="file"
                   accept="image/*"
@@ -360,7 +360,8 @@ export default function MyBlog() {
                     if (e.target.files[0]) { setCurrentBlogImage(e.target.files[0]); }
                   }}
                 />
-              ) : ('') }
+              ) : ('')) : ('')}
+
               {currentBlogImage ? (
                 <>
                   <BlogBackgroundImage
@@ -392,7 +393,7 @@ export default function MyBlog() {
                 role="button"
                 tabIndex={0}
               >
-                {currentUser.uid === userID ? (
+                {currentUser ? (currentUser.uid === userID ? (
                   <input
                     type="file"
                     accept="image/*"
@@ -403,7 +404,7 @@ export default function MyBlog() {
                       if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
                     }}
                   />
-                ) : ('') }
+                ) : ('')) : ('')}
                 {currentUserImage ? (
                   <>
                     <img
@@ -491,7 +492,7 @@ export default function MyBlog() {
                 </>
               )}
 
-              {currentUser.uid === userID ? (
+              {currentUser ? (currentUser.uid === userID ? (
                 <>
                   <MyBlogButtonLight
                     type="button"
@@ -522,7 +523,7 @@ export default function MyBlog() {
                   </MyBlogButtonLight>
 
                 </>
-              ) : ('')}
+              ) : ('')) : ('')}
             </MyBlogFLexLeft>
             <MyBlogFLexRight>
               {diaryID ? (<BlogArticle />) : (

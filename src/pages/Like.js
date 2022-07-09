@@ -39,17 +39,17 @@ export default function Like({ currentUser, nowlikeUsers }) {
 
   const likeDiary = (articleID) => {
     if (currentUser) {
-      let likeUsersCopy = [...likeUsers];
-      if (!likeUsersCopy.includes(currentUser.uid)) {
-        const likeUsersCopyOfIndex = [...likeUsersCopy, currentUser.uid];
-        likeUsersCopy = likeUsersCopyOfIndex;
-        setLikeUsers(likeUsersCopy);
-        saveLikerDB(articleID);
+      if (currentUser.uid === userID) {} else {
+        let likeUsersCopy = [...likeUsers];
+        if (!likeUsersCopy.includes(currentUser.uid)) {
+          const likeUsersCopyOfIndex = [...likeUsersCopy, currentUser.uid];
+          likeUsersCopy = likeUsersCopyOfIndex;
+          setLikeUsers(likeUsersCopy);
+          saveLikerDB(articleID);
+        }
       }
-    } else if (currentUser.uid === userID) {
-
     } else {
-      alert('請先登入');
+      alert('登入後即可按讚');
     }
   };
 
@@ -67,8 +67,7 @@ export default function Like({ currentUser, nowlikeUsers }) {
   };
   return (
     <>
-
-      { likeUsers
+      { currentUser ? (likeUsers
     && likeUsers.includes(currentUser.uid) ? (
       <BlogArticleLikesContainer
         onClick={() => { unlikeDiary(diaryID); }}
@@ -99,8 +98,19 @@ export default function Like({ currentUser, nowlikeUsers }) {
           </BlogArticleLikesContainer>
         )
 
-        )}
-      <div />
+        )) : (
+          <BlogArticleLikesContainer
+            onClick={() => { likeDiary(diaryID); }}
+            onKeyUp={() => { likeDiary(diaryID); }}
+            role="button"
+            tabIndex={0}
+          >
+            <InteractiveImage src={heartPink} alt="heart-pink" />
+&nbsp;
+            {likeUsers.length}
+          </BlogArticleLikesContainer>
+      )}
+      {}
     </>
   );
 }

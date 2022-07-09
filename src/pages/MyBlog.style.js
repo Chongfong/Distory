@@ -109,4 +109,7 @@ export const MyBlogProfileSubTitle = styled.p`
 
 export const ClickableDiv = styled.div`
   cursor:pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
 `;

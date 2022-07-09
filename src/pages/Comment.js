@@ -1,16 +1,17 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  arrayUnion, collection, doc, getDoc, Timestamp, updateDoc,
+  arrayUnion, collection, doc, getDoc, Timestamp, updateDoc, query, getDocs, where,
 } from 'firebase/firestore';
 import { db } from '../firestore/firestore';
 
 import {
   CommentsContainer, CommentNickName, CommentTime, CommentDivContainer, CommentDetailDiv,
-  CommentDetail, CommentInput, CommentNickNameInput,
+  CommentDetail, CommentInput, CommentNickNameInput, CommentAuthorImgContainer,
 } from './Comment.style';
 
 import { MyBlogProfileSubTitle } from './MyBlog.style';
@@ -21,6 +22,8 @@ export default function Comment({
   commentAll, loginUserDate, setCommentAuthor,
 }) {
   const [commentContent, setCommentContent] = useState();
+  const [commentAuthorsInfo, setCommentAuthorsInfo] = useState();
+  const navigate = useNavigate();
 
   const { diaryID } = useParams();
 
@@ -70,17 +73,64 @@ export default function Comment({
     return formatted;
   };
 
+  const getCommentAuthorInfoFunc = async () => {
+    if (commentAll) {
+      const storyAuthorsArray = [];
+      const story = await Promise.all(commentAll.map((eachComment) => {
+        async function gettingAuthorInfo() {
+          try {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('userUID', '==', eachComment.commentAuthorID));
+            const querySnapshot = await getDocs(q);
+            return querySnapshot;
+          } catch {
+            return [];
+          }
+        }
+        return gettingAuthorInfo();
+      }));
+      story.forEach((querySnapshot) => {
+        if (querySnapshot.empty) {
+          storyAuthorsArray.push('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
+        } else {
+          querySnapshot.forEach((querySnapshotEach) => {
+            if (!querySnapshotEach.empty) {
+              storyAuthorsArray.push(
+                querySnapshotEach.data().userImage,
+              );
+            }
+          });
+        }
+      }); setCommentAuthorsInfo(storyAuthorsArray);
+    }
+  };
+
+  useEffect(() => {
+    getCommentAuthorInfoFunc();
+  }, [commentAll]);
+
   return (
 
     <>
       {commentAll ? (
         <CommentsContainer>
-          {commentAll.map((eachComment) => (
+          {commentAll.map((eachComment, index) => (
             <>
-              {/* {currentUser.uid === userID ? (<button type="button">X</button>) : ('')} */}
               {eachComment ? (
                 <CommentDivContainer>
-                  <img src={loginUserDate.userImage} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                  {commentAuthorsInfo
+                    ? (eachComment.commentAuthorID ? ((
+                      <CommentAuthorImgContainer
+                        onClick={() => { navigate(`/${eachComment.commentAuthorID}`); }}
+                        onKeyUp={() => { navigate(`/${eachComment.commentAuthorID}`); }}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <img src={commentAuthorsInfo[index]} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                      </CommentAuthorImgContainer>
+                    )) : ((<div><img src={commentAuthorsInfo[index]} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /></div>
+                    )))
+                    : ('')}
                   <CommentDetailDiv>
                     <div>
                       <CommentNickName>{eachComment?.commentAuthor}</CommentNickName>
@@ -92,6 +142,7 @@ export default function Comment({
                   </CommentDetailDiv>
                 </CommentDivContainer>
               ) : ('') }
+              {}
             </>
           ))}
 

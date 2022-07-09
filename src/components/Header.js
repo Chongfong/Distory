@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState, useCallback } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
+import { getDoc, doc } from 'firebase/firestore';
 import {
   HeaderContainer, HeaderTitle, HeaderSearchBar, HeaderLogin, HeaderSignup,
-  HeaderMember, HeaderTitleContainer, HeaderTitleWords, HeaderBackgroundImage,
+  HeaderMember, HeaderTitleContainer,
+  HeaderBackgroundImage,
 } from './Header.style';
 
-import { auth } from '../firestore/firestore';
+import { db, auth } from '../firestore/firestore';
 
-import TitleImage from '../img/shiori.png';
 import sky from '../img/sora.png';
+import logo from '../img/Distory Logo.png';
 
 export default function Header() {
   const [currentUser, setCurrentUser] = useState();
   const [searchkey, setSearchKey] = useState();
+  const [headerLoginUserData, setHeaderLoginUserData] = useState();
 
   const navigate = useNavigate();
 
@@ -34,13 +38,35 @@ export default function Header() {
     changeUser();
   }, []);
 
+  const fetchLoginUser = () => new Promise((resolve) => {
+    if (currentUser) {
+      const querySnapshot = getDoc(doc(db, 'users', currentUser.uid));
+      resolve(querySnapshot);
+    }
+  });
+
+  const loadLoginUser = useCallback(() => {
+    const loadingLoginUser = async () => {
+      let nowLoginUser = {};
+      fetchLoginUser().then((querySnapshot) => {
+        nowLoginUser = querySnapshot.data();
+        setHeaderLoginUserData(querySnapshot.data());
+      });
+      return (nowLoginUser);
+    };
+    loadingLoginUser();
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadLoginUser();
+  }, [currentUser]);
+
   return (
     <>
       <HeaderBackgroundImage src={sky} alt="sky" />
       <Link to="/">
         <HeaderTitle>
-          <HeaderTitleContainer src={TitleImage} alt="title" />
-          <HeaderTitleWords>Distory</HeaderTitleWords>
+          <HeaderTitleContainer src={logo} alt="title" />
         </HeaderTitle>
       </Link>
       <HeaderContainer>
@@ -53,7 +79,7 @@ export default function Header() {
         />
         {currentUser ? (
           <Link to={`${currentUser.uid}`} style={{ alignSelf: 'center' }}>
-            <HeaderMember><img src="https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png" alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} /></HeaderMember>
+            <HeaderMember><img src={headerLoginUserData?.userImage} alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} /></HeaderMember>
           </Link>
         ) : (
           <>

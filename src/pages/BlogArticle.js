@@ -121,13 +121,13 @@ export default function BlogArticle() {
 
   return (
     <>
-      {currentUser && currentUserData ? (
+      {currentUserData ? (
         <ul>
           {userDiaries.map((eachDiary) => (
             <>
               <div className="diary" style={{ position: 'relative' }}>
                 <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
-                {userID === currentUser.uid && (
+                {currentUser ? (userID === currentUser.uid && (
                 <BlogArticleEditImageContainer
                   onClick={() => {
                     navigate(`/${userID}/edit/${diaryID}`);
@@ -141,7 +141,7 @@ export default function BlogArticle() {
                   <BlogArticleEditImage src={edit} alt="edit" />
 
                 </BlogArticleEditImageContainer>
-                ) }
+                )) : ('') }
                 <BlogArticleDate>
                   {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                 </BlogArticleDate>
