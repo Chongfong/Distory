@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const HomeBody = styled.div`
   width: 70%;
@@ -13,7 +13,16 @@ export const HomeBody = styled.div`
 export const DiaryOutContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-contents: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+export const DiaryAllContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const DiarySmallContainer = styled.div`

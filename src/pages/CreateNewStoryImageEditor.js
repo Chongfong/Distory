@@ -1,90 +1,26 @@
-/* eslint-disable max-classes-per-file */
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
 import React, { useRef } from 'react';
-import { Quill } from 'react-quill';
 import PropTypes from 'prop-types';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { useParams } from 'react-router-dom';
 import {
   doc, collection, Timestamp, setDoc,
 } from 'firebase/firestore';
-import { myTheme, ImageEditorSubmitButtonsForm } from './imageEditorTheme';
+import { myTheme, ImageEditorSubmitButtonsForm } from '../components/imageEditorTheme';
 import '../css/textEditor.css';
 import '../css/imageEditor.css';
-import { PopUpBackDiv, PopUpContainerDiv, CircleButton } from '../pages/ImageEditor.style';
+import { PopUpBackDiv, PopUpContainerDiv, CircleButton } from './ImageEditor.style';
 
-import StickerRow from './ImageEditorSticker';
+import StickerRow from '../components/ImageEditorSticker';
 
 import { storage, db } from '../firestore/firestore';
 
-export default function PhotoEditor({
-  diaryContentValue, setDiaryContentValue,
-  imageUrl, setImageUrl, openImageEditor, setOpenImageEditor, setUrl,
-  textEditorRef,
+export default function CreateStoryPhotoEditor({
+  imageUrl, setImageUrl, openImageEditor, setOpenImageEditor,
 }) {
   const { userID } = useParams();
   const editorRef = useRef();
-  const BlockEmbed = Quill.import('blots/block/embed');
-  const Block = Quill.import('blots/block');
-
-  class ClickButtonBlot extends Block {
-    static create(value) {
-      const node = super.create();
-      node.setAttribute('src', value.url);
-      node.setAttribute('class', value.class);
-      node.addEventListener('click', (e) => {
-        e.preventDefault();
-        setOpenImageEditor(true);
-        setImageUrl(value.url);
-      }, false);
-      return node;
-    }
-
-    static value(node) {
-      return {
-        url: node.getAttribute('src'),
-        class: node.getAttribute('class'),
-      };
-    }
-  }
-  class ImageBlot extends BlockEmbed {
-    static create(value) {
-      const node = super.create();
-      node.setAttribute('alt', value.alt);
-      node.setAttribute('src', value.url);
-      node.setAttribute('class', value.class);
-      return node;
-    }
-
-    static value(node) {
-      return {
-        alt: node.getAttribute('alt'),
-        url: node.getAttribute('src'),
-        class: node.getAttribute('class'),
-
-      };
-    }
-  }
-  ImageBlot.blotName = 'image';
-  ImageBlot.tagName = 'img';
-  ClickButtonBlot.blotName = 'clickButton';
-  ClickButtonBlot.tagName = 'clickButton';
-  Quill.register(ImageBlot);
-  Quill.register(ClickButtonBlot);
-
-  function uuid() {
-    let d = Date.now();
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-      d += performance.now();
-    }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r = (d + Math.random() * 16) % 16 || 0;
-      d = Math.floor(d / 16);
-      return (c === 'x' ? r : ((r && 0x3) || 0x8)).toString(16);
-    });
-  }
-
   const imageRef = useRef();
   const testURL = useRef();
 
@@ -94,61 +30,6 @@ export default function PhotoEditor({
     const editorInstance = editorRef.current.getInstance();
 
     editorInstance.addImageObject(path);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    let cursorPosition;
-    if (textEditorRef.current.editor.getSelection()) {
-      cursorPosition = textEditorRef.current.editor.getSelection().index;
-    } else {
-      cursorPosition = 0;
-    }
-    textEditorRef.current.editor.deleteText(cursorPosition - 1, 4);
-    textEditorRef.current.editor.setSelection(cursorPosition - 1);
-
-    const editorInstance = editorRef.current.getInstance();
-    const dataURL = editorInstance.toDataURL();
-
-    const metadata = {
-      contentType: 'image/jpeg',
-    };
-
-    fetch(dataURL)
-      .then((res) => res.blob())
-      .then((imageBlob) => {
-        testURL.current = imageBlob;
-
-        const file = testURL.current;
-        const storageRef = ref(storage, `files/${uuid()}`);
-        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
-        uploadTask.on(
-          'state_changed',
-          () => {},
-          (error) => {
-            switch (error.code) {
-              case 'storage/unauthorized':
-                break;
-              case 'storage/canceled':
-                break;
-              case 'storage/unknown':
-                break;
-              default:
-                break;
-            }
-          },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setDiaryContentValue(`${diaryContentValue} <img src="${downloadURL}">`);
-              setOpenImageEditor(false);
-              setImageUrl();
-              setUrl();
-            });
-          },
-        );
-      });
   };
 
   const handleUploadStory = () => {
@@ -201,7 +82,6 @@ export default function PhotoEditor({
               saveStoryDB(downloadURL);
               setOpenImageEditor(false);
               setImageUrl();
-              setUrl();
             });
           },
         );
@@ -265,9 +145,8 @@ export default function PhotoEditor({
                 }}
               />
               <StickerRow onStickerSelected={(path) => addSticker(path)} />
-              <ImageEditorSubmitButtonsForm onSubmit={handleSubmit}>
+              <ImageEditorSubmitButtonsForm>
                 <CircleButton type="button" onClick={() => { handleUploadStory(); }}>＋</CircleButton>
-                <CircleButton type="submit">✓</CircleButton>
                 <CircleButton type="button" style={{ fontSize: '25px' }} onClick={() => setOpenImageEditor(false)}>×</CircleButton>
               </ImageEditorSubmitButtonsForm>
             </PopUpContainerDiv>
@@ -281,24 +160,16 @@ export default function PhotoEditor({
   );
 }
 
-PhotoEditor.propTypes = {
-  diaryContentValue: PropTypes.string,
-  setDiaryContentValue: PropTypes.func,
+CreateStoryPhotoEditor.propTypes = {
   imageUrl: PropTypes.string,
   setImageUrl: PropTypes.func,
   openImageEditor: PropTypes.bool,
   setOpenImageEditor: PropTypes.func,
-  setUrl: PropTypes.func,
-  textEditorRef: PropTypes.string,
 };
 
-PhotoEditor.defaultProps = {
-  diaryContentValue: '',
-  setDiaryContentValue: () => {},
+CreateStoryPhotoEditor.defaultProps = {
   imageUrl: '',
   setImageUrl: () => {},
   openImageEditor: false,
   setOpenImageEditor: () => {},
-  setUrl: () => {},
-  textEditorRef: '',
 };

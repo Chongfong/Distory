@@ -55,8 +55,8 @@ export const CommentInput = styled.textarea`
   min-height: 80px;
   max-height: 200px;
   margin: 10px;
-  padding-left: 8px;
-  padding-top: 8px;
+  padding-left: 12px;
+  padding-top: 12px;
 `;
 
 export const CommentButton = styled.div`

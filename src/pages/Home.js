@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useEffect, useState, useCallback,
 } from 'react';
 import {
   collection,
   getDocs,
+  query,
+  where,
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
@@ -14,6 +17,7 @@ import {
   DiaryPublishTime, DiaryTitle, DiaryOutContainer, DiarySmallContainer,
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
   HomeWelcomeWords, DiaryContent, DiaryImageBoxNormal, DiaryTitleFirst, DiaryProfileImageBoxNormal,
+  DiaryAllContainer,
 } from './Home.style';
 
 import preview1 from '../img/preview-1.jpg';
@@ -22,11 +26,11 @@ import preview3 from '../img/preview-3.jpg';
 import preview4 from '../img/preview-4.jpg';
 import preview5 from '../img/preview-5.jpg';
 
-import boy from '../img/boy.png';
-
 import { MyBlogProfileSubTitle } from './MyBlog.style';
 
 import { changeHTMLToPureText } from '../components/ShareFunctions';
+
+import LoadStories from '../components/LoadStories';
 
 const previewImagesArray = [preview1, preview2, preview3, preview4, preview5];
 
@@ -54,6 +58,8 @@ export default function Home() {
     loadingDiaries();
   }, []);
 
+  const [allDiariesAuthorImg, setAllDiariesAuthorImg] = useState([]);
+
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
     const formatted = `${t.getFullYear()}.
@@ -66,15 +72,42 @@ export default function Home() {
     loadDiaries();
   }, [loadDiaries]);
 
+  const getAuthorInfoFunc = async () => {
+    if (allDiaries) {
+      const diaryAuthorsArray = [];
+      const diary = await Promise.all(allDiaries.map((eachDiary) => {
+        async function gettingAuthorInfo() {
+          try {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('userUID', '==', eachDiary.author));
+            const querySnapshot = await getDocs(q);
+            return querySnapshot;
+          } catch (e) {
+            return e.response;
+          }
+        }
+        return gettingAuthorInfo();
+      }));
+      diary.forEach((querySnapshot) => {
+        querySnapshot.forEach((querySnapshotEach) => {
+          if (!querySnapshotEach.empty) {
+            diaryAuthorsArray.push(querySnapshotEach.data().userImage);
+          }
+        });
+      }); setAllDiariesAuthorImg(diaryAuthorsArray);
+    }
+  };
+
+  useEffect(() => {
+    getAuthorInfoFunc();
+  }, [allDiaries]);
+
   return (
     <HomeBody>
 
       <DiaryOutContainer>
-        <div
+        <DiaryAllContainer
           className="diary"
-          style={{
-            display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',
-          }}
         >
           {allDiaries.map((eachDiary, index) => (
             <>
@@ -105,11 +138,11 @@ export default function Home() {
                         <DiaryImageInsideBox>
                           <HomeAuthorImage
                             alt="author"
-                            src={boy}
+                            src={allDiariesAuthorImg[index]}
                           />
                         </DiaryImageInsideBox>
-                        <DiaryTitleInsideBox>
-                          <DiaryTitleFirst>{eachDiary.title}</DiaryTitleFirst>
+                        <DiaryTitleInsideBox style={{ textAlign: 'center' }}>
+                          <DiaryTitleFirst>{eachDiary.title.slice(0, 20)}</DiaryTitleFirst>
                           <DiaryPublishTime>
                             {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                           </DiaryPublishTime>
@@ -132,6 +165,7 @@ export default function Home() {
                         </Link>
                       </HomeInviteButtonContainer>
                     </HomeInviteDiv>
+                    <LoadStories />
 
                   </>
                 )
@@ -150,7 +184,7 @@ export default function Home() {
                     <DiaryImageBoxNormal><HomeImageNormal src={previewImagesArray[(index % 5)]} alt={`diary-${index}`} /></DiaryImageBoxNormal>
                     <DiaryInfoBox>
                       <DiaryTitleInsideBox>
-                        <DiaryTitle>{eachDiary.title}</DiaryTitle>
+                        <DiaryTitle>{eachDiary.title.slice(0, 60)}</DiaryTitle>
                         <DiaryPublishTime>
                           {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                         </DiaryPublishTime>
@@ -160,7 +194,7 @@ export default function Home() {
                         <img
                           alt="author"
                           style={{ width: '50px', height: '50px' }}
-                          src={boy}
+                          src={allDiariesAuthorImg[index]}
                         />
                       </DiaryProfileImageBoxNormal>
                     </DiaryInfoBox>
@@ -171,7 +205,7 @@ export default function Home() {
             </>
           ))}
 
-        </div>
+        </DiaryAllContainer>
       </DiaryOutContainer>
     </HomeBody>
   );

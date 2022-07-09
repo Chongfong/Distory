@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import addImageIcon from '../img/add-image.png';
 
-const CreateDiaryUploadImage = styled('div')`
+export const CreateDiaryUploadImage = styled('div')`
   width: 50px;
   height: 50px; 
   position: fixed;
@@ -18,7 +18,7 @@ const CreateDiaryUploadImage = styled('div')`
   cursor: pointer;
 `;
 
-const CreateDiaryUploadImageIcon = styled.img`
+export const CreateDiaryUploadImageIcon = styled.img`
   width: 25px;
   height: 25px;
   line-height: 50px;

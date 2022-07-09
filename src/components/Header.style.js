@@ -24,7 +24,7 @@ export const HeaderTitleContainer = styled.img`
 `;
 
 export const HeaderBackgroundImage = styled.img`
-  opacity: 0.4;
+  opacity: 0.3;
   z-index: -1;
   position: absolute;
   left: 0;

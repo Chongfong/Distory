@@ -505,6 +505,15 @@ export default function MyBlog() {
                   <MyBlogButtonLight
                     type="button"
                     onClick={() => {
+                      navigate('newstory');
+                    }}
+                  >
+                    發布限時動態
+
+                  </MyBlogButtonLight>
+                  <MyBlogButtonLight
+                    type="button"
+                    onClick={() => {
                       navigate('blogedit');
                     }}
                   >

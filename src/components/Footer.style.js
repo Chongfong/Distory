@@ -9,6 +9,7 @@ export const FooterBackgroundImage = styled.img`
   position: absolute;
   bottom: 20px;
   right: 20px;
+  opacity: 0.3;
   z-index: -1;
 `;
 

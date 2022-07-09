@@ -76,7 +76,7 @@ export const ImageEditorDefaultImageContainer = styled.div`
 `;
 
 export const ImageEditorDefaultImageInnerImageContainer = styled.div`
-  flex: 0 1 45%;
+  flex: 0 1 30%;
   margin: 5px;
   cursor: pointer;
   outline: ${({ selected }) => (selected ? '2px solid #ccc' : 'none')};
