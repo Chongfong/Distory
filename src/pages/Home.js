@@ -20,7 +20,7 @@ import {
   DiaryAllContainer,
 } from './Home.style';
 
-import { MyBlogProfileSubTitle } from './MyBlog.style';
+import { MyBlogProfileSubTitle, MyBlogProfileSubTitleMargin } from './MyBlog.style';
 
 import { changeHTMLToPureText } from '../components/ShareFunctions';
 
@@ -114,62 +114,68 @@ export default function Home() {
               index === 0
                 ? (
                   <>
-                    <div style={{ position: 'relative', width: '100%', height: '300px' }}>
-                      <HomeWelcomeWords>
-                        「　寫下你的專屬故事　」
-                      </HomeWelcomeWords>
+                    <>
+                      <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                        <HomeWelcomeWords>
+                          「　寫下你的專屬故事　」
+                        </HomeWelcomeWords>
 
-                    </div>
+                      </div>
 
-                    <MyBlogProfileSubTitle>網友熱議</MyBlogProfileSubTitle>
-                    <DiaryContainer
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => {
-                        navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-                      }}
-                      onKeyUp={() => {
-                        navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-                      }}
-                    >
-                      <DiaryImageBox><HomeImageFirst src={previewImagesArray[0]} alt={`diary-${index}`} /></DiaryImageBox>
-                      <DiaryInfoBox>
-                        <DiaryImageInsideBox>
-                          <HomeAuthorImage
-                            alt="author"
-                            src={allDiariesAuthorImg[index]}
-                          />
-                        </DiaryImageInsideBox>
-                        <DiaryTitleInsideBox style={{ textAlign: 'center' }}>
-                          <DiaryTitleFirst>{eachDiary.title.slice(0, 20)}</DiaryTitleFirst>
-                          <DiaryPublishTime>
-                            {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
-                          </DiaryPublishTime>
-                          <DiaryContent>
-                            {changeHTMLToPureText(eachDiary.content).slice(0, 80)}
-                          </DiaryContent>
-                        </DiaryTitleInsideBox>
+                      <MyBlogProfileSubTitle>網友熱議</MyBlogProfileSubTitle>
+                      <DiaryContainer
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => {
+                          navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                        }}
+                        onKeyUp={() => {
+                          navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                        }}
+                      >
+                        <DiaryImageBox><HomeImageFirst src={previewImagesArray[0]} alt={`diary-${index}`} /></DiaryImageBox>
+                        <DiaryInfoBox>
+                          <DiaryImageInsideBox>
+                            <HomeAuthorImage
+                              alt="author"
+                              src={allDiariesAuthorImg[index]}
+                            />
+                          </DiaryImageInsideBox>
+                          <DiaryTitleInsideBox style={{ textAlign: 'center' }}>
+                            <DiaryTitleFirst>{eachDiary.title.slice(0, 20)}</DiaryTitleFirst>
+                            <DiaryPublishTime>
+                              {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+                            </DiaryPublishTime>
+                            <DiaryContent>
+                              {changeHTMLToPureText(eachDiary.content).slice(0, 80)}
+                            </DiaryContent>
+                          </DiaryTitleInsideBox>
 
-                      </DiaryInfoBox>
+                        </DiaryInfoBox>
 
-                    </DiaryContainer>
-                    <HomeInviteDiv>
-                      <HomeInviteTitle>加入 Distory 的世界</HomeInviteTitle>
-                      <HomeInviteButtonContainer>
-                        <Link to="/signup">
-                          <HomeInviteButton>免費註冊</HomeInviteButton>
-                        </Link>
-                        <Link to="/login">
-                          <HomeInviteButton>立即登入</HomeInviteButton>
-                        </Link>
-                      </HomeInviteButtonContainer>
-                    </HomeInviteDiv>
-                    <LoadStories />
+                      </DiaryContainer>
+                      <HomeInviteDiv>
+                        <HomeInviteTitle>加入 Distory 的世界</HomeInviteTitle>
+                        <HomeInviteButtonContainer>
+                          <Link to="/signup">
+                            <HomeInviteButton>免費註冊</HomeInviteButton>
+                          </Link>
+                          <Link to="/login">
+                            <HomeInviteButton>立即登入</HomeInviteButton>
+                          </Link>
+                        </HomeInviteButtonContainer>
+                      </HomeInviteDiv>
+                      <LoadStories />
+
+                    </>
+                    <MyBlogProfileSubTitleMargin>
+                      經典好文
+
+                    </MyBlogProfileSubTitleMargin>
 
                   </>
                 )
                 : (
-
                   <DiarySmallContainer
                     role="button"
                     tabIndex={0}

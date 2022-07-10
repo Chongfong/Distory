@@ -107,6 +107,10 @@ export const MyBlogProfileSubTitle = styled.p`
   margin: 0px auto !important;
 `;
 
+export const MyBlogProfileSubTitleMargin = styled(MyBlogProfileSubTitle)`
+  margin: 100px auto 50px !important;
+`;
+
 export const ClickableDiv = styled.div`
   cursor:pointer;
   :hover, :active, :focus{
