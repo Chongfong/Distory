@@ -38,6 +38,8 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 
   const textEditorRef = useRef();
 
+  const textEditorCursorIndex = useRef();
+
   const imageRef = useRef();
   const navigate = useNavigate();
   const { userID } = useParams();
@@ -110,6 +112,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
                 imageUrl={imageUrl}
                 imageRef={imageRef}
                 textEditorRef={textEditorRef}
+                textEditorCursorIndex={textEditorCursorIndex}
               />
             </>
           )
@@ -132,7 +135,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
           setImageUrl={setImageUrl}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-
+          textEditorCursorIndex={textEditorCursorIndex}
         />
         <UploadImageInTextEditor
           loadFromFile={loadFromFile}
@@ -143,6 +146,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
           textEditorRef={textEditorRef}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+          textEditorCursorIndex={textEditorCursorIndex}
         />
         <PhotoEditor
           diaryContentValue={diaryContentValue}
@@ -154,6 +158,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
           url={url}
           setUrl={setUrl}
           textEditorRef={textEditorRef}
+          textEditorCursorIndex={textEditorCursorIndex}
         />
         <CreateDiarySave
           onClick={() => {

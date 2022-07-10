@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-classes-per-file */
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
@@ -19,16 +20,16 @@ import StickerRow from './ImageEditorSticker';
 import { storage, db } from '../firestore/firestore';
 
 export default function PhotoEditor({
-  diaryContentValue, setDiaryContentValue,
+  setDiaryContentValue,
   imageUrl, setImageUrl, openImageEditor, setOpenImageEditor, setUrl,
-  textEditorRef,
+  textEditorRef, textEditorCursorIndex,
 }) {
   const { userID } = useParams();
   const editorRef = useRef();
   const BlockEmbed = Quill.import('blots/block/embed');
-  const Block = Quill.import('blots/block');
+  const Delta = Quill.import('delta');
 
-  class ClickButtonBlot extends Block {
+  class ClickButtonBlot extends BlockEmbed {
     static create(value) {
       const node = super.create();
       node.setAttribute('src', value.url);
@@ -37,6 +38,7 @@ export default function PhotoEditor({
         e.preventDefault();
         setOpenImageEditor(true);
         setImageUrl(value.url);
+        textEditorCursorIndex.current = textEditorRef.current.editor.getSelection().index;
       }, false);
       return node;
     }
@@ -92,7 +94,6 @@ export default function PhotoEditor({
 
   const addSticker = (path) => {
     const editorInstance = editorRef.current.getInstance();
-
     editorInstance.addImageObject(path);
   };
 
@@ -105,7 +106,7 @@ export default function PhotoEditor({
     } else {
       cursorPosition = 0;
     }
-    textEditorRef.current.editor.deleteText(cursorPosition - 1, 4);
+
     textEditorRef.current.editor.setSelection(cursorPosition - 1);
 
     const editorInstance = editorRef.current.getInstance();
@@ -141,7 +142,28 @@ export default function PhotoEditor({
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setDiaryContentValue(`${diaryContentValue} <img src="${downloadURL}">`);
+              if (textEditorCursorIndex.current !== 0) {
+                textEditorRef.current.editor.updateContents(new Delta()
+                  .retain(textEditorCursorIndex.current - 1)
+                  .delete(1)
+                  .insert({
+                    image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
+                  })
+                  .delete(1)
+                  .retain(textEditorCursorIndex.current));
+              } else {
+                textEditorRef.current.editor.updateContents(new Delta()
+                  .retain(textEditorCursorIndex.current)
+                  .insert({
+                    image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
+                  })
+                  .retain(textEditorCursorIndex.current - 1)
+                  .delete(2));
+              }
+
+              setDiaryContentValue(
+                textEditorRef.current.editor.getContents(),
+              );
               setOpenImageEditor(false);
               setImageUrl();
               setUrl();
@@ -282,7 +304,6 @@ export default function PhotoEditor({
 }
 
 PhotoEditor.propTypes = {
-  diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
   imageUrl: PropTypes.string,
   setImageUrl: PropTypes.func,
@@ -290,10 +311,10 @@ PhotoEditor.propTypes = {
   setOpenImageEditor: PropTypes.func,
   setUrl: PropTypes.func,
   textEditorRef: PropTypes.string,
+  textEditorCursorIndex: PropTypes.string,
 };
 
 PhotoEditor.defaultProps = {
-  diaryContentValue: '',
   setDiaryContentValue: () => {},
   imageUrl: '',
   setImageUrl: () => {},
@@ -301,4 +322,5 @@ PhotoEditor.defaultProps = {
   setOpenImageEditor: () => {},
   setUrl: () => {},
   textEditorRef: '',
+  textEditorCursorIndex: '',
 };
