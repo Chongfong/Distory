@@ -20,19 +20,18 @@ import {
   DiaryAllContainer,
 } from './Home.style';
 
-import preview1 from '../img/preview-1.jpg';
-import preview2 from '../img/preview-2.jpg';
-import preview3 from '../img/preview-3.jpg';
-import preview4 from '../img/preview-4.jpg';
-import preview5 from '../img/preview-5.jpg';
-
 import { MyBlogProfileSubTitle } from './MyBlog.style';
 
 import { changeHTMLToPureText } from '../components/ShareFunctions';
 
 import LoadStories from '../components/LoadStories';
 
-const previewImagesArray = [preview1, preview2, preview3, preview4, preview5];
+export const previewImagesArray = [
+  'https://file.coffee/u/pk6HROQiXzoh8qxIxho0F.jpg',
+  'https://file.coffee/u/k9JaFxf5SM95WDSLyEZ8-.jpg',
+  'https://file.coffee/u/yDBwlsE2SWC_ABi4wrdfL.jpg',
+  'https://file.coffee/u/NeyXW_Jb49mXSdLikJm6S.jpg',
+  'https://file.coffee/u/4VidEWw87CJvCU7o7h29i.jpg'];
 
 export default function Home() {
   const fetchDiaries = () => new Promise((resolve) => {

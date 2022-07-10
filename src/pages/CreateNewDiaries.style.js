@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const CreateDiaryBody = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc( 100vh + 200px );
   position: relative;
   background-size: 20%;
   background-repeat: no-repeat;
