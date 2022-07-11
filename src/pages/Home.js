@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useEffect, useState, useCallback,
 } from 'react';
 import {
   collection,
   getDocs,
+  query,
+  where,
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
@@ -14,19 +17,21 @@ import {
   DiaryPublishTime, DiaryTitle, DiaryOutContainer, DiarySmallContainer,
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
   HomeWelcomeWords, DiaryContent, DiaryImageBoxNormal, DiaryTitleFirst, DiaryProfileImageBoxNormal,
+  DiaryAllContainer,
 } from './Home.style';
 
-import preview1 from '../img/preview-1.jpg';
-import preview2 from '../img/preview-2.jpg';
-import preview3 from '../img/preview-3.jpg';
-import preview4 from '../img/preview-4.jpg';
-import preview5 from '../img/preview-5.jpg';
+import { MyBlogProfileSubTitle, MyBlogProfileSubTitleMargin } from './MyBlog.style';
 
-import boy from '../img/boy.png';
+import { changeHTMLToPureText } from '../components/ShareFunctions';
 
-import { MyBlogProfileSubTitle } from './MyBlog.style';
+import LoadStories from '../components/LoadStories';
 
-const previewImagesArray = [preview1, preview2, preview3, preview4, preview5];
+export const previewImagesArray = [
+  'https://file.coffee/u/pk6HROQiXzoh8qxIxho0F.jpg',
+  'https://file.coffee/u/k9JaFxf5SM95WDSLyEZ8-.jpg',
+  'https://file.coffee/u/yDBwlsE2SWC_ABi4wrdfL.jpg',
+  'https://file.coffee/u/NeyXW_Jb49mXSdLikJm6S.jpg',
+  'https://file.coffee/u/4VidEWw87CJvCU7o7h29i.jpg'];
 
 export default function Home() {
   const fetchDiaries = () => new Promise((resolve) => {
@@ -52,6 +57,8 @@ export default function Home() {
     loadingDiaries();
   }, []);
 
+  const [allDiariesAuthorImg, setAllDiariesAuthorImg] = useState([]);
+
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
     const formatted = `${t.getFullYear()}.
@@ -64,15 +71,42 @@ export default function Home() {
     loadDiaries();
   }, [loadDiaries]);
 
+  const getAuthorInfoFunc = async () => {
+    if (allDiaries) {
+      const diaryAuthorsArray = [];
+      const diary = await Promise.all(allDiaries.map((eachDiary) => {
+        async function gettingAuthorInfo() {
+          try {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('userUID', '==', eachDiary.author));
+            const querySnapshot = await getDocs(q);
+            return querySnapshot;
+          } catch (e) {
+            return e.response;
+          }
+        }
+        return gettingAuthorInfo();
+      }));
+      diary.forEach((querySnapshot) => {
+        querySnapshot.forEach((querySnapshotEach) => {
+          if (!querySnapshotEach.empty) {
+            diaryAuthorsArray.push(querySnapshotEach.data().userImage);
+          }
+        });
+      }); setAllDiariesAuthorImg(diaryAuthorsArray);
+    }
+  };
+
+  useEffect(() => {
+    getAuthorInfoFunc();
+  }, [allDiaries]);
+
   return (
     <HomeBody>
 
       <DiaryOutContainer>
-        <div
+        <DiaryAllContainer
           className="diary"
-          style={{
-            display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',
-          }}
         >
           {allDiaries.map((eachDiary, index) => (
             <>
@@ -80,61 +114,68 @@ export default function Home() {
               index === 0
                 ? (
                   <>
-                    <div style={{ position: 'relative', width: '100%', height: '300px' }}>
-                      <HomeWelcomeWords>
-                        「　寫下你的專屬故事　」
-                      </HomeWelcomeWords>
+                    <>
+                      <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                        <HomeWelcomeWords>
+                          「　寫下你的專屬故事　」
+                        </HomeWelcomeWords>
 
-                    </div>
+                      </div>
 
-                    <MyBlogProfileSubTitle>網友熱議</MyBlogProfileSubTitle>
-                    <DiaryContainer
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => {
-                        navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-                      }}
-                      onKeyUp={() => {
-                        navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-                      }}
-                    >
-                      <DiaryImageBox><HomeImageFirst src={previewImagesArray[0]} alt={`diary-${index}`} /></DiaryImageBox>
-                      <DiaryInfoBox>
-                        <DiaryImageInsideBox>
-                          <HomeAuthorImage
-                            alt="author"
-                            src={boy}
-                          />
-                        </DiaryImageInsideBox>
-                        <DiaryTitleInsideBox>
-                          <DiaryTitleFirst>{eachDiary.title}</DiaryTitleFirst>
-                          <DiaryPublishTime>
-                            {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
-                          </DiaryPublishTime>
-                          <DiaryContent>
-                            {eachDiary.content.slice(0, 80)}
-                          </DiaryContent>
-                        </DiaryTitleInsideBox>
+                      <MyBlogProfileSubTitle>網友熱議</MyBlogProfileSubTitle>
+                      <DiaryContainer
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => {
+                          navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                        }}
+                        onKeyUp={() => {
+                          navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                        }}
+                      >
+                        <DiaryImageBox><HomeImageFirst src={previewImagesArray[0]} alt={`diary-${index}`} /></DiaryImageBox>
+                        <DiaryInfoBox>
+                          <DiaryImageInsideBox>
+                            <HomeAuthorImage
+                              alt="author"
+                              src={allDiariesAuthorImg[index]}
+                            />
+                          </DiaryImageInsideBox>
+                          <DiaryTitleInsideBox style={{ textAlign: 'center' }}>
+                            <DiaryTitleFirst>{eachDiary.title.slice(0, 20)}</DiaryTitleFirst>
+                            <DiaryPublishTime>
+                              {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+                            </DiaryPublishTime>
+                            <DiaryContent>
+                              {changeHTMLToPureText(eachDiary.content).slice(0, 80)}
+                            </DiaryContent>
+                          </DiaryTitleInsideBox>
 
-                      </DiaryInfoBox>
+                        </DiaryInfoBox>
 
-                    </DiaryContainer>
-                    <HomeInviteDiv>
-                      <HomeInviteTitle>加入 Distory 的世界</HomeInviteTitle>
-                      <HomeInviteButtonContainer>
-                        <Link to="/signup">
-                          <HomeInviteButton>免費註冊</HomeInviteButton>
-                        </Link>
-                        <Link to="/login">
-                          <HomeInviteButton>立即登入</HomeInviteButton>
-                        </Link>
-                      </HomeInviteButtonContainer>
-                    </HomeInviteDiv>
+                      </DiaryContainer>
+                      <HomeInviteDiv>
+                        <HomeInviteTitle>加入 Distory 的世界</HomeInviteTitle>
+                        <HomeInviteButtonContainer>
+                          <Link to="/signup">
+                            <HomeInviteButton>免費註冊</HomeInviteButton>
+                          </Link>
+                          <Link to="/login">
+                            <HomeInviteButton>立即登入</HomeInviteButton>
+                          </Link>
+                        </HomeInviteButtonContainer>
+                      </HomeInviteDiv>
+                      <LoadStories />
+
+                    </>
+                    <MyBlogProfileSubTitleMargin>
+                      經典好文
+
+                    </MyBlogProfileSubTitleMargin>
 
                   </>
                 )
                 : (
-
                   <DiarySmallContainer
                     role="button"
                     tabIndex={0}
@@ -148,7 +189,7 @@ export default function Home() {
                     <DiaryImageBoxNormal><HomeImageNormal src={previewImagesArray[(index % 5)]} alt={`diary-${index}`} /></DiaryImageBoxNormal>
                     <DiaryInfoBox>
                       <DiaryTitleInsideBox>
-                        <DiaryTitle>{eachDiary.title}</DiaryTitle>
+                        <DiaryTitle>{eachDiary.title.slice(0, 60)}</DiaryTitle>
                         <DiaryPublishTime>
                           {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                         </DiaryPublishTime>
@@ -158,7 +199,7 @@ export default function Home() {
                         <img
                           alt="author"
                           style={{ width: '50px', height: '50px' }}
-                          src={boy}
+                          src={allDiariesAuthorImg[index]}
                         />
                       </DiaryProfileImageBoxNormal>
                     </DiaryInfoBox>
@@ -169,7 +210,7 @@ export default function Home() {
             </>
           ))}
 
-        </div>
+        </DiaryAllContainer>
       </DiaryOutContainer>
     </HomeBody>
   );

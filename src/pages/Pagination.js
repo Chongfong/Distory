@@ -13,6 +13,8 @@ import {
 
 import postImage from '../img/post2.png';
 
+import { changeHTMLToPureText } from '../components/ShareFunctions';
+
 export default function Pagination({ userID, currentUserData }) {
   const [list, setList] = useState([]);
   const [page, setPage] = useState(0);
@@ -46,14 +48,14 @@ export default function Pagination({ userID, currentUserData }) {
         }
       });
       setList(items);
-      totalPages.current = (Math.ceil(items.length / 2));
+      totalPages.current = (Math.ceil(items.length / 3));
     };
     fetchData();
   }, []);
   return (
     <>
       { page !== 0
-        ? (list.slice(page * 2, page * 2 + 2).map((doc) => (
+        ? (list.slice(page * 3, page * 3 + 3).map((doc) => (
           <DiaryContainerFlex
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
@@ -67,15 +69,15 @@ export default function Pagination({ userID, currentUserData }) {
           >
             <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
-              <DiaryTitle>{doc.title}</DiaryTitle>
-              <DiaryContent>{doc.content.slice(0, 80)}</DiaryContent>
+              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
+              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;
               {doc.likeDiary ? doc.likeDiary.length : 0}
             </DiaryLikes>
           </DiaryContainerFlex>
-        ))) : ((list.slice(0, 2).map((doc) => (
+        ))) : ((list.slice(0, 3).map((doc) => (
           <DiaryContainerFlex
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
@@ -89,8 +91,8 @@ export default function Pagination({ userID, currentUserData }) {
           >
             <DiaryImageDefault src={postImage} alt="preview-diary" />
             <DiaryContentFlex>
-              <DiaryTitle>{doc.title}</DiaryTitle>
-              <DiaryContent>{doc.content.slice(0, 80)}</DiaryContent>
+              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
+              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;

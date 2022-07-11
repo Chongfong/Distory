@@ -16,7 +16,7 @@
 }
 
 .diary_click_button::after {
-    content: '💗';
+    content: url('../img/pencil.png');
     position: relative;
     left:10px;    
     cursor:pointer;

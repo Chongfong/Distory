@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   doc, getDoc, getDocs, collection, query, where,
@@ -8,12 +8,19 @@ import {
 import DOMPurify from 'dompurify';
 import { auth, db } from '../firestore/firestore';
 
-import { BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer } from './BlogArticle.style';
+import {
+  BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
+  BlogArticleEditImage, BlogArticleEditImageContainer,
+  BlogArticleInteractiveContainer, BlogArticleInteractiveButtonContainer,
+} from './BlogArticle.style';
 
 import { MyBlogBottomLine } from './MyBlog.style';
 
+import Share from '../components/Share';
+
 import Comment from './Comment';
 import Like from './Like';
+import edit from '../img/edit.png';
 
 export default function BlogArticle() {
   const [currentUser, setCurrentUser] = useState();
@@ -24,6 +31,7 @@ export default function BlogArticle() {
   const [commentAuthor, setCommentAuthor] = useState();
 
   const { userID, diaryID } = useParams();
+  const navigate = useNavigate();
 
   const docRef = doc(db, 'users', userID);
 
@@ -113,12 +121,27 @@ export default function BlogArticle() {
 
   return (
     <>
-      {currentUser && currentUserData ? (
+      {currentUserData ? (
         <ul>
           {userDiaries.map((eachDiary) => (
             <>
-              <div className="diary">
+              <div className="diary" style={{ position: 'relative' }}>
                 <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
+                {currentUser ? (userID === currentUser.uid && (
+                <BlogArticleEditImageContainer
+                  onClick={() => {
+                    navigate(`/${userID}/edit/${diaryID}`);
+                  }}
+                  onKeyUp={() => {
+                    navigate(`/${userID}/edit/${diaryID}`);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <BlogArticleEditImage src={edit} alt="edit" />
+
+                </BlogArticleEditImageContainer>
+                )) : ('') }
                 <BlogArticleDate>
                   {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                 </BlogArticleDate>
@@ -127,7 +150,14 @@ export default function BlogArticle() {
                 }}
                 />
               </div>
-              <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+              <BlogArticleInteractiveContainer>
+                <BlogArticleInteractiveButtonContainer>
+                  <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+                </BlogArticleInteractiveButtonContainer>
+                <BlogArticleInteractiveButtonContainer>
+                  <Share url={window.location.href} title={eachDiary.title} />
+                </BlogArticleInteractiveButtonContainer>
+              </BlogArticleInteractiveContainer>
               <MyBlogBottomLine style={{ width: '97%' }} />
               <Comment
                 currentUser={currentUser}

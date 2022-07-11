@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const HomeBody = styled.div`
   width: 70%;
@@ -13,7 +13,16 @@ export const HomeBody = styled.div`
 export const DiaryOutContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-contents: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+export const DiaryAllContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const DiarySmallContainer = styled.div`
@@ -38,7 +47,7 @@ export const DiaryContainer = styled.div`
   flex: 0 1 100%;
   display: flex;
   flex-wrap: wrap;
-  padding: 50px 50px 25px;
+  padding: 50px 50px 100px;
   align-items: center;
   cursor: pointer;
   justify-content: space-between;
@@ -93,6 +102,7 @@ export const DiaryTitleInsideBox = styled.div`
   display:flex;
   flex-wrap: wrap;
   text-align: left;
+  padding-left: 10px;
 `;
 
 export const DiaryImageInsideBox = styled.div`
@@ -158,13 +168,14 @@ export const HomeInviteDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
   border-top: 1px solid #b8b8b8;
+  margin-bottom: 120px;
 `;
 
 export const HomeInviteTitle = styled.p`
   flex: 100%;
   font-size: 2.5rem;
   font-weight: bold;
-  margin-top: 30px !important; 
+  margin-top: 80px !important; 
   @media (max-width: 912px) {
     font-size: 2rem;
 }

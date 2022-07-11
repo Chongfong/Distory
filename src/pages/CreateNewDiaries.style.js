@@ -1,11 +1,9 @@
 import styled from 'styled-components';
-import backgroundImage from '../img/quill.png';
 
 export const CreateDiaryBody = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc( 100vh + 200px );
   position: relative;
-  background-image: url(${backgroundImage});
   background-size: 20%;
   background-repeat: no-repeat;
   background-position: bottom 20px right 40px;
@@ -47,4 +45,46 @@ export const CreateDiaryPublish = styled.div`
   right: 20px;
   bottom: 30px;
   cursor: pointer;
+`;
+
+export const CreateDiarySave = styled(CreateDiaryPublish)`
+  bottom: 100px;
+`;
+
+export const CreateDiaryIconImage = styled.img`
+  width: 25px;
+  height: 25px;
+  line-height: 50px;
+  color: #ccc
+`;
+
+export const CreateDiaryNavBar = styled.div`
+  width: 50%;
+  height: 40px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+`;
+
+export const CreateDiaryNavButton = styled.div`
+  width: 50%;
+  font-size: 1.5rem;
+  text-align: center;
+  border-bottom: ${({ selected }) => (selected ? '4px solid #ccc' : '2px solid #ccc')};
+  cursor: pointer;
+  :hover, :focus, :active {
+    border-bottom: 4px solid #ccc;
+  }
+`;
+
+export const EditDiaryEachDiaryRow = styled.div`
+  display: flex;
+  flex-wrap: no-wrap;
+  flex-basis: 100%;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+  margin: 5px;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
 `;

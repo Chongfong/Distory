@@ -1,34 +1,57 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import {
   collection,
   doc,
   Timestamp,
   setDoc,
 } from 'firebase/firestore';
+import PropTypes from 'prop-types';
 import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
 import {
-  CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryTitle, CreateDiaryPublish,
+  CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryTitle, CreateDiaryPublish,
+  CreateDiarySave, CreateDiaryIconImage, CreateDiaryNavBar, CreateDiaryNavButton,
 } from './CreateNewDiaries.style';
-import { db } from '../firestore/firestore';
+import { db, storage } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
 import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
+import ChooseEditArtices from '../components/ChooseEditArticles';
 
-export default function CreateNewDiary() {
+import { removeClickButtonsTag } from '../components/ShareFunctions';
+
+import save from '../img/save.png';
+
+import SetArticlePassword from '../components/SetArticlePassword';
+import SetArticleShowImg from '../components/setArticleShowImg';
+
+import { previewImagesArray } from './Home';
+
+export default function CreateNewDiary({ isOpen, setIsOpen }) {
   const [titleValue, setTitleValue] = useState('Please enter the title');
   const [diaryContentValue, setDiaryContentValue] = useState();
   const [imageUrl, setImageUrl] = useState();
-
-  const [isOpen, setIsOpen] = useState(false);
 
   const [loadFromFile, setLoadFromFile] = useState();
   const [loadFromUrl, setLoadFromUrl] = useState();
   const [url, setUrl] = useState();
 
   const [openImageEditor, setOpenImageEditor] = useState(false);
+  const [selectEditMode, setSelectEditMode] = useState();
+  const [isChoosing, setIsChoosing] = useState(false);
+  const [articlePassword, setArticlePassword] = useState();
+  const [articlePasswordHint, setArticlePasswordHint] = useState();
+  const [articleShowImg, setArticleShowImg] = useState(
+    previewImagesArray[Math.floor(Math.random() * 5)],
+  );
+  const [articleShowImgUrl, setArticleShowImgUrl] = useState(articleShowImg);
+  const [articleShowImgFile, setArticleShowImgFile] = useState();
 
   const textEditorRef = useRef();
+
+  const textEditorCursorIndex = useRef();
 
   const imageRef = useRef();
   const navigate = useNavigate();
@@ -39,28 +62,168 @@ export default function CreateNewDiary() {
     const data = {
       title: titleValue,
       titleText: [...titleValue.replace(' ', '')],
-      content: diaryContentValue,
+      content: removeClickButtonsTag(diaryContentValue),
       status: 'published',
       publishAt: Timestamp.now().toDate(),
       diaryID: diarydoc.id,
       author: userID,
+      password: articlePassword,
+      passwordHint: articlePasswordHint,
+      showImg: articleShowImg,
     };
     setDoc(diarydoc, { ...data });
     alert('文章已發布');
   };
 
+  const saveNewDiaryImgDB = (imgDownloadURL) => {
+    const data = {
+      title: titleValue,
+      titleText: [...titleValue.replace(' ', '')],
+      content: removeClickButtonsTag(diaryContentValue),
+      status: 'published',
+      publishAt: Timestamp.now().toDate(),
+      diaryID: diarydoc.id,
+      author: userID,
+      password: articlePassword,
+      passwordHint: articlePasswordHint,
+      showImg: imgDownloadURL,
+    };
+    setDoc(diarydoc, { ...data });
+    alert('文章已發布');
+  };
+
+  const saveTempDiaryDB = () => {
+    const data = {
+      title: titleValue,
+      titleText: [...titleValue.replace(' ', '')],
+      content: removeClickButtonsTag(diaryContentValue),
+      status: 'draft',
+      publishAt: Timestamp.now().toDate(),
+      diaryID: diarydoc.id,
+      author: userID,
+      password: articlePassword,
+      passwordHint: articlePasswordHint,
+      showImg: articleShowImg,
+    };
+    setDoc(diarydoc, { ...data });
+    alert('文章已儲存');
+  };
+
+  const metadata = {
+    contentType: 'image/jpeg',
+  };
+
+  const handleSubmit = (imageFile) => {
+    const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
+    if (!imageFile) { alert('please try again'); return; }
+    if (!imageTypes.includes(imageFile.type.slice(6))) {
+      alert('Please upload the image file');
+      return;
+    }
+    const storageRef = ref(storage, `files/${imageFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile, metadata);
+    uploadTask.on(
+      'state_changed',
+      () => {},
+      (error) => {
+        switch (error.code) {
+          case 'storage/unauthorized':
+            break;
+          case 'storage/canceled':
+            break;
+          case 'storage/unknown':
+            break;
+          default:
+            break;
+        }
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          saveNewDiaryImgDB(downloadURL);
+          navigate(`/${userID}`);
+        });
+      },
+    );
+  };
+
   return (
     <CreateDiaryBody>
       <CreateDiaryInsideBody>
-        <CreateDiaryNavTitle>發表新文章</CreateDiaryNavTitle>
-        <CreateDiaryTitle titleValue={titleValue} onChange={(e) => { setTitleValue(e.target.value); }} setTitleValue={setTitleValue} placeholder="請輸入標題" />
-        <TextEditor
-          diaryContentValue={diaryContentValue}
-          setDiaryContentValue={setDiaryContentValue}
-          imageUrl={imageUrl}
-          imageRef={imageRef}
-          textEditorRef={textEditorRef}
-        />
+        <CreateDiaryNavBar>
+          <CreateDiaryNavButton
+            selected={selectEditMode === 'new'}
+            onClick={() => {
+              setSelectEditMode('new');
+              setIsChoosing(false);
+            }}
+          >
+            發表新文章
+
+          </CreateDiaryNavButton>
+          <CreateDiaryNavButton
+            selected={selectEditMode === 'edit'}
+            onClick={() => {
+              setSelectEditMode('edit');
+              setIsChoosing(true);
+            }}
+          >
+            編輯草稿
+
+          </CreateDiaryNavButton>
+        </CreateDiaryNavBar>
+        <div style={{ height: '100%' }}>
+          {isChoosing === false ? (
+            <>
+              <CreateDiaryTitle
+                value={titleValue}
+                onChange={(e) => { setTitleValue(e.target.value); }}
+                placeholder={titleValue}
+              />
+              <TextEditor
+                diaryContentValue={diaryContentValue}
+                setDiaryContentValue={setDiaryContentValue}
+                imageUrl={imageUrl}
+                imageRef={imageRef}
+                textEditorRef={textEditorRef}
+                textEditorCursorIndex={textEditorCursorIndex}
+              />
+              <div style={{ display: 'flex', width: '100%', marginTop: '100px' }}>
+                <div style={{
+                  flex: '1', width: '100%', display: 'flex', flexWrap: 'wrap',
+                }}
+                >
+                  <SetArticlePassword
+                    articlePassword={articlePassword}
+                    setArticlePassword={setArticlePassword}
+                    articlePasswordHint={articlePasswordHint}
+                    setArticlePasswordHint={setArticlePasswordHint}
+                  />
+                </div>
+                <div style={{ flex: '1', width: '100%' }}>
+                  <SetArticleShowImg
+                    articleShowImg={articleShowImg}
+                    setArticleShowImg={setArticleShowImg}
+                    articleShowImgUrl={articleShowImgUrl}
+                    setArticleShowImgUrl={setArticleShowImgUrl}
+                    articleShowImgFile={articleShowImgFile}
+                    setArticleShowImgFile={setArticleShowImgFile}
+                  />
+                </div>
+              </div>
+            </>
+          )
+            : (
+              selectEditMode === 'edit' ? (
+                <ChooseEditArtices
+                  setTitleValue={setTitleValue}
+                  setDiaryContentValue={setDiaryContentValue}
+                  isChoosing={isChoosing}
+                  setIsChoosing={setIsChoosing}
+                />
+              ) : ('')
+            )}
+
+        </div>
         <br />
         <DropDownButton
           setLoadFromFile={setLoadFromFile}
@@ -68,7 +231,7 @@ export default function CreateNewDiary() {
           setImageUrl={setImageUrl}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-
+          textEditorCursorIndex={textEditorCursorIndex}
         />
         <UploadImageInTextEditor
           loadFromFile={loadFromFile}
@@ -79,6 +242,7 @@ export default function CreateNewDiary() {
           textEditorRef={textEditorRef}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+          textEditorCursorIndex={textEditorCursorIndex}
         />
         <PhotoEditor
           diaryContentValue={diaryContentValue}
@@ -90,23 +254,66 @@ export default function CreateNewDiary() {
           url={url}
           setUrl={setUrl}
           textEditorRef={textEditorRef}
+          textEditorCursorIndex={textEditorCursorIndex}
         />
-        <CreateDiaryPublish
+        <CreateDiarySave
           onClick={() => {
-            saveNewDiaryDB();
+            saveTempDiaryDB();
             navigate(`/${userID}`);
           }}
           onKeyUp={() => {
-            saveNewDiaryDB();
+            saveTempDiaryDB();
             navigate(`/${userID}`);
           }}
           role="button"
           tabIndex={0}
         >
-          ✓
+          <CreateDiaryIconImage src={save} alt="save" />
 
-        </CreateDiaryPublish>
+        </CreateDiarySave>
+        { articleShowImgFile ? (
+          <CreateDiaryPublish
+            onClick={() => {
+              handleSubmit(articleShowImgFile);
+            }}
+            onKeyUp={() => {
+              handleSubmit(articleShowImgFile);
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            ✓
+
+          </CreateDiaryPublish>
+        ) : (
+          <CreateDiaryPublish
+            onClick={() => {
+              saveNewDiaryDB();
+              navigate(`/${userID}`);
+            }}
+            onKeyUp={() => {
+              saveNewDiaryDB();
+              navigate(`/${userID}`);
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            ✓
+
+          </CreateDiaryPublish>
+        )}
+
       </CreateDiaryInsideBody>
     </CreateDiaryBody>
   );
 }
+
+CreateNewDiary.propTypes = {
+  isOpen: PropTypes.string,
+  setIsOpen: PropTypes.func,
+};
+
+CreateNewDiary.defaultProps = {
+  isOpen: '',
+  setIsOpen: () => {},
+};

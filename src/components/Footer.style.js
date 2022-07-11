@@ -3,12 +3,15 @@ import styled from 'styled-components';
 export const Body = styled.div`
   width: 98vw;
   position: relative;
+  bottom: -250px;
+  padding-bottom: 30px;
 `;
 
 export const FooterBackgroundImage = styled.img`
   position: absolute;
   bottom: 20px;
   right: 20px;
+  opacity: 0.3;
   z-index: -1;
 `;
 

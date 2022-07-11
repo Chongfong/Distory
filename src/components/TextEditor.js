@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React
   from 'react';
 import ReactQuill from 'react-quill';
@@ -11,7 +12,11 @@ class CustomQuill extends ReactQuill {
     this.unhookEditor(this.editor);
   }
 }
-export default function TextEditor({ diaryContentValue, setDiaryContentValue, textEditorRef }) {
+export default function TextEditor(
+  {
+    diaryContentValue, setDiaryContentValue, textEditorRef, textEditorCursorIndex,
+  },
+) {
   const modules = {
     toolbar: [
       [{ size: ['small', false, 'large', 'huge'] }],
@@ -37,18 +42,31 @@ export default function TextEditor({ diaryContentValue, setDiaryContentValue, te
   };
 
   return (
-    <CustomQuill theme="snow" ref={textEditorRef} value={diaryContentValue} modules={modules} onChange={setDiaryContentValue} />
+    <CustomQuill
+      theme="snow"
+      ref={textEditorRef}
+      value={diaryContentValue}
+      modules={modules}
+      onChange={
+        (contentValue) => {
+          setDiaryContentValue(contentValue);
+          textEditorCursorIndex.current = textEditorRef.current.editor.getSelection().index;
+        }
+}
+    />
   );
 }
 
 TextEditor.propTypes = {
   diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
-  textEditorRef: PropTypes.shape({}),
+  textEditorRef: PropTypes.string,
+  textEditorCursorIndex: PropTypes.string,
 };
 
 TextEditor.defaultProps = {
   diaryContentValue: '',
   setDiaryContentValue: () => {},
   textEditorRef: '',
+  textEditorCursorIndex: '',
 };

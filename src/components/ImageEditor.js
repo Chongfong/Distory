@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-classes-per-file */
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
@@ -5,23 +6,30 @@ import React, { useRef } from 'react';
 import { Quill } from 'react-quill';
 import PropTypes from 'prop-types';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import myTheme from './imageEditorTheme';
+import { useParams } from 'react-router-dom';
+import {
+  doc, collection, Timestamp, setDoc,
+} from 'firebase/firestore';
+import { myTheme, ImageEditorSubmitButtonsForm } from './imageEditorTheme';
 import '../css/textEditor.css';
 import '../css/imageEditor.css';
 import { PopUpBackDiv, PopUpContainerDiv, CircleButton } from '../pages/ImageEditor.style';
 
-import { storage } from '../firestore/firestore';
+import StickerRow from './ImageEditorSticker';
+
+import { storage, db } from '../firestore/firestore';
 
 export default function PhotoEditor({
-  diaryContentValue, setDiaryContentValue,
+  setDiaryContentValue,
   imageUrl, setImageUrl, openImageEditor, setOpenImageEditor, setUrl,
-  textEditorRef,
+  textEditorRef, textEditorCursorIndex,
 }) {
+  const { userID } = useParams();
   const editorRef = useRef();
   const BlockEmbed = Quill.import('blots/block/embed');
-  const Block = Quill.import('blots/block');
+  const Delta = Quill.import('delta');
 
-  class ClickButtonBlot extends Block {
+  class ClickButtonBlot extends BlockEmbed {
     static create(value) {
       const node = super.create();
       node.setAttribute('src', value.url);
@@ -30,6 +38,7 @@ export default function PhotoEditor({
         e.preventDefault();
         setOpenImageEditor(true);
         setImageUrl(value.url);
+        textEditorCursorIndex.current = textEditorRef.current.editor.getSelection().index;
       }, false);
       return node;
     }
@@ -83,6 +92,11 @@ export default function PhotoEditor({
 
   imageRef.current = '';
 
+  const addSticker = (path) => {
+    const editorInstance = editorRef.current.getInstance();
+    editorInstance.addImageObject(path);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -92,7 +106,7 @@ export default function PhotoEditor({
     } else {
       cursorPosition = 0;
     }
-    textEditorRef.current.editor.deleteText(cursorPosition - 1, 4);
+
     textEditorRef.current.editor.setSelection(cursorPosition - 1);
 
     const editorInstance = editorRef.current.getInstance();
@@ -128,7 +142,85 @@ export default function PhotoEditor({
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setDiaryContentValue(`${diaryContentValue} <img src="${downloadURL}">`);
+              if (textEditorCursorIndex.current !== 0) {
+                textEditorRef.current.editor.updateContents(new Delta()
+                  .retain(textEditorCursorIndex.current - 1)
+                  .delete(1)
+                  .insert({
+                    image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
+                  })
+                  .delete(1)
+                  .retain(textEditorCursorIndex.current));
+              } else {
+                textEditorRef.current.editor.updateContents(new Delta()
+                  .retain(textEditorCursorIndex.current)
+                  .insert({
+                    image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
+                  })
+                  .retain(textEditorCursorIndex.current - 1)
+                  .delete(2));
+              }
+
+              setDiaryContentValue(
+                textEditorRef.current.editor.getContents(),
+              );
+              setOpenImageEditor(false);
+              setImageUrl();
+              setUrl();
+            });
+          },
+        );
+      });
+  };
+
+  const handleUploadStory = () => {
+    const storydoc = doc(collection(db, 'stories'));
+
+    const saveStoryDB = (storyImageUrl) => {
+      const data = {
+        imageUrl: storyImageUrl,
+        publishAt: Timestamp.now().toDate(),
+        diaryID: storydoc.id,
+        author: userID,
+      };
+      setDoc(storydoc, { ...data });
+      alert('已發布限時動態');
+    };
+
+    const editorInstance = editorRef.current.getInstance();
+    const dataURL = editorInstance.toDataURL();
+
+    const metadata = {
+      contentType: 'image/jpeg',
+    };
+
+    fetch(dataURL)
+      .then((res) => res.blob())
+      .then((imageBlob) => {
+        testURL.current = imageBlob;
+
+        const file = testURL.current;
+        const storageRef = ref(storage, `stories/${Date.now()}`);
+        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+        uploadTask.on(
+          'state_changed',
+          () => {},
+          (error) => {
+            switch (error.code) {
+              case 'storage/unauthorized':
+                break;
+              case 'storage/canceled':
+                break;
+              case 'storage/unknown':
+                break;
+              default:
+                break;
+            }
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              saveStoryDB(downloadURL);
               setOpenImageEditor(false);
               setImageUrl();
               setUrl();
@@ -180,7 +272,6 @@ export default function PhotoEditor({
                     'mask',
                     'filter',
                   ],
-                  initMenu: 'draw',
                   uiSize: {
                     width: '100%',
                     height: '95%',
@@ -195,10 +286,12 @@ export default function PhotoEditor({
                   usageStatistics: false,
                 }}
               />
-              <form onSubmit={handleSubmit}>
+              <StickerRow onStickerSelected={(path) => addSticker(path)} />
+              <ImageEditorSubmitButtonsForm onSubmit={handleSubmit}>
+                <CircleButton type="button" onClick={() => { handleUploadStory(); }}>＋</CircleButton>
                 <CircleButton type="submit">✓</CircleButton>
                 <CircleButton type="button" style={{ fontSize: '25px' }} onClick={() => setOpenImageEditor(false)}>×</CircleButton>
-              </form>
+              </ImageEditorSubmitButtonsForm>
             </PopUpContainerDiv>
           </PopUpBackDiv>
         )
@@ -211,7 +304,6 @@ export default function PhotoEditor({
 }
 
 PhotoEditor.propTypes = {
-  diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
   imageUrl: PropTypes.string,
   setImageUrl: PropTypes.func,
@@ -219,10 +311,10 @@ PhotoEditor.propTypes = {
   setOpenImageEditor: PropTypes.func,
   setUrl: PropTypes.func,
   textEditorRef: PropTypes.string,
+  textEditorCursorIndex: PropTypes.string,
 };
 
 PhotoEditor.defaultProps = {
-  diaryContentValue: '',
   setDiaryContentValue: () => {},
   imageUrl: '',
   setImageUrl: () => {},
@@ -230,4 +322,5 @@ PhotoEditor.defaultProps = {
   setOpenImageEditor: () => {},
   setUrl: () => {},
   textEditorRef: '',
+  textEditorCursorIndex: '',
 };

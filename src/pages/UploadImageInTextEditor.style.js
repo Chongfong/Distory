@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import addImageIcon from '../img/add-image.png';
 
-const CreateDiaryUploadImage = styled('div')`
+export const CreateDiaryUploadImage = styled('div')`
   width: 50px;
   height: 50px; 
   position: fixed;
   right: 20px;
-  bottom: 100px;
+  bottom: 170px;
   border-radius: 50%;
   border: #BDC0BA 2px solid;
   background-color: white;
@@ -18,7 +18,7 @@ const CreateDiaryUploadImage = styled('div')`
   cursor: pointer;
 `;
 
-const CreateDiaryUploadImageIcon = styled.img`
+export const CreateDiaryUploadImageIcon = styled.img`
   width: 25px;
   height: 25px;
   line-height: 50px;
@@ -43,7 +43,7 @@ export const UploadNavBar = styled.div`
 export const UploadImageNavButtom = styled.div`
   width: 50%;
   text-align: center;
-  border-bottom: 2px solid #ccc;
+  border-bottom: ${({ selected }) => (selected ? '4px solid #ccc' : '2px solid #ccc')};
   cursor: pointer;
   :hover, :focus, :active {
     border-bottom: 4px solid #ccc;
@@ -65,7 +65,15 @@ export const UploadImageContainer = styled.div`
   height: 73%;
   border: solid 1px #ccc;
   border-radius: 20px;
-
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+  height: 3px;
+  width: 7px;
+  }
+  ::-webkit-scrollbar-thumb {
+  background: #cabeba;
+  border-radius: 10px;
+}
 `;
 
 export const UploadImageFromUrl = styled.input`

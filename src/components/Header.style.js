@@ -24,7 +24,7 @@ export const HeaderTitleContainer = styled.img`
 `;
 
 export const HeaderBackgroundImage = styled.img`
-  opacity: 0.4;
+  opacity: 0.3;
   z-index: -1;
   position: absolute;
   left: 0;
@@ -39,6 +39,7 @@ export const HeaderTitle = styled.div`
   animation: ${bookmark} 10s ease 0s infinite;
   transform-origin: top center; 
   position: fixed;
+  z-index:1;
   :hover, :active, :focus{
     opacity: 0.5;
   }
@@ -56,11 +57,22 @@ export const HeaderTitleWords = styled.p`
 `;
 
 export const HeaderSearchBar = styled.input`
-border: none;
-background-color:transparent;
-width: 200px;
-border-bottom: 1px solid #ccc;
-margin: 10px 20px;
+  border: 2px solid #ccc;
+  border-radius:25px;
+  background-color:rgba(255,255,255,0.8) ;
+  width: 150px;
+  padding: 0px 40px 0px 10px;
+  height: 30px;
+`;
+
+export const HeaderSearchIconContainer = styled.div`
+  position: absolute; 
+  right: 10px; 
+  bottom: 0px;
+  cursor: pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
 `;
 
 export const HeaderLogin = styled.div`
@@ -105,11 +117,28 @@ export const HeaderSignup = styled.div`
 `;
 
 export const HeaderMember = styled.div`
-  width: 50px;
-  height:50px;
+  width: 60px;
+  height:60px;
   margin-right: 20px;
   cursor: pointer;
+  position: relative;
+  z-index:1;
+  ::after{
+    content:"∨";
+    color: white;
+    position: absolute;
+    top: 12px;
+    right: 0;
+  }
   :hover, :active, :focus{
     opacity: 0.8;
   }
+`;
+
+export const HeaderMore = styled.div`
+  color: white;
+  ::after{
+    content:"∨"
+  }
+  
 `;

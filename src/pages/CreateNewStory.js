@@ -1,50 +1,29 @@
 /* eslint-disable no-nested-ternary */
 import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Quill } from 'react-quill';
-import { PopUpBackDiv, PopUpImageContainerDiv, CircleButton } from '../pages/ImageEditor.style';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PopUpBackDiv, PopUpImageContainerDiv, CircleButton } from './ImageEditor.style';
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage,
-} from '../pages/UploadImageInTextEditor.style';
+} from './UploadImageInTextEditor.style';
 
-import ImageEditorDefaultImage from './ImageEditorDefaultImage';
+import ImageEditorDefaultImage from '../components/ImageEditorDefaultImage';
 import addUploadImage from '../img/image.png';
 
-export default function UploadImageInTextEditor({
-  setImageUrl, url, setUrl,
-  textEditorRef,
-  isOpen,
-  setIsOpen,
-  textEditorCursorIndex,
-}) {
+import CreateStoryPhotoEditor from './CreateNewStoryImageEditor';
+
+export default function CreateNewStory() {
+  const [imageUrl, setImageUrl] = useState();
+  const [url, setUrl] = useState();
   const [uploadFromFile, setUploadFromFile] = useState('default');
   const [imageFileUrl, setImageFileUrl] = useState();
   const [imageFile, setImageFile] = useState();
   const [uploadImageMethod] = useState(false);
+  const [openImageEditor, setOpenImageEditor] = useState(false);
   const base64ImageUrl = useRef();
-  const insertEditablePhoto = (uploadImageUrl) => {
-    const cursorPosition = textEditorRef.current.editor.getSelection().index;
-    textEditorRef.current.editor.insertEmbed(cursorPosition, 'image', {
-      alt: `image${Date.now()}`,
-      url: uploadImageUrl,
-      class: 'diary_image',
-    }, Quill.sources.USER);
 
-    const Delta = Quill.import('delta');
-
-    textEditorRef.current.editor.insertEmbed(cursorPosition, 'clickButton', {
-      url: uploadImageUrl,
-      class: 'diary_click_button',
-    }, Quill.sources.USER);
-    if (textEditorCursorIndex.current !== 0) {
-      textEditorRef.current.editor.updateContents(new Delta()
-        .retain(textEditorCursorIndex.current + 2)
-        .delete(1));
-    }
-
-    textEditorRef.current.editor.setSelection(cursorPosition);
-  };
+  const navigate = useNavigate();
+  const { userID } = useParams();
 
   const convertBase64 = (file) => new Promise((resolve, reject) => {
     const fileReader = new FileReader();
@@ -64,14 +43,12 @@ export default function UploadImageInTextEditor({
     const base64 = await convertBase64(file);
     setImageUrl(base64);
     base64ImageUrl.current = base64;
-    insertEditablePhoto(base64ImageUrl.current);
   };
 
   return (
     <>
-      { isOpen && (
       <PopUpBackDiv>
-        <PopUpImageContainerDiv>
+        <PopUpImageContainerDiv style={{ width: '85%', height: '85%' }}>
           <FlexBox>
             <UploadImageTitle>
               插入圖片
@@ -108,7 +85,7 @@ export default function UploadImageInTextEditor({
 
               </UploadImageNavButtom>
             </UploadNavBar>
-            <UploadImageContainer>
+            <UploadImageContainer style={{ height: '84%' }}>
               {uploadFromFile === 'file'
                 ? (
                   <form>
@@ -116,12 +93,13 @@ export default function UploadImageInTextEditor({
                       htmlFor="upload-image"
                       style={{
                         width: '100%',
-                        height: '270px',
+                        height: '100%',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: '20px',
                         cursor: 'pointer',
+                        padding: '20px',
                       }}
                     >
                       {imageFileUrl ? (
@@ -159,7 +137,13 @@ export default function UploadImageInTextEditor({
                       onChange={(e) => setUrl(e.target.value)}
                     />
                     <br />
-                    {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
+                    {url !== 0 ? (
+                      <UploadImagePreviewImage
+                        alt="previewImageUrl"
+                        style={{ maxHeight: '400px' }}
+                        src={url}
+                      />
+                    ) : ('')}
                   </form>
                 ) : (
                   <ImageEditorDefaultImage url={url} setUrl={setUrl} />
@@ -172,9 +156,9 @@ export default function UploadImageInTextEditor({
                 <CircleButton
                   onClick={() => {
                     uploadImage(imageFile);
+                    setOpenImageEditor(true);
                     setImageFileUrl();
                     setImageFile();
-                    setIsOpen(false);
                   }}
                   style={{ position: 'relative', top: '-60px' }}
                 >
@@ -185,7 +169,7 @@ export default function UploadImageInTextEditor({
                   onClick={() => {
                     setImageFileUrl();
                     setImageFile();
-                    setIsOpen(false);
+                    navigate(`/${userID}`);
                   }}
                   style={{ fontSize: '25px', position: 'relative', top: '-60px' }}
                 >
@@ -198,8 +182,7 @@ export default function UploadImageInTextEditor({
                 <CircleButton
                   onClick={() => {
                     setImageUrl(url);
-                    insertEditablePhoto(url);
-                    setIsOpen(false);
+                    setOpenImageEditor(true);
                     setUrl();
                   }}
                   style={{ position: 'relative', top: '-60px' }}
@@ -208,8 +191,8 @@ export default function UploadImageInTextEditor({
                 </CircleButton>
                 <CircleButton
                   onClick={() => {
-                    setIsOpen(false);
                     setUrl();
+                    navigate(`/${userID}`);
                   }}
                   style={{ fontSize: '25px', position: 'relative', top: '-60px' }}
                 >
@@ -221,28 +204,13 @@ export default function UploadImageInTextEditor({
           </FlexBox>
         </PopUpImageContainerDiv>
       </PopUpBackDiv>
-      )}
       <div />
+      <CreateStoryPhotoEditor
+        openImageEditor={openImageEditor}
+        setOpenImageEditor={setOpenImageEditor}
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+      />
     </>
   );
 }
-
-UploadImageInTextEditor.propTypes = {
-  setImageUrl: PropTypes.func,
-  url: PropTypes.string,
-  setUrl: PropTypes.func,
-  textEditorRef: PropTypes.string,
-  isOpen: PropTypes.bool,
-  setIsOpen: PropTypes.func,
-  textEditorCursorIndex: PropTypes.string,
-};
-
-UploadImageInTextEditor.defaultProps = {
-  setImageUrl: () => {},
-  url: '',
-  setUrl: () => {},
-  textEditorRef: '',
-  isOpen: false,
-  setIsOpen: () => {},
-  textEditorCursorIndex: '',
-};

@@ -98,14 +98,22 @@ export const MyBlogVisitorDiv = styled.div`
 `;
 
 export const MyBlogProfileSubTitle = styled.p`
+  padding: 0px 50px 0px;
   font-size: 1.3rem;
   letter-spacing: 2px;
   color: #b8b8b8;
   text-align: left;
   width: 90%;
-  margin: 0px auto;
+  margin: 0px auto !important;
+`;
+
+export const MyBlogProfileSubTitleMargin = styled(MyBlogProfileSubTitle)`
+  margin: 100px auto 50px !important;
 `;
 
 export const ClickableDiv = styled.div`
   cursor:pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
 `;

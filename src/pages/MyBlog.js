@@ -57,11 +57,13 @@ export default function MyBlog() {
       let nowWhoVisited = {};
       fetchUserWhoVisited().then((querySnapshot) => {
         nowWhoVisited = querySnapshot.data();
-        if (nowWhoVisited.come) {
-          if (nowWhoVisited.come.userUid) {
-            updateDoc(userCamedoc, { ...userCameEditData });
+        if (nowWhoVisited) {
+          if (nowWhoVisited.come) {
+            if (nowWhoVisited.come.userUid) {
+              updateDoc(userCamedoc, { ...userCameEditData });
+            }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
           }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
-        }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
+        }
       });
       return (nowWhoVisited);
     };
@@ -328,7 +330,7 @@ export default function MyBlog() {
   }, [currentUserData]);
   return (
     <>
-      {currentUser && currentUserData ? (
+      {currentUserData ? (
         <CreateDiaryInsideBody>
           <div
             role="button"
@@ -347,7 +349,7 @@ export default function MyBlog() {
               role="button"
               tabIndex={0}
             >
-              {currentUser.uid === userID ? (
+              {currentUser ? (currentUser.uid === userID ? (
                 <input
                   type="file"
                   accept="image/*"
@@ -358,7 +360,8 @@ export default function MyBlog() {
                     if (e.target.files[0]) { setCurrentBlogImage(e.target.files[0]); }
                   }}
                 />
-              ) : ('') }
+              ) : ('')) : ('')}
+
               {currentBlogImage ? (
                 <>
                   <BlogBackgroundImage
@@ -390,7 +393,7 @@ export default function MyBlog() {
                 role="button"
                 tabIndex={0}
               >
-                {currentUser.uid === userID ? (
+                {currentUser ? (currentUser.uid === userID ? (
                   <input
                     type="file"
                     accept="image/*"
@@ -401,7 +404,7 @@ export default function MyBlog() {
                       if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
                     }}
                   />
-                ) : ('') }
+                ) : ('')) : ('')}
                 {currentUserImage ? (
                   <>
                     <img
@@ -489,7 +492,7 @@ export default function MyBlog() {
                 </>
               )}
 
-              {currentUser.uid === userID ? (
+              {currentUser ? (currentUser.uid === userID ? (
                 <>
                   <MyBlogButtonLight
                     type="button"
@@ -503,6 +506,15 @@ export default function MyBlog() {
                   <MyBlogButtonLight
                     type="button"
                     onClick={() => {
+                      navigate('newstory');
+                    }}
+                  >
+                    發布限時動態
+
+                  </MyBlogButtonLight>
+                  <MyBlogButtonLight
+                    type="button"
+                    onClick={() => {
                       navigate('blogedit');
                     }}
                   >
@@ -511,7 +523,7 @@ export default function MyBlog() {
                   </MyBlogButtonLight>
 
                 </>
-              ) : ('')}
+              ) : ('')) : ('')}
             </MyBlogFLexLeft>
             <MyBlogFLexRight>
               {diaryID ? (<BlogArticle />) : (
