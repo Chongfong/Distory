@@ -70,8 +70,10 @@ export const StoryAuthorContainer = styled.div`
 
 export const StoryImg = styled.img`
   width: 100%;
+  max-width: 500px;
+  max-height: 450px;
   margin: 10px auto;
-  box-shadow: -1px -1px 3px 0px #eee;
+  box-shadow: -3px -3px 3px 3px #eee;
 `;
 
 export const StoryAuthorImg = styled.img`
@@ -86,6 +88,7 @@ export const StoryAuthorName = styled.p`
   flex: 100%;
   width: 85%;
   font-size: 1.2rem;
+  text-shadow:0px 0px 4px #fff;
 `;
 
 export const StoryTimeAgo = styled(StoryAuthorName)`
@@ -94,7 +97,7 @@ export const StoryTimeAgo = styled(StoryAuthorName)`
 `;
 
 export const StoryPopUpContainer = styled.div`
-  width: 50%;
+  max-width: 530px;
   height:80%;
   background-color: #fefefe;
   margin: 20px auto;
@@ -104,6 +107,8 @@ export const StoryPopUpContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  border-radius: 7px;
+
 
 `;
 

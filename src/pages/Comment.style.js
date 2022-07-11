@@ -82,3 +82,13 @@ export const CommentAuthorImgContainer = styled.div`
     opacity: 0.5;
   }
 `;
+
+export const CommentSubTitle = styled.p`
+  padding: 0px 10px 0px;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  color: #d3b092;
+  text-align: left;
+  width: 90%;
+  margin-bottom: 40px;
+`;

@@ -11,9 +11,8 @@ import {
   DiaryLikes,
 } from './Pagination.style';
 
-import postImage from '../img/post2.png';
-
 import { changeHTMLToPureText } from '../components/ShareFunctions';
+import { previewImagesArray } from './Home';
 
 export default function Pagination({ userID, currentUserData }) {
   const [list, setList] = useState([]);
@@ -55,7 +54,7 @@ export default function Pagination({ userID, currentUserData }) {
   return (
     <>
       { page !== 0
-        ? (list.slice(page * 3, page * 3 + 3).map((doc) => (
+        ? (list.slice(page * 3, page * 3 + 3).map((doc, index) => (
           <DiaryContainerFlex
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
@@ -67,7 +66,19 @@ export default function Pagination({ userID, currentUserData }) {
               navigate(`${doc.diaryID}`);
             }}
           >
-            <DiaryImageDefault src={postImage} alt="preview-diary" />
+            {doc.showImg
+              ? (
+                <DiaryImageDefault
+                  src={doc.showImg}
+                  alt={`preview-diary-${index}`}
+                />
+              )
+              : (
+                <DiaryImageDefault
+                  src={previewImagesArray[(index % 5)]}
+                  alt={`preview-diary-${index}`}
+                />
+              )}
             <DiaryContentFlex>
               <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
               <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
@@ -77,7 +88,7 @@ export default function Pagination({ userID, currentUserData }) {
               {doc.likeDiary ? doc.likeDiary.length : 0}
             </DiaryLikes>
           </DiaryContainerFlex>
-        ))) : ((list.slice(0, 3).map((doc) => (
+        ))) : ((list.slice(0, 3).map((doc, index) => (
           <DiaryContainerFlex
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
@@ -89,7 +100,19 @@ export default function Pagination({ userID, currentUserData }) {
               navigate(`${doc.diaryID}`);
             }}
           >
-            <DiaryImageDefault src={postImage} alt="preview-diary" />
+            {doc.showImg
+              ? (
+                <DiaryImageDefault
+                  src={doc.showImg}
+                  alt={`preview-diary-${index}`}
+                />
+              )
+              : (
+                <DiaryImageDefault
+                  src={previewImagesArray[(index % 5)]}
+                  alt={`preview-diary-${index}`}
+                />
+              )}
             <DiaryContentFlex>
               <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
               <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>

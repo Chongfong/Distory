@@ -49,6 +49,9 @@ export const DiaryTitle = styled.p`
   font-weight: bold;
   text-align: left;
   margin:8px 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const DiaryContent = styled.p`
@@ -58,6 +61,10 @@ export const DiaryContent = styled.p`
   margin:8px 0px;
   overflow:hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; 
+  -webkit-box-orient: vertical;
 `;
 
 export const DiaryPageContainer = styled.div`

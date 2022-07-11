@@ -137,7 +137,7 @@ export default function CreateNewStory() {
                       onChange={(e) => setUrl(e.target.value)}
                     />
                     <br />
-                    {url !== 0 ? (
+                    {url ? (
                       <UploadImagePreviewImage
                         alt="previewImageUrl"
                         style={{ maxHeight: '400px' }}

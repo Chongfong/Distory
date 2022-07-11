@@ -52,10 +52,14 @@ export default function LoadStories() {
           storiesAuthorAll.push(eachDiary.data().author);
           storiesTimeAll.push(eachDiary.data().publishAt);
         });
-        setStoriesAvailable(storiesAll);
-        setStoriesImgAvailbale(storiesImgAll);
-        setStoriesAuthor(storiesAuthorAll);
-        setStoriesTime(storiesTimeAll);
+        const reverseStories = storiesAll.reverse();
+        const reverseStoriesImg = storiesImgAll.reverse();
+        const reverseStoriesAuthor = storiesAuthorAll.reverse();
+        const reverseStoriesTime = storiesTimeAll.reverse();
+        setStoriesAvailable(reverseStories);
+        setStoriesImgAvailbale(reverseStoriesImg);
+        setStoriesAuthor(reverseStoriesAuthor);
+        setStoriesTime(reverseStoriesTime);
       }
       return false;
     } catch (e) {
@@ -109,7 +113,7 @@ export default function LoadStories() {
 
   return (
     <>
-      <MyBlogProfileSubTitle>探索Distory</MyBlogProfileSubTitle>
+      <MyBlogProfileSubTitle>▋&nbsp;探索Distory</MyBlogProfileSubTitle>
       <StoryOuterContainer>
         {storiesAvailable
           ? (storiesAvailable
@@ -144,12 +148,14 @@ export default function LoadStories() {
                         width: '100%', paddingLeft: '10px', position: 'absolute', bottom: '20px', left: '20px',
                       }}
                       >
-                        <StoryAuthorName>{storyAuthorsInfo[index][1]}</StoryAuthorName>
+                        <StoryAuthorName>
+                          {storyAuthorsInfo[chosedStoryIndex + index][1]}
+                        </StoryAuthorName>
                         <StoryTimeAgo>{timeAgo(eachStory.publishAt.seconds * 1000)}</StoryTimeAgo>
                       </div>
                     </StoryImgContainer>
                     <StoryAuthorContainer onClick={() => navigate(`/${eachStory.author}`)}>
-                      <StoryAuthorImg src={storyAuthorsInfo[index][0]} alt="story-author" />
+                      <StoryAuthorImg src={storyAuthorsInfo[chosedStoryIndex + index][0]} alt="story-author" />
                     </StoryAuthorContainer>
 
                   </>

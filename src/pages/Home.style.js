@@ -123,6 +123,12 @@ export const DiaryTitle = styled.p`
   line-height: 140%;
   flex: 100%;
   padding: 5px 0 !important;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; 
+  -webkit-box-orient: vertical;
 `;
 
 export const DiaryTitleFirst = styled(DiaryTitle)`
@@ -206,15 +212,15 @@ export const HomeInviteButton = styled.button`
   height: 40px;
   border-radius: 15px;
   background-color: white;
-  border: 2px solid #b8b8b8;
+  border: 2px solid #d3b092;
   line-height:40px;
   font-size: 1rem;
   letter-spacing: 2px;
-  color: #b8b8b8;
+  color: #d3b092;
   cursor: pointer;
   margin: 30px 10px 50px 10px;
   :hover, :active, :focus{
-    background-color: #b8b8b8;
+    background-color: #d3b092;
     color: white; 
   }
 `;
@@ -230,10 +236,13 @@ export const HomeAuthorImage = styled.img`
 `;
 
 export const HomeWelcomeWords = styled.p`
-  font-size: 25px;
+  font-size: 65px;
   font-weight: bold;
+  letter-spacing: 3px;
   top: 50px;
   line-height: 200px;
+  font-family: 'Beth Ellen';
+  color:#72677E;
 `;
 
 export const SearchTitle = styled.p`

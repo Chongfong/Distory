@@ -62,31 +62,31 @@ export const MyBlogButton = styled.button`
   width: 80%;
   height: 40px;
   border-radius: 10px;
-  background-color: #b8b8b8;
-  border: 2px solid #b8b8b8;
+  background-color: #d3b092;
+  border: 2px solid #d3b092;
   font-size: 1rem;
   letter-spacing: 3px;
   color: white;
   cursor: pointer;
   :hover, :active, :focus{
     background-color: white;
-    color: #b8b8b8; 
+    color: #d3b092; 
   }
 `;
 
 export const MyBlogButtonLight = styled(MyBlogButton)`
   background-color: white;
-  color: #b8b8b8;
+  color: #d3b092;
   margin: 8px 0px;
   :hover, :active, :focus{
-    background-color: #b8b8b8;
+    background-color: #d3b092;
     color: white; 
   }
 `;
 
 export const MyBlogBottomLine = styled.div`
   width: 80%;
-  border-bottom: 1px #b8b8b8 solid;
+  border-bottom: 1px #d3b092 solid;
   margin: 20px auto;
   @media (max-width: 912px) {
     width: 100%;
@@ -101,7 +101,7 @@ export const MyBlogProfileSubTitle = styled.p`
   padding: 0px 50px 0px;
   font-size: 1.3rem;
   letter-spacing: 2px;
-  color: #b8b8b8;
+  color: #d3b092;
   text-align: left;
   width: 90%;
   margin: 0px auto !important;

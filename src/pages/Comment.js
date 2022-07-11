@@ -11,10 +11,9 @@ import { db } from '../firestore/firestore';
 
 import {
   CommentsContainer, CommentNickName, CommentTime, CommentDivContainer, CommentDetailDiv,
-  CommentDetail, CommentInput, CommentNickNameInput, CommentAuthorImgContainer,
+  CommentDetail, CommentInput, CommentNickNameInput, CommentAuthorImgContainer, CommentSubTitle,
 } from './Comment.style';
 
-import { MyBlogProfileSubTitle } from './MyBlog.style';
 import { CircleButton } from './ImageEditor.style';
 
 export default function Comment({
@@ -149,7 +148,7 @@ export default function Comment({
         </CommentsContainer>
       )
         : ('')}
-      <MyBlogProfileSubTitle style={{ marginBottom: '40px' }}>發表留言</MyBlogProfileSubTitle>
+      <CommentSubTitle>▋&nbsp;發表留言</CommentSubTitle>
       <CommentDivContainer style={{ flexWrap: 'wrap' }}>
         {loginUserDate ? (
           <>
@@ -157,7 +156,7 @@ export default function Comment({
               src={loginUserDate.userImage}
               alt="loginUser"
               style={{
-                width: '50px', height: '50px', borderRadius: '50%', flexBasis: '10%',
+                maxWidth: '50px', height: '50px', borderRadius: '50%', flexBasis: '10%',
               }}
             />
             <CommentNickName style={{ flexBasis: '88%' }}>

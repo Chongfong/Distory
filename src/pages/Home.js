@@ -117,12 +117,12 @@ export default function Home() {
                     <>
                       <div style={{ position: 'relative', width: '100%', height: '300px' }}>
                         <HomeWelcomeWords>
-                          「　寫下你的專屬故事　」
+                          Discover your story
                         </HomeWelcomeWords>
 
                       </div>
 
-                      <MyBlogProfileSubTitle>網友熱議</MyBlogProfileSubTitle>
+                      <MyBlogProfileSubTitle>▋&nbsp;網友熱議</MyBlogProfileSubTitle>
                       <DiaryContainer
                         role="button"
                         tabIndex={0}
@@ -147,7 +147,7 @@ export default function Home() {
                               {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                             </DiaryPublishTime>
                             <DiaryContent>
-                              {changeHTMLToPureText(eachDiary.content).slice(0, 80)}
+                              {`${changeHTMLToPureText(eachDiary.content).slice(0, 80)}...`}
                             </DiaryContent>
                           </DiaryTitleInsideBox>
 
@@ -155,7 +155,11 @@ export default function Home() {
 
                       </DiaryContainer>
                       <HomeInviteDiv>
-                        <HomeInviteTitle>加入 Distory 的世界</HomeInviteTitle>
+                        <HomeInviteTitle>
+                          加入&nbsp;
+                          <span style={{ color: '#b57c4a' }}>Distory</span>
+                          &nbsp;的世界
+                        </HomeInviteTitle>
                         <HomeInviteButtonContainer>
                           <Link to="/signup">
                             <HomeInviteButton>免費註冊</HomeInviteButton>
@@ -169,7 +173,7 @@ export default function Home() {
 
                     </>
                     <MyBlogProfileSubTitleMargin>
-                      經典好文
+                      ▋&nbsp;經典好文
 
                     </MyBlogProfileSubTitleMargin>
 
@@ -186,7 +190,22 @@ export default function Home() {
                       navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
                     }}
                   >
-                    <DiaryImageBoxNormal><HomeImageNormal src={previewImagesArray[(index % 5)]} alt={`diary-${index}`} /></DiaryImageBoxNormal>
+                    <DiaryImageBoxNormal>
+                      {eachDiary.showImg
+                        ? (
+                          <HomeImageNormal
+                            src={eachDiary.showImg}
+                            alt={`diary-${index}`}
+                          />
+                        )
+                        : (
+                          <HomeImageNormal
+                            src={previewImagesArray[(index % 5)]}
+                            alt={`diary-${index}`}
+                          />
+                        )}
+
+                    </DiaryImageBoxNormal>
                     <DiaryInfoBox>
                       <DiaryTitleInsideBox>
                         <DiaryTitle>{eachDiary.title.slice(0, 60)}</DiaryTitle>

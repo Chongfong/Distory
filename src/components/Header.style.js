@@ -75,6 +75,17 @@ export const HeaderSearchIconContainer = styled.div`
   }
 `;
 
+export const HeaderUserContainer = styled.div`
+  width: 200px;
+  min-width: auto;
+  height: auto;
+  background-color: rgba(255,255,255,0.8);
+  position: relative;
+  right: 150px;
+  padding: 10px 0px;
+  border-radius: 15px;
+`;
+
 export const HeaderLogin = styled.div`
   width: 100px;
   height:40px;
@@ -141,4 +152,16 @@ export const HeaderMore = styled.div`
     content:"∨"
   }
   
+`;
+
+export const HeaderLoginOptions = styled.div`
+  width: auto;
+  position: relative;
+  color: #b57c4a;
+  padding: 8px 0px 8px 10px;
+  border-radius: 8px;
+  :hover, :active, :focus{
+    background-color: rgba(181, 124, 74, 0.8);
+    color: white;
+  }
 `;

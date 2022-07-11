@@ -4,10 +4,17 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { getDoc, doc } from 'firebase/firestore';
+import { MdCreate } from 'react-icons/md';
+import { GiQuill } from 'react-icons/gi';
+import { FaHome } from 'react-icons/fa';
+import { GoGear } from 'react-icons/go';
+import { TbLogout } from 'react-icons/tb';
+
 import {
   HeaderContainer, HeaderTitle, HeaderSearchBar, HeaderLogin, HeaderSignup,
   HeaderMember, HeaderTitleContainer,
-  HeaderBackgroundImage, HeaderSearchIconContainer,
+  HeaderBackgroundImage, HeaderSearchIconContainer, HeaderUserContainer,
+  HeaderLoginOptions,
 } from './Header.style';
 
 import { db, auth } from '../firestore/firestore';
@@ -105,22 +112,56 @@ export default function Header() {
           <HeaderMember type="button" onClick={() => { setToggleLoginUser((prev) => !prev); }}>
             <img src={headerLoginUserData?.userImage} alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
             {toggleLoginUser ? (
-              <>
-                <Link to={`${currentUser.uid}/create`}><div style={{ width: '80px', position: 'relative', left: '-20px' }}>發布文章</div></Link>
-                <Link to={`${currentUser.uid}/newstory`}><div style={{ width: '80px', position: 'relative', left: '-20px' }}>發布動態</div></Link>
-                <Link to={`${currentUser.uid}`}><div style={{ width: '80px', position: 'relative', left: '-20px' }}>我的部落格</div></Link>
-                <Link to={`${currentUser.uid}/blogedit`}><div style={{ width: '80px', position: 'relative', left: '-20px' }}>編輯設定</div></Link>
-                <div
-                  style={{ width: '80px' }}
+              <HeaderUserContainer>
+                <Link to={`${currentUser.uid}/create`}>
+                  <HeaderLoginOptions>
+                    <MdCreate />
+                    &nbsp;
+                    發布文章
+                  </HeaderLoginOptions>
+
+                </Link>
+                <Link to={`${currentUser.uid}/newstory`}>
+                  <HeaderLoginOptions>
+                    <GiQuill />
+                    &nbsp;
+                    發布動態
+                  </HeaderLoginOptions>
+                </Link>
+                <Link to={`${currentUser.uid}`}>
+                  <HeaderLoginOptions>
+                    <FaHome />
+                    &nbsp;
+                    我的部落格
+                  </HeaderLoginOptions>
+                </Link>
+                <Link to={`${currentUser.uid}/blogedit`}>
+                  <HeaderLoginOptions>
+                    <GoGear />
+                    &nbsp;
+                    編輯設定
+                  </HeaderLoginOptions>
+                </Link>
+                <HeaderLoginOptions
+                  style={{
+                    width: 'auto',
+                    textAlign: 'center',
+                    paddingLeft: '0px',
+                    marginTop: '10px',
+                    backgroundColor: '#e2e2e2',
+                    color: '#464646',
+                  }}
                   role="button"
                   tabIndex={0}
                   onClick={handleLogOut}
                   onKeyUp={handleLogOut}
                 >
+                  <TbLogout />
+                  &nbsp;
                   登出
 
-                </div>
-              </>
+                </HeaderLoginOptions>
+              </HeaderUserContainer>
             ) : ('')}
 
           </HeaderMember>
