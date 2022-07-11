@@ -11,19 +11,11 @@ export const StoryOuterContainer = styled.div`
   flex-wrap: nowrap;
   align-items: flex-start;
   text-align: left;
-  padding: 50px 0px 100px;
+  padding: 50px 50px 100px 0px;
   width: 100%;
-  overflow-y: auto;
   height: 10%;
-
-  ::-webkit-scrollbar {
-  height: 6px;
-  width: 0px;
-  }
-  ::-webkit-scrollbar-thumb {
-  background: #cabeba;
-  border-radius: 10px;
-}
+  gap: 0px 20px;
+  position: relative;
 `;
 
 export const StoryContainer = styled.div`
@@ -31,8 +23,9 @@ export const StoryContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: 5px 0px;
-  width: 33.3%;
+  max-width: 20%;
   height: 100%;
+  position: relative;
 
   @media (max-width: 912px) {
       width: 48%;
@@ -40,7 +33,7 @@ export const StoryContainer = styled.div`
 `;
 
 export const StoryImgContainer = styled.div`
-  margin: 10px;
+  margin: 10px 0px;
   flex: 100%;
   height: 80%;
   background-image: ${({ storyImgUrl }) => (storyImgUrl
@@ -51,6 +44,10 @@ export const StoryImgContainer = styled.div`
   width:500px;
   border: 1px solid #eee;
   cursor: pointer;
+  border-radius: 25px;
+  position: relative;
+  opacity: 1;
+  transition: opacity 1s ease-in;
   :hover, :active, :focus{
     opacity: 0.5;
   }
@@ -63,6 +60,9 @@ export const StoryAuthorContainer = styled.div`
   width: 100%;
   margin: 10px;
   cursor: pointer;
+  position:absolute;
+  left: 15px;
+  top: 15px;
   :hover, :active, :focus{
     opacity: 0.5;
   }
@@ -75,7 +75,11 @@ export const StoryImg = styled.img`
 `;
 
 export const StoryAuthorImg = styled.img`
-  width: 15%;
+  width: 20%;
+  height: 100%;
+  background-color: white;
+  border-radius: 50%;
+  border: 3px solid #ccc
 `;
 
 export const StoryAuthorName = styled.p`
@@ -140,10 +144,11 @@ export const StoryPhotoStatusBar = styled.div`
 export const StoryCloseButton = styled.div`
   width: 40px;
   height: 40px;
+  font-size: 40px;
   position: absolute;
   color: white;
   right: 20px;
-  top: 20px;
+  top: 15px;
   cursor: pointer;
   :hover :active :focus{
     opacity: 0.5;

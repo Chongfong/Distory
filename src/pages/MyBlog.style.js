@@ -108,7 +108,7 @@ export const MyBlogProfileSubTitle = styled.p`
 `;
 
 export const MyBlogProfileSubTitleMargin = styled(MyBlogProfileSubTitle)`
-  margin: 100px auto 50px !important;
+  margin: 10px auto 50px !important;
 `;
 
 export const ClickableDiv = styled.div`

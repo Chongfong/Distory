@@ -34,9 +34,6 @@ export const DiarySmallContainer = styled.div`
   padding: 20px;
   cursor: pointer;
   border-bottom: 1px solid #BEB3B4;
-  :hover, :active, :focus{
-    opacity: 0.7
-  }
   @media (max-width: 912px) {
     flex: 0 1 100%;
 
@@ -68,6 +65,9 @@ export const DiaryImageBox = styled.div`
   outline-offset: -10px;
   vertical-align: middle;
   border-radius: 5px;
+  :hover, :active, :focus{
+    opacity: 0.7
+  }
   @media (max-width: 1482px) {
       outline: none;
 }
@@ -89,6 +89,9 @@ export const DiaryImageBoxNormal = styled.div`
   width: 240px;
   height: 180px;
   flex: 0 1 48%;
+  :hover, :active, :focus{
+    opacity: 0.7
+  }
 `;
 
 export const DiaryProfileImageBoxNormal = styled.div`
@@ -103,6 +106,9 @@ export const DiaryTitleInsideBox = styled.div`
   flex-wrap: wrap;
   text-align: left;
   padding-left: 10px;
+  :hover, :active, :focus{
+    opacity: 0.7
+  }
 `;
 
 export const DiaryImageInsideBox = styled.div`
@@ -139,6 +145,15 @@ export const DiaryPublishTime = styled.p`
   flex: 100%;
   font-size: 1.2rem;
   padding: 5px 0 !important;
+`;
+
+export const DiaryProfileImg = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;  
+  :hover, :active, :focus{
+    opacity: 0.7
+  }
 `;
 
 export const HomeImageFirst = styled.img`
@@ -219,4 +234,9 @@ export const HomeWelcomeWords = styled.p`
   font-weight: bold;
   top: 50px;
   line-height: 200px;
+`;
+
+export const SearchTitle = styled.p`
+  font-size: 1.5rem;
+  margin-bottom: 100px;
 `;

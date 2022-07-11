@@ -108,15 +108,15 @@ export default function UploadImageInTextEditor({
 
               </UploadImageNavButtom>
             </UploadNavBar>
-            <UploadImageContainer>
+            <UploadImageContainer style={{ height: '84%' }}>
               {uploadFromFile === 'file'
                 ? (
-                  <form>
+                  <form style={{ height: '100%' }}>
                     <label
                       htmlFor="upload-image"
                       style={{
                         width: '100%',
-                        height: '270px',
+                        height: '90%',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',

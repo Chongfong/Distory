@@ -24,8 +24,8 @@ export const PopUpContainerDiv = styled.div`
 `;
 
 export const PopUpImageContainerDiv = styled(PopUpContainerDiv)`
-  width: 35%;
-  height: 50%;
+  width: 85%;
+  height: 85%;
   @media (max-width: 912px) {
     width: 70%;
     height: 80%;

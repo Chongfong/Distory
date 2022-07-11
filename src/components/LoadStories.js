@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -17,6 +18,8 @@ import { MyBlogProfileSubTitle } from '../pages/MyBlog.style';
 
 import { timeAgo } from './ShareFunctions';
 
+import { CircleButton } from '../pages/ImageEditor.style';
+
 export default function LoadStories() {
   const [storiesAvailable, setStoriesAvailable] = useState();
   const [storiesImgAvailable, setStoriesImgAvailbale] = useState();
@@ -28,6 +31,7 @@ export default function LoadStories() {
   const [storyAuthorsInfo, setStoryAuthorsInfo] = useState();
   const intervalRef = useRef();
   const navigate = useNavigate();
+  const [chosedStoryIndex, setChosedStoryIndex] = useState(0);
 
   async function searchStoriesAvailable() {
     try {
@@ -108,43 +112,71 @@ export default function LoadStories() {
       <MyBlogProfileSubTitle>探索Distory</MyBlogProfileSubTitle>
       <StoryOuterContainer>
         {storiesAvailable
-          ? (storiesAvailable.map((eachStory, index) => (
-            <StoryContainer>
-              {openStory && (
-              <ShowStoryDetail
-                chosedImg={chosedImg}
-                setChosedImg={setChosedImg}
-                time={eachStory.publishAt.seconds * 1000}
-                setOpenStory={setOpenStory}
-                storiesImgAvailable={storiesImgAvailable}
-                chosedIndex={chosedIndex}
-                setChosedIndex={setChosedIndex}
-                intervalRef={intervalRef}
-                storiesAuthorAll={storiesAuthor}
-                storiesTimeAll={storiesTime}
-              />
-              )}
-              <StoryImgContainer
-                storyImgUrl={eachStory.imageUrl}
-                onClick={() => {
-                  setOpenStory(true);
-                  setChosedImg(eachStory.imageUrl);
-                  setChosedIndex(index);
-                }}
-              />
-              {storyAuthorsInfo ? (
-                <StoryAuthorContainer onClick={() => navigate(`/${eachStory.author}`)}>
-                  <StoryAuthorImg src={storyAuthorsInfo[index][0]} alt="story-author" />
-                  <div style={{ width: '100%', paddingLeft: '10px' }}>
-                    <StoryAuthorName>{storyAuthorsInfo[index][1]}</StoryAuthorName>
-                    <StoryTimeAgo>{timeAgo(eachStory.publishAt.seconds * 1000)}</StoryTimeAgo>
-                  </div>
+          ? (storiesAvailable
+            .slice(chosedStoryIndex, chosedStoryIndex + 5)
+            .map((eachStory, index) => (
+              <StoryContainer>
+                {openStory && (
+                <ShowStoryDetail
+                  chosedImg={chosedImg}
+                  setChosedImg={setChosedImg}
+                  time={eachStory.publishAt.seconds * 1000}
+                  setOpenStory={setOpenStory}
+                  storiesImgAvailable={storiesImgAvailable}
+                  chosedIndex={chosedIndex}
+                  setChosedIndex={setChosedIndex}
+                  intervalRef={intervalRef}
+                  storiesAuthorAll={storiesAuthor}
+                  storiesTimeAll={storiesTime}
+                />
+                )}
+                {storyAuthorsInfo ? (
+                  <>
+                    <StoryImgContainer
+                      storyImgUrl={eachStory.imageUrl}
+                      onClick={() => {
+                        setOpenStory(true);
+                        setChosedImg(eachStory.imageUrl);
+                        setChosedIndex(chosedStoryIndex + index);
+                      }}
+                    >
+                      <div style={{
+                        width: '100%', paddingLeft: '10px', position: 'absolute', bottom: '20px', left: '20px',
+                      }}
+                      >
+                        <StoryAuthorName>{storyAuthorsInfo[index][1]}</StoryAuthorName>
+                        <StoryTimeAgo>{timeAgo(eachStory.publishAt.seconds * 1000)}</StoryTimeAgo>
+                      </div>
+                    </StoryImgContainer>
+                    <StoryAuthorContainer onClick={() => navigate(`/${eachStory.author}`)}>
+                      <StoryAuthorImg src={storyAuthorsInfo[index][0]} alt="story-author" />
+                    </StoryAuthorContainer>
 
-                </StoryAuthorContainer>
-              ) : ('')}
-            </StoryContainer>
-          ))) : (<p>No Story</p>)}
-
+                  </>
+                ) : ('')}
+              </StoryContainer>
+            ))) : (<p>No Story</p>)}
+        {storiesAvailable ? (
+          (chosedStoryIndex < (storiesAvailable.length - 5) ? (
+            <CircleButton
+              style={{
+                position: 'absolute', top: '35%', right: '-60px', lineHeight: '0px',
+              }}
+              onClick={() => setChosedStoryIndex(chosedStoryIndex + 5)}
+            >
+              →
+            </CircleButton>
+          ) : (''))) : ('')}
+        {chosedStoryIndex >= 5 ? (
+          <CircleButton
+            style={{
+              position: 'absolute', top: '35%', left: '-30px', lineHeight: '0px',
+            }}
+            onClick={() => setChosedStoryIndex(chosedStoryIndex - 5)}
+          >
+            ←
+          </CircleButton>
+        ) : ('')}
       </StoryOuterContainer>
 
     </>

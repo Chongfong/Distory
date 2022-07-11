@@ -17,7 +17,7 @@ import {
   DiaryPublishTime, DiaryTitle, DiaryOutContainer, DiarySmallContainer,
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
   HomeWelcomeWords, DiaryContent, DiaryImageBoxNormal, DiaryTitleFirst, DiaryProfileImageBoxNormal,
-  DiaryAllContainer,
+  DiaryAllContainer, DiaryProfileImg,
 } from './Home.style';
 
 import { MyBlogProfileSubTitle, MyBlogProfileSubTitleMargin } from './MyBlog.style';
@@ -196,9 +196,8 @@ export default function Home() {
                       </DiaryTitleInsideBox>
 
                       <DiaryProfileImageBoxNormal>
-                        <img
+                        <DiaryProfileImg
                           alt="author"
-                          style={{ width: '50px', height: '50px' }}
                           src={allDiariesAuthorImg[index]}
                         />
                       </DiaryProfileImageBoxNormal>
