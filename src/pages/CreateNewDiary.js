@@ -41,8 +41,8 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
   const [openImageEditor, setOpenImageEditor] = useState(false);
   const [selectEditMode, setSelectEditMode] = useState();
   const [isChoosing, setIsChoosing] = useState(false);
-  const [articlePassword, setArticlePassword] = useState();
-  const [articlePasswordHint, setArticlePasswordHint] = useState();
+  const [articlePassword, setArticlePassword] = useState('');
+  const [articlePasswordHint, setArticlePasswordHint] = useState('');
   const [articleShowImg, setArticleShowImg] = useState(
     previewImagesArray[Math.floor(Math.random() * 5)],
   );
