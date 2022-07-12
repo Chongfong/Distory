@@ -9,11 +9,12 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
+import { FiSave } from 'react-icons/fi';
 import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
 import {
   CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryTitle, CreateDiaryPublish,
-  CreateDiarySave, CreateDiaryIconImage, CreateDiaryNavBar, CreateDiaryNavButton,
+  CreateDiarySave, CreateDiaryNavBar, CreateDiaryNavButton,
 } from './CreateNewDiaries.style';
 import { db, storage } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
@@ -21,8 +22,6 @@ import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
 import ChooseEditArtices from '../components/ChooseEditArticles';
 
 import { removeClickButtonsTag } from '../components/ShareFunctions';
-
-import save from '../img/save.png';
 
 import SetArticlePassword from '../components/SetArticlePassword';
 import SetArticleShowImg from '../components/setArticleShowImg';
@@ -268,7 +267,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
           role="button"
           tabIndex={0}
         >
-          <CreateDiaryIconImage src={save} alt="save" />
+          <FiSave />
 
         </CreateDiarySave>
         { articleShowImgFile ? (

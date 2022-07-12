@@ -149,7 +149,7 @@ export default function Comment({
       )
         : ('')}
       <CommentSubTitle>▋&nbsp;發表留言</CommentSubTitle>
-      <CommentDivContainer style={{ flexWrap: 'wrap' }}>
+      <CommentDivContainer style={{ flexWrap: 'wrap', width: '100%' }}>
         {loginUserDate ? (
           <>
             <img
@@ -174,13 +174,18 @@ export default function Comment({
             />
           </>
         )}
-        <CommentDetailDiv style={{ alignItems: 'flex-end' }}>
+        <CommentDetailDiv style={{ alignItems: 'flex-end', position: 'relative' }}>
           <CommentInput
             type="text"
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
           />
           <CircleButton
+            style={{
+              position: 'absolute',
+              bottom: '15px',
+              right: '15px',
+            }}
             role="button"
             tabIndex={0}
             onClick={() => { postCommentDB(); }}

@@ -24,7 +24,7 @@ export default function UploadImageInTextEditor({
   const [uploadImageMethod] = useState(false);
   const base64ImageUrl = useRef();
   const insertEditablePhoto = (uploadImageUrl) => {
-    const cursorPosition = textEditorRef.current.editor.getSelection().index;
+    const cursorPosition = textEditorRef.current.editor.selection.savedRange.index;
     textEditorRef.current.editor.insertEmbed(cursorPosition, 'image', {
       alt: `image${Date.now()}`,
       url: uploadImageUrl,

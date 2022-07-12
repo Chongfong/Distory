@@ -50,7 +50,7 @@ export default function TextEditor(
       onChange={
         (contentValue) => {
           setDiaryContentValue(contentValue);
-          textEditorCursorIndex.current = textEditorRef.current.editor.getSelection().index;
+          textEditorCursorIndex.current = textEditorRef.current.editor.selection.savedRange.index;
         }
 }
     />

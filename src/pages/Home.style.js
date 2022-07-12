@@ -236,7 +236,7 @@ export const HomeAuthorImage = styled.img`
 `;
 
 export const HomeWelcomeWords = styled.p`
-  font-size: 65px;
+  font-size: 60px;
   font-weight: bold;
   letter-spacing: 3px;
   top: 50px;

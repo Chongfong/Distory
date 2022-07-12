@@ -75,18 +75,6 @@ export default function PhotoEditor({
   Quill.register(ImageBlot);
   Quill.register(ClickButtonBlot);
 
-  function uuid() {
-    let d = Date.now();
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-      d += performance.now();
-    }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r = (d + Math.random() * 16) % 16 || 0;
-      d = Math.floor(d / 16);
-      return (c === 'x' ? r : ((r && 0x3) || 0x8)).toString(16);
-    });
-  }
-
   const imageRef = useRef();
   const testURL = useRef();
 
@@ -122,7 +110,7 @@ export default function PhotoEditor({
         testURL.current = imageBlob;
 
         const file = testURL.current;
-        const storageRef = ref(storage, `files/${uuid()}`);
+        const storageRef = ref(storage, `files/image${Date.now()}`);
         const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
         uploadTask.on(
