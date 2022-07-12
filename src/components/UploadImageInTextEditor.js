@@ -1,7 +1,8 @@
 /* eslint-disable no-nested-ternary */
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Quill } from 'react-quill';
+import Resizer from 'react-image-file-resizer';
 import { PopUpBackDiv, PopUpImageContainerDiv, CircleButton } from '../pages/ImageEditor.style';
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
@@ -22,8 +23,29 @@ export default function UploadImageInTextEditor({
   const [imageFileUrl, setImageFileUrl] = useState();
   const [imageFile, setImageFile] = useState();
   const [uploadImageMethod] = useState(false);
-  const base64ImageUrl = useRef();
-  const insertEditablePhoto = (uploadImageUrl) => {
+
+  const resizeFile = (file) => new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      500,
+      500,
+      'PNG',
+      50,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      'base64',
+    );
+  });
+
+  const insertEditablePhoto = async (upload) => {
+    let uploadImageUrl;
+    if (upload.type) {
+      uploadImageUrl = await resizeFile(upload);
+    } else {
+      uploadImageUrl = upload;
+    }
     const cursorPosition = textEditorRef.current.editor.selection.savedRange.index;
     textEditorRef.current.editor.insertEmbed(cursorPosition, 'image', {
       alt: `image${Date.now()}`,
@@ -46,25 +68,9 @@ export default function UploadImageInTextEditor({
     textEditorRef.current.editor.setSelection(cursorPosition);
   };
 
-  const convertBase64 = (file) => new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
-
   const uploadImage = async (event) => {
     const file = event.target.files[0];
-    const base64 = await convertBase64(file);
-    setImageUrl(base64);
-    base64ImageUrl.current = base64;
-    insertEditablePhoto(base64ImageUrl.current);
+    insertEditablePhoto(file);
   };
 
   return (
