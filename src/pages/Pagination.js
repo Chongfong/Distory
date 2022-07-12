@@ -24,7 +24,7 @@ export default function Pagination({ userID, currentUserData }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const q = query(urlsRef, where('author', '==', userID), orderBy('publishAt', 'desc'));
+      const q = query(urlsRef, where('author', '==', userID), where('status', '==', 'published'), orderBy('publishAt', 'desc'));
       const querySnapshot = await getDocs(q);
       const items = [];
       querySnapshot.forEach((doc) => {
@@ -81,7 +81,7 @@ export default function Pagination({ userID, currentUserData }) {
               )}
             <DiaryContentFlex>
               <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
+              {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8' }}>輸入密碼後方可觀看</p>)}
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;
@@ -115,7 +115,7 @@ export default function Pagination({ userID, currentUserData }) {
               )}
             <DiaryContentFlex>
               <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
+              {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8' }}>輸入密碼後方可觀看</p>)}
             </DiaryContentFlex>
             <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
               💗&nbsp;

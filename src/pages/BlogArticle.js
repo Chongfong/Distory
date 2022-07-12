@@ -12,7 +12,10 @@ import {
   BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
   BlogArticleEditImage, BlogArticleEditImageContainer,
   BlogArticleInteractiveContainer, BlogArticleInteractiveButtonContainer,
+  BlogArticleInputPassword,
 } from './BlogArticle.style';
+
+import { CircleButton } from './ImageEditor.style';
 
 import { MyBlogBottomLine } from './MyBlog.style';
 
@@ -29,6 +32,8 @@ export default function BlogArticle() {
   const [commentAll, setCommentAll] = useState();
   const [loginUserDate, setLoginUserData] = useState();
   const [commentAuthor, setCommentAuthor] = useState();
+  const [isShowDiary, setIsShowDiary] = useState(false);
+  const [inputPassword, setInputPassword] = useState();
 
   const { userID, diaryID } = useParams();
   const navigate = useNavigate();
@@ -119,54 +124,93 @@ export default function BlogArticle() {
     getUserDiaries();
   }, [currentUser]);
 
+  const checkArticlePassword = (userInput, correct) => {
+    if (userInput === correct.replace(' ', '')) {
+      setIsShowDiary(true);
+    } else {
+      alert('密碼錯誤，請重新輸入');
+    }
+  };
+
   return (
     <>
       {currentUserData ? (
         <ul>
           {userDiaries.map((eachDiary) => (
             <>
-              <div className="diary" style={{ position: 'relative' }}>
-                <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
-                {currentUser ? (userID === currentUser.uid && (
-                <BlogArticleEditImageContainer
-                  onClick={() => {
-                    navigate(`/${userID}/edit/${diaryID}`);
-                  }}
-                  onKeyUp={() => {
-                    navigate(`/${userID}/edit/${diaryID}`);
-                  }}
-                  role="button"
-                  tabIndex={0}
-                >
-                  <BlogArticleEditImage src={edit} alt="edit" />
+              {eachDiary.password === '' || isShowDiary ? (
+                <>
+                  <div className="diary" style={{ position: 'relative' }}>
+                    <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
+                    {currentUser ? (userID === currentUser.uid && (
+                    <BlogArticleEditImageContainer
+                      onClick={() => {
+                        navigate(`/${userID}/edit/${diaryID}`);
+                      }}
+                      onKeyUp={() => {
+                        navigate(`/${userID}/edit/${diaryID}`);
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <BlogArticleEditImage src={edit} alt="edit" />
 
-                </BlogArticleEditImageContainer>
-                )) : ('') }
-                <BlogArticleDate>
-                  {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
-                </BlogArticleDate>
-                <BlogAtricleDetailContainer dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(eachDiary.content),
-                }}
-                />
-              </div>
-              <BlogArticleInteractiveContainer>
-                <BlogArticleInteractiveButtonContainer>
-                  <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
-                </BlogArticleInteractiveButtonContainer>
-                <BlogArticleInteractiveButtonContainer>
-                  <Share url={window.location.href} title={eachDiary.title} />
-                </BlogArticleInteractiveButtonContainer>
-              </BlogArticleInteractiveContainer>
-              <MyBlogBottomLine style={{ width: '97%' }} />
-              <Comment
-                currentUser={currentUser}
-                setCommentAll={setCommentAll}
-                commentAuthor={commentAuthor}
-                commentAll={commentAll}
-                loginUserDate={loginUserDate}
-                setCommentAuthor={setCommentAuthor}
-              />
+                    </BlogArticleEditImageContainer>
+                    )) : ('')}
+                    <BlogArticleDate>
+                      {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+                    </BlogArticleDate>
+                    <BlogAtricleDetailContainer dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(eachDiary.content),
+                    }}
+                    />
+                  </div>
+                  <BlogArticleInteractiveContainer>
+                    <BlogArticleInteractiveButtonContainer>
+                      <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+                    </BlogArticleInteractiveButtonContainer>
+                    <BlogArticleInteractiveButtonContainer>
+                      <Share url={window.location.href} title={eachDiary.title} />
+                    </BlogArticleInteractiveButtonContainer>
+                  </BlogArticleInteractiveContainer>
+                  <MyBlogBottomLine style={{ width: '97%' }} />
+                  <Comment
+                    currentUser={currentUser}
+                    setCommentAll={setCommentAll}
+                    commentAuthor={commentAuthor}
+                    commentAll={commentAll}
+                    loginUserDate={loginUserDate}
+                    setCommentAuthor={setCommentAuthor}
+                  />
+
+                </>
+
+              ) : (
+                <div>
+                  本文章需輸入密碼才能觀看
+                  <p>
+                    密碼提示：
+                    {eachDiary.passwordHint}
+                  </p>
+                  <BlogArticleInputPassword
+                    onChange={(e) => setInputPassword(e.target.value)}
+                    placeholder="請輸入密碼"
+                  />
+                  <br />
+                  <CircleButton
+                    style={{ marginTop: '20px' }}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => { checkArticlePassword(inputPassword, eachDiary.password); }}
+                    onKeyUp={() => { checkArticlePassword(inputPassword, eachDiary.password); }}
+                  >
+                    ✓
+
+                  </CircleButton>
+                </div>
+              )}
+              {}
+
             </>
           ))}
         </ul>

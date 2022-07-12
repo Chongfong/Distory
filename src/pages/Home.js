@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   where,
+  orderBy,
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
@@ -35,7 +36,9 @@ export const previewImagesArray = [
 
 export default function Home() {
   const fetchDiaries = () => new Promise((resolve) => {
-    const querySnapshot = getDocs(collection(db, 'articles'));
+    const diariesCollection = collection(db, 'articles');
+    const q = query(diariesCollection, where('status', '==', 'published'), where('password', '==', ''), orderBy('publishAt', 'desc'));
+    const querySnapshot = getDocs(q);
     resolve(querySnapshot);
   });
   const navigate = useNavigate();
