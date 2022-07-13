@@ -1,5 +1,8 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState, useCallback, useEffect, useRef,
+} from 'react';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -15,7 +18,8 @@ import {
   CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryTitle, CreateDiaryPublish,
 } from './CreateNewDiaries.style';
 import {
-  EditBlogTitle, EditBlogLayout, EditBlogFlex, BlogBackgroundImage,
+  EditBlogTitle, EditBlogLayout, EditBlogFlex, BlogBackgroundImage, BlogBackgroundImageLabel,
+  BlogUserImageDiv,
 } from './EditBlog.style';
 import { CircleButton } from './ImageEditor.style';
 
@@ -31,6 +35,9 @@ export default function EditBlog() {
   const [currentUserData, setCurrentUserData] = useState();
 
   const [currentUser, setCurrentUser] = useState();
+  const [currentUserImage, setCurrentUserImage] = useState();
+
+  const inputUserImage = useRef();
 
   const changeUser = () => {
     onAuthStateChanged(auth, (user) => {
@@ -41,6 +48,48 @@ export default function EditBlog() {
   const { userID } = useParams();
 
   const userCollection = collection(db, 'users');
+
+  const saveUserImgDB = (uid, downloadURL) => {
+    const userBlogdoc = doc(userCollection, uid);
+    let userBlogData = {};
+    userBlogData = {
+      userImage: downloadURL,
+    };
+    updateDoc(userBlogdoc, { ...userBlogData });
+  };
+
+  const submitUserImgDB = (imageFile, uid) => {
+    const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
+    if (!imageFile) { alert('please try again'); return; }
+    if (!imageTypes.includes(imageFile.type.slice(6))) {
+      alert('Please upload the image file');
+      return;
+    }
+    const storageRef = ref(storage, `files/${Date.now()}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile, { contentType: 'image/jpeg' });
+    uploadTask.on(
+      'state_changed',
+      () => {},
+      (error) => {
+        switch (error.code) {
+          case 'storage/unauthorized':
+            break;
+          case 'storage/canceled':
+            break;
+          case 'storage/unknown':
+            break;
+          default:
+            break;
+        }
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setCurrentUserImage(downloadURL);
+          saveUserImgDB(uid, downloadURL);
+        });
+      },
+    );
+  };
 
   const saveBlogSettingsDB = (uid, downloadURL) => {
     const userBlogdoc = doc(userCollection, uid);
@@ -62,10 +111,6 @@ export default function EditBlog() {
       };
     }
     updateDoc(userBlogdoc, { ...userBlogData });
-  };
-
-  const metadata = {
-    contentType: 'image/jpeg',
   };
 
   const thisUserRef = doc(db, 'users', userID);
@@ -99,8 +144,8 @@ export default function EditBlog() {
       alert('Please upload the image file');
       return;
     }
-    const storageRef = ref(storage, `files/${imageFile.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile, metadata);
+    const storageRef = ref(storage, `files/${Date.now()}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile, { contentType: 'image/jpeg' });
     uploadTask.on(
       'state_changed',
       () => {},
@@ -131,37 +176,100 @@ export default function EditBlog() {
     changeUser();
   }, []);
 
+  const onUserImageClick = () => {
+    inputUserImage.current.click();
+  };
+
+  const renderUploadImage = (imageFile) => {
+    if (typeof (imageFile) === 'object') {
+      return URL.createObjectURL(currentUserImage);
+    } if (typeof (currentUserImage) === 'string') {
+      return imageFile;
+    }
+    return currentUserData.userImage;
+  };
+
+  const [checkLoadUserImage, setCheckLoadUserImage] = useState(false);
+
   return (
     <>
       {currentUserData ? (
         <CreateDiaryInsideBody style={{ textAlign: 'left', padding: '0px 10px 50px 10px' }}>
           <CreateDiaryNavTitle style={{ paddingLeft: '0px' }}>部落格編輯</CreateDiaryNavTitle>
-          <EditBlogTitle>部落格標題</EditBlogTitle>
-          <CreateDiaryTitle
-            type="text"
-            value={blogTitle}
-            onChange={(e) => setBlogTitle(e.target.value)}
-          />
-          <EditBlogTitle>部落格介紹</EditBlogTitle>
-          <CreateDiaryTitle
-            type="text"
-            value={blogIntro}
-            onChange={(e) => setBlogIntro(e.target.value)}
-          />
+          <div style={{ display: 'flex' }}>
+            <div style={{ flex: '1' }}>
+              <EditBlogTitle>部落格標題</EditBlogTitle>
+              <CreateDiaryTitle
+                type="text"
+                value={blogTitle}
+                onChange={(e) => setBlogTitle(e.target.value)}
+              />
+              <EditBlogTitle>部落格介紹</EditBlogTitle>
+              <CreateDiaryTitle
+                type="text"
+                value={blogIntro}
+                onChange={(e) => setBlogIntro(e.target.value)}
+              />
+
+            </div>
+            <div style={{ flex: '1', position: 'relative' }}>
+              <EditBlogTitle style={{ margin: '10px 60px' }}>編輯大頭貼</EditBlogTitle>
+              <BlogUserImageDiv
+                onClick={() => {
+                  onUserImageClick();
+                }}
+                onKeyUp={() => {
+                  onUserImageClick();
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                {currentUser ? (currentUser.uid === userID ? (
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="user-image"
+                    ref={inputUserImage}
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
+                    }}
+                  />
+                ) : ('')) : ('')}
+                {currentUserImage ? (
+                  <>
+                    <img
+                      style={{
+                        width: '200px', height: '200px', borderRadius: '50%', border: '#ccc solid 2px',
+                      }}
+                      src={renderUploadImage(currentUserImage, 'user')}
+                      alt={currentUserImage ? currentUserImage.name : null}
+                    />
+                    {!checkLoadUserImage ? (
+                      <>
+                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); submitUserImgDB(currentUserImage, userID); setCheckLoadUserImage(true); }}>確認</button>
+                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentUserImage(); }}>取消</button>
+                      </>
+                    ) : ('')}
+                  </>
+                ) : (
+                  <img
+                    style={{
+                      width: '200px', height: '200px', borderRadius: '50%',
+                    }}
+                    src={currentUserData.userImage}
+                    alt="userImage"
+                  />
+                ) }
+              </BlogUserImageDiv>
+            </div>
+
+          </div>
+
           <EditBlogTitle>進版畫面設定</EditBlogTitle>
 
-          <label
+          <BlogBackgroundImageLabel
             htmlFor="upload-blogImage"
-            style={{
-              width: '100%',
-              height: '70%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              position: 'relative',
-            }}
           >
             <input
               type="file"
@@ -205,11 +313,8 @@ export default function EditBlog() {
             <BlogBackgroundImage
               alt="background"
               src={blogImage}
-              style={{
-                width: '100%', height: '70%', maxHeight: '400px', borderRadius: '25px',
-              }}
             />
-          </label>
+          </BlogBackgroundImageLabel>
 
           <EditBlogTitle>基本版面設定</EditBlogTitle>
           <EditBlogFlex>
@@ -256,6 +361,7 @@ export default function EditBlog() {
           <br />
           {blogImageFile ? (
             <CreateDiaryPublish
+              style={{ zIndex: '1' }}
               onClick={() => {
                 handleSubmit(blogImageFile, currentUser.uid);
               }}
@@ -271,6 +377,7 @@ export default function EditBlog() {
             </CreateDiaryPublish>
           ) : (
             <CreateDiaryPublish
+              style={{ zIndex: '1' }}
               onClick={() => {
                 saveBlogSettingsDB(currentUser.uid);
                 navigate(`/${currentUser.uid}`);

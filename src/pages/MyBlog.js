@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
-  useCallback, useState, useEffect, useRef,
+  useCallback, useState, useEffect,
 } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -12,8 +12,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { auth, db, storage } from '../firestore/firestore';
+import { auth, db } from '../firestore/firestore';
 
 import { CreateDiaryInsideBody } from './CreateNewDiaries.style';
 import { BlogBackgroundImage } from './EditBlog.style';
@@ -21,6 +20,7 @@ import {
   MyBlogFLexContainer, MyBlogFLexLeft, MyBlogFLexRight, ClickableDiv,
   MyBlogVisitorContainer, MyBlogVisitorDiv, MyBlogUserName, MyBlogButton,
   MyBlogBottomLine, MyBlogProfileSubTitle, MyBlogComeHomeUsers, MyBlogButtonLight,
+  MyBlogProfileImg,
 } from './MyBlog.style';
 
 import BlogArticle from './BlogArticle';
@@ -30,10 +30,6 @@ export default function MyBlog() {
   const [currentUser, setCurrentUser] = useState();
   const [currentUserData, setCurrentUserData] = useState();
   const [, setUserDiaries] = useState([]);
-  const [currentBlogImage, setCurrentBlogImage] = useState();
-  const [currentUserImage, setCurrentUserImage] = useState();
-  const [checkLoadBlogImage, setCheckLoadBlogImage] = useState(false);
-  const [checkLoadUserImage, setCheckLoadUserImage] = useState(false);
   const [visitMyHomeAll, setVisitMyHomeAll] = useState();
   const [followingUsers, setFollowingUsers] = useState();
   const [loginUserData, setLoginUserData] = useState();
@@ -41,8 +37,6 @@ export default function MyBlog() {
 
   const navigate = useNavigate();
   const { userID, diaryID } = useParams();
-  const inputUserImage = useRef();
-  const inputBlogImage = useRef();
 
   const userCollection = collection(db, 'users');
 
@@ -150,63 +144,7 @@ export default function MyBlog() {
     });
   };
 
-  const onUserImageClick = () => {
-    inputUserImage.current.click();
-  };
-  const onBlogImageClick = () => {
-    inputBlogImage.current.click();
-  };
-
   const docRef = doc(db, 'users', userID);
-
-  const saveUserSettingsDB = (uid, downloadURL, option) => {
-    const userSettingdoc = doc(userCollection, uid);
-    let userSettings = {};
-    if (option === 'blog') {
-      userSettings = {
-        blogImage: downloadURL,
-      };
-    }
-    if (option === 'user') {
-      userSettings = {
-        userImage: downloadURL,
-      };
-    }
-    updateDoc(userSettingdoc, { ...userSettings });
-  };
-
-  const handleSubmit = (imageFile, uid, option) => {
-    const storageRef = ref(storage, `files/image${Date.now()}`);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile, { contentType: 'image/jpeg' });
-    uploadTask.on(
-      'state_changed',
-      () => {},
-      (error) => {
-        switch (error.code) {
-          case 'storage/unauthorized':
-            break;
-          case 'storage/canceled':
-            break;
-          case 'storage/unknown':
-            break;
-          default:
-            break;
-        }
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          if (option === 'blog') {
-            setCurrentBlogImage(downloadURL);
-            saveUserSettingsDB(uid, downloadURL, 'blog');
-          }
-          if (option === 'user') {
-            setCurrentUserImage(downloadURL);
-            saveUserSettingsDB(uid, downloadURL, 'user');
-          }
-        });
-      },
-    );
-  };
 
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
@@ -214,23 +152,6 @@ export default function MyBlog() {
     ${(`0${t.getMonth() + 1}`).slice(-2)}.
     ${(`0${t.getDate()}`).slice(-2)}`;
     return formatted;
-  };
-
-  const renderUploadImage = (imageFile, option) => {
-    if (option === 'blog') {
-      if (typeof (imageFile) === 'object') {
-        return URL.createObjectURL(currentBlogImage);
-      } if (typeof (currentBlogImage) === 'string') {
-        return imageFile;
-      }
-      return currentUserData.blogImage;
-    }
-    if (typeof (imageFile) === 'object') {
-      return URL.createObjectURL(currentUserImage);
-    } if (typeof (currentUserImage) === 'string') {
-      return imageFile;
-    }
-    return currentUserData.userImage;
   };
 
   const fetchUserBlogSettings = () => new Promise((resolve) => {
@@ -339,43 +260,8 @@ export default function MyBlog() {
             onKeyUp={() => { navigate(`/${userID}`); }}
             style={{ cursor: 'pointer' }}
           >
-            <div
-              onClick={() => {
-                onBlogImageClick();
-              }}
-              onKeyUp={() => {
-                onBlogImageClick();
-              }}
-              role="button"
-              tabIndex={0}
-            >
-              {currentUser ? (currentUser.uid === userID ? (
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="blog-image"
-                  ref={inputBlogImage}
-                  style={{ display: 'none' }}
-                  onChange={(e) => {
-                    if (e.target.files[0]) { setCurrentBlogImage(e.target.files[0]); }
-                  }}
-                />
-              ) : ('')) : ('')}
-
-              {currentBlogImage ? (
-                <>
-                  <BlogBackgroundImage
-                    src={renderUploadImage(currentBlogImage, 'blog')}
-                    alt={currentBlogImage ? currentBlogImage.name : null}
-                  />
-                  {!checkLoadBlogImage ? (
-                    <>
-                      <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(currentBlogImage, userID, 'blog'); setCheckLoadBlogImage(true); }}>確認</button>
-                      <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentBlogImage(); }}>取消</button>
-                    </>
-                  ) : ('')}
-                </>
-              ) : (<BlogBackgroundImage src={currentUserData.blogImage} alt="blogImage" />)}
+            <div>
+              <BlogBackgroundImage src={currentUserData.blogImage} alt="blogImage" />
               <h1>{currentUserData.blogTitle}</h1>
               <p>{currentUserData.blogIntro}</p>
             </div>
@@ -385,51 +271,18 @@ export default function MyBlog() {
             <MyBlogFLexLeft>
               <div
                 onClick={() => {
-                  onUserImageClick();
+                  navigate(`/${userID}`);
                 }}
                 onKeyUp={() => {
-                  onUserImageClick();
+                  navigate(`/${userID}`);
                 }}
                 role="button"
                 tabIndex={0}
               >
-                {currentUser ? (currentUser.uid === userID ? (
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="user-image"
-                    ref={inputUserImage}
-                    style={{ display: 'none' }}
-                    onChange={(e) => {
-                      if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
-                    }}
-                  />
-                ) : ('')) : ('')}
-                {currentUserImage ? (
-                  <>
-                    <img
-                      style={{
-                        width: '100px', height: '100px', borderRadius: '50%', border: 'black solid 2px',
-                      }}
-                      src={renderUploadImage(currentUserImage, 'user')}
-                      alt={currentUserImage ? currentUserImage.name : null}
-                    />
-                    {!checkLoadUserImage ? (
-                      <>
-                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(currentUserImage, userID, 'user'); setCheckLoadUserImage(true); }}>確認</button>
-                        <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentUserImage(); }}>取消</button>
-                      </>
-                    ) : ('')}
-                  </>
-                ) : (
-                  <img
-                    style={{
-                      width: '100px', height: '100px', borderRadius: '50%',
-                    }}
-                    src={currentUserData.userImage}
-                    alt="userImage"
-                  />
-                ) }
+                <MyBlogProfileImg
+                  src={currentUserData.userImage}
+                  alt="userImage"
+                />
               </div>
               <MyBlogUserName>{currentUserData.distoryId}</MyBlogUserName>
               <br />

@@ -229,6 +229,7 @@ export const HomeAuthorImage = styled.img`
 
   width: 100px;
   height:100px;
+  border-radius: 50%;
     @media (max-width: 912px) {
       width: 50px;
       height:50px;

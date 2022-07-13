@@ -111,6 +111,16 @@ export const MyBlogProfileSubTitleMargin = styled(MyBlogProfileSubTitle)`
   margin: 10px auto 50px !important;
 `;
 
+export const MyBlogProfileImg = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  cursor: pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
+`;
+
 export const ClickableDiv = styled.div`
   cursor:pointer;
   :hover, :active, :focus{

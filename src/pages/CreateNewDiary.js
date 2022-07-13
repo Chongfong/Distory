@@ -272,6 +272,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
         </CreateDiarySave>
         { articleShowImgFile ? (
           <CreateDiaryPublish
+            style={{ zIndex: 1 }}
             onClick={() => {
               handleSubmit(articleShowImgFile);
             }}
@@ -286,6 +287,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
           </CreateDiaryPublish>
         ) : (
           <CreateDiaryPublish
+            style={{ zIndex: 1 }}
             onClick={() => {
               saveNewDiaryDB();
               navigate(`/${userID}`);
