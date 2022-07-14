@@ -168,7 +168,13 @@ export default function UploadImageInTextEditor({
                     {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
                   </form>
                 ) : (
-                  <ImageEditorDefaultImage url={url} setUrl={setUrl} />
+                  <ImageEditorDefaultImage
+                    setImageUrl={setImageUrl}
+                    insertEditablePhoto={insertEditablePhoto}
+                    setIsOpen={setIsOpen}
+                    url={url}
+                    setUrl={setUrl}
+                  />
                 )
 
                 )}

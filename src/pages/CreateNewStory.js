@@ -146,7 +146,12 @@ export default function CreateNewStory() {
                     ) : ('')}
                   </form>
                 ) : (
-                  <ImageEditorDefaultImage url={url} setUrl={setUrl} />
+                  <ImageEditorDefaultImage
+                    setImageUrl={setImageUrl}
+                    url={url}
+                    setUrl={setUrl}
+                    setOpenImageEditor={setOpenImageEditor}
+                  />
                 )
 
                 )}
