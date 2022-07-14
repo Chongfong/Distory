@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { CircleButton } from '../pages/ImageEditor.style';
 
+import { EditDiaryShowImageDiv } from '../pages/CreateNewDiaries.style';
+
 export default function SetArticleShowImg(
   {
     articleShowImg, articleShowImgUrl, setArticleShowImgUrl,
@@ -15,7 +17,7 @@ export default function SetArticleShowImg(
     }}
     >
       <p style={{ margin: '1em 20px' }}>預設圖片</p>
-      <div>
+      <EditDiaryShowImageDiv>
         <label
           htmlFor="upload-blogImage"
           style={{
@@ -76,7 +78,7 @@ export default function SetArticleShowImg(
             }}
           />
         </label>
-      </div>
+      </EditDiaryShowImageDiv>
     </div>
   );
 }

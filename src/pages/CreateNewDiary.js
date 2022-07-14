@@ -14,7 +14,7 @@ import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
 import {
   CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryTitle, CreateDiaryPublish,
-  CreateDiarySave, CreateDiaryNavBar, CreateDiaryNavButton,
+  CreateDiaryNavBar, CreateDiaryNavButton, CreateDiaryColored,
 } from './CreateNewDiaries.style';
 import { db, storage } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
@@ -29,8 +29,8 @@ import SetArticleShowImg from '../components/setArticleShowImg';
 import { previewImagesArray } from './Home';
 
 export default function CreateNewDiary({ isOpen, setIsOpen }) {
-  const [titleValue, setTitleValue] = useState('Please enter the title');
-  const [diaryContentValue, setDiaryContentValue] = useState();
+  const [titleValue, setTitleValue] = useState('');
+  const [diaryContentValue, setDiaryContentValue] = useState('');
   const [imageUrl, setImageUrl] = useState();
 
   const [loadFromFile, setLoadFromFile] = useState();
@@ -58,6 +58,14 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
   const diarydoc = doc(collection(db, 'articles'));
 
   const saveNewDiaryDB = () => {
+    if (titleValue === '') {
+      alert('請輸入標題');
+      return;
+    }
+    if (diaryContentValue === '') {
+      alert('請輸入內文');
+      return;
+    }
     const data = {
       title: titleValue,
       titleText: [...titleValue.replace(' ', '')],
@@ -72,9 +80,18 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
     };
     setDoc(diarydoc, { ...data });
     alert('文章已發布');
+    navigate(`/${userID}`);
   };
 
   const saveNewDiaryImgDB = (imgDownloadURL) => {
+    if (titleValue === '') {
+      alert('請輸入標題');
+      return;
+    }
+    if (diaryContentValue === '') {
+      alert('請輸入內文');
+      return;
+    }
     const data = {
       title: titleValue,
       titleText: [...titleValue.replace(' ', '')],
@@ -89,9 +106,18 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
     };
     setDoc(diarydoc, { ...data });
     alert('文章已發布');
+    navigate(`/${userID}`);
   };
 
   const saveTempDiaryDB = () => {
+    if (titleValue === '') {
+      alert('請輸入標題');
+      return;
+    }
+    if (diaryContentValue === '') {
+      alert('請輸入內文');
+      return;
+    }
     const data = {
       title: titleValue,
       titleText: [...titleValue.replace(' ', '')],
@@ -106,13 +132,89 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
     };
     setDoc(diarydoc, { ...data });
     alert('文章已儲存');
+    navigate(`/${userID}`);
+  };
+
+  const saveTempDiaryImgDB = (imgDownloadURL) => {
+    if (titleValue === '') {
+      alert('請輸入標題');
+      return;
+    }
+    if (diaryContentValue === '') {
+      alert('請輸入內文');
+      return;
+    }
+    const data = {
+      title: titleValue,
+      titleText: [...titleValue.replace(' ', '')],
+      content: removeClickButtonsTag(diaryContentValue),
+      status: 'draft',
+      publishAt: Timestamp.now().toDate(),
+      diaryID: diarydoc.id,
+      author: userID,
+      password: articlePassword,
+      passwordHint: articlePasswordHint,
+      showImg: imgDownloadURL,
+    };
+    setDoc(diarydoc, { ...data });
+    alert('文章已儲存');
+    navigate(`/${userID}`);
   };
 
   const metadata = {
     contentType: 'image/jpeg',
   };
 
+  const handleTempSubmit = (imageFile) => {
+    if (titleValue === '') {
+      alert('請輸入標題');
+      return;
+    }
+    if (diaryContentValue === '') {
+      alert('請輸入內文');
+      return;
+    }
+    const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
+    if (!imageFile) { alert('please try again'); return; }
+    if (!imageTypes.includes(imageFile.type.slice(6))) {
+      alert('Please upload the image file');
+      return;
+    }
+    const storageRef = ref(storage, `files/${imageFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile, metadata);
+    uploadTask.on(
+      'state_changed',
+      () => {},
+      (error) => {
+        switch (error.code) {
+          case 'storage/unauthorized':
+            break;
+          case 'storage/canceled':
+            break;
+          case 'storage/unknown':
+            break;
+          default:
+            break;
+        }
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          saveTempDiaryImgDB(downloadURL);
+          navigate(`/${userID}`);
+        });
+      },
+    );
+  };
+
   const handleSubmit = (imageFile) => {
+    if (titleValue === '') {
+      alert('請輸入標題');
+      return;
+    }
+    if (diaryContentValue === '') {
+      alert('請輸入內文');
+      return;
+    }
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
     if (!imageFile) { alert('please try again'); return; }
     if (!imageTypes.includes(imageFile.type.slice(6))) {
@@ -255,53 +357,72 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
           textEditorRef={textEditorRef}
           textEditorCursorIndex={textEditorCursorIndex}
         />
-        <CreateDiarySave
-          onClick={() => {
-            saveTempDiaryDB();
-            navigate(`/${userID}`);
-          }}
-          onKeyUp={() => {
-            saveTempDiaryDB();
-            navigate(`/${userID}`);
-          }}
-          role="button"
-          tabIndex={0}
-        >
-          <FiSave />
 
-        </CreateDiarySave>
         { articleShowImgFile ? (
           <CreateDiaryPublish
-            style={{ zIndex: 1 }}
+            style={{ bottom: '140px' }}
             onClick={() => {
-              handleSubmit(articleShowImgFile);
+              handleTempSubmit(articleShowImgFile);
             }}
             onKeyUp={() => {
-              handleSubmit(articleShowImgFile);
+              handleTempSubmit(articleShowImgFile);
             }}
             role="button"
             tabIndex={0}
           >
-            ✓
+            <FiSave />
 
           </CreateDiaryPublish>
         ) : (
           <CreateDiaryPublish
-            style={{ zIndex: 1 }}
+            style={{ bottom: '140px' }}
             onClick={() => {
-              saveNewDiaryDB();
-              navigate(`/${userID}`);
+              saveTempDiaryDB();
             }}
             onKeyUp={() => {
-              saveNewDiaryDB();
-              navigate(`/${userID}`);
+              saveTempDiaryDB();
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            <FiSave />
+
+          </CreateDiaryPublish>
+        )}
+        { articleShowImgFile ? (
+          <CreateDiaryColored
+            style={{
+              zIndex: 1,
+              bottom: '70px',
+              border: '#d3b092 2px solid',
+            }}
+            onClick={() => {
+              handleSubmit(articleShowImgFile);
+            }}
+            onKeyUp={() => {
+              handleSubmit(articleShowImgFile);
             }}
             role="button"
             tabIndex={0}
           >
             ✓
 
-          </CreateDiaryPublish>
+          </CreateDiaryColored>
+        ) : (
+          <CreateDiaryColored
+            style={{ bottom: '70px', border: '#d3b092 2px solid' }}
+            onClick={() => {
+              saveNewDiaryDB();
+            }}
+            onKeyUp={() => {
+              saveNewDiaryDB();
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            ✓
+
+          </CreateDiaryColored>
         )}
 
       </CreateDiaryInsideBody>

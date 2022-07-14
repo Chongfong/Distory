@@ -42,13 +42,21 @@ export const CreateDiaryPublish = styled.div`
   font-size: 25px;
   line-height: 50px;
   position: fixed;
-  right: 20px;
-  bottom: 30px;
+  right: 80px;
+  bottom: 70px;
   cursor: pointer;
+  :hover, :active, :focus{
+    background-color: #d3b092;
+    color: white;
+  }
 `;
 
-export const CreateDiarySave = styled(CreateDiaryPublish)`
-  bottom: 100px;
+export const CreateDiaryColored = styled(CreateDiaryPublish)`
+  background-color: #d3b092;
+  color: white;
+  :hover, :active, :focus{
+    background-color: #b57c4a;
+  }
 `;
 
 export const CreateDiaryIconImage = styled.img`
@@ -86,5 +94,20 @@ export const EditDiaryEachDiaryRow = styled.div`
   margin: 5px;
   :hover, :active, :focus{
     opacity: 0.5;
+  }
+`;
+
+export const EditDiaryShowImageDiv = styled.div`
+  cursor: pointer;
+  position: relative;
+  :hover {
+    opacity: 0.5;
+    ::after{
+    content:'更換';
+    position:absolute;
+    top: 40%;
+    left: 40%;
+    font-size: 1.5rem;
+  }
   }
 `;
