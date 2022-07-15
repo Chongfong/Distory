@@ -159,10 +159,27 @@ export const HeaderLoginOptions = styled.div`
   width: auto;
   position: relative;
   color: #b57c4a;
-  padding: 8px 0px 8px 10px;
+  padding: 8px 20px 8px 20px;
   border-radius: 8px;
+  font-size: 24px;
+  line-height: 24px;
   :hover, :active, :focus{
     background-color: rgba(181, 124, 74, 0.8);
     color: white;
   }
+`;
+
+export const HeaderOptionsExplain = styled.div`
+  width: 50px;
+  font-size: 12px;
+  height: 20px;
+  background-color: white;
+  border: #ccc solid 1px;
+  border-radius: 5px;
+  text-align: center;
+  position: absolute;
+  padding: 0px 3px;
+  right: 0px;
+  bottom: -10px;
+  display: ${({ isHovered }) => (isHovered ? 'block' : 'none')};
 `;

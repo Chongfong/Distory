@@ -15,7 +15,7 @@ import {
   HeaderContainer, HeaderTitle, HeaderSearchBar, HeaderLogin, HeaderSignup,
   HeaderMember, HeaderTitleContainer,
   HeaderBackgroundImage, HeaderSearchIconContainer, HeaderUserContainer,
-  HeaderLoginOptions,
+  HeaderLoginOptions, HeaderOptionsExplain,
 } from './Header.style';
 
 import { db, auth } from '../firestore/firestore';
@@ -30,6 +30,9 @@ export default function Header({
   const [searchkey, setSearchKey] = useState('');
   const [headerLoginUserData, setHeaderLoginUserData] = useState();
   const [toggleLoginUser, setToggleLoginUser] = useState(false);
+  const [hoverCreateNew, setHoverCreateNew] = useState(false);
+  const [hoverCreateStory, setHoverCreateStory] = useState(false);
+  const [hoverBackBlog, setHoverBackBlog] = useState(false);
 
   const navigate = useNavigate();
 
@@ -88,7 +91,7 @@ export default function Header({
         </HeaderTitle>
       </Link>
       <HeaderContainer>
-        <div style={{ position: 'relative', margin: '15px 20px' }}>
+        <div style={{ position: 'relative', margin: '20px 20px' }}>
           <HeaderSearchBar
             type="text"
             value={searchkey}
@@ -121,62 +124,82 @@ export default function Header({
 
         </div>
         {currentUser ? (
-          <HeaderMember type="button" onClick={() => { setToggleLoginUser((prev) => !prev); }}>
-            <img src={headerLoginUserData?.userImage} alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
-            {toggleLoginUser ? (
-              <HeaderUserContainer>
-                <Link to={`${currentUser.uid}/create`}>
-                  <HeaderLoginOptions>
-                    <MdCreate />
-                    &nbsp;
-                    發布文章
-                  </HeaderLoginOptions>
-
-                </Link>
-                <Link to={`${currentUser.uid}/newstory`}>
-                  <HeaderLoginOptions>
-                    <GiQuill />
-                    &nbsp;
-                    發布動態
-                  </HeaderLoginOptions>
-                </Link>
-                <Link to={`${currentUser.uid}`}>
-                  <HeaderLoginOptions>
-                    <FaHome />
-                    &nbsp;
-                    我的部落格
-                  </HeaderLoginOptions>
-                </Link>
-                <Link to={`${currentUser.uid}/blogedit`}>
-                  <HeaderLoginOptions>
-                    <GoGear />
-                    &nbsp;
-                    編輯設定
-                  </HeaderLoginOptions>
-                </Link>
-                <HeaderLoginOptions
-                  style={{
-                    width: 'auto',
-                    textAlign: 'center',
-                    paddingLeft: '0px',
-                    marginTop: '10px',
-                    backgroundColor: '#e2e2e2',
-                    color: '#464646',
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  onClick={handleLogOut}
-                  onKeyUp={handleLogOut}
-                >
-                  <TbLogout />
-                  &nbsp;
-                  登出
-
+          <>
+            <div style={{
+              display: 'flex', flexWrap: 'no-wrap', position: 'relative', margin: '15px 20px 15px 0px',
+            }}
+            >
+              <Link
+                to={`${currentUser.uid}/create`}
+                style={{ position: 'relative' }}
+                onMouseOver={() => setHoverCreateNew(true)}
+                onMouseLeave={() => setHoverCreateNew(false)}
+              >
+                <HeaderLoginOptions style={{ width: '25px' }}>
+                  <MdCreate />
                 </HeaderLoginOptions>
-              </HeaderUserContainer>
-            ) : ('')}
+                <HeaderOptionsExplain isHovered={hoverCreateNew}>發布文章</HeaderOptionsExplain>
+              </Link>
+              <Link
+                to={`${currentUser.uid}/newstory`}
+                style={{ position: 'relative' }}
+                onMouseOver={() => setHoverCreateStory(true)}
+                onMouseLeave={() => setHoverCreateStory(false)}
+              >
+                <HeaderLoginOptions style={{ width: '25px' }}>
+                  <GiQuill />
+                </HeaderLoginOptions>
+                <HeaderOptionsExplain isHovered={hoverCreateStory}>發布動態</HeaderOptionsExplain>
+              </Link>
+              <Link
+                to={`${currentUser.uid}`}
+                style={{ position: 'relative' }}
+                onMouseOver={() => setHoverBackBlog(true)}
+                onMouseLeave={() => setHoverBackBlog(false)}
+              >
+                <HeaderLoginOptions style={{ width: '25px' }}>
+                  <FaHome />
+                </HeaderLoginOptions>
+                <HeaderOptionsExplain isHovered={hoverBackBlog}>部落格</HeaderOptionsExplain>
+              </Link>
 
-          </HeaderMember>
+            </div>
+            <HeaderMember type="button" onClick={() => { setToggleLoginUser((prev) => !prev); }}>
+              <img src={headerLoginUserData?.userImage} alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
+              {toggleLoginUser ? (
+                <HeaderUserContainer>
+                  <Link to={`${currentUser.uid}/blogedit`}>
+                    <HeaderLoginOptions>
+                      <GoGear />
+                      &nbsp;
+                      編輯設定
+                    </HeaderLoginOptions>
+                  </Link>
+                  <HeaderLoginOptions
+                    style={{
+                      width: 'auto',
+                      textAlign: 'center',
+                      paddingLeft: '0px',
+                      marginTop: '10px',
+                      backgroundColor: '#e2e2e2',
+                      color: '#464646',
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    onClick={handleLogOut}
+                    onKeyUp={handleLogOut}
+                  >
+                    <TbLogout />
+                    &nbsp;
+                    登出
+
+                  </HeaderLoginOptions>
+                </HeaderUserContainer>
+              ) : ('')}
+
+            </HeaderMember>
+
+          </>
         ) : (
           <>
             <Link to="/signup">
