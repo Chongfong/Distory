@@ -27,7 +27,7 @@ export default function LoadStories() {
   const [storiesTime, setStoriesTime] = useState();
   const [openStory, setOpenStory] = useState(false);
   const [chosedImg, setChosedImg] = useState();
-  const [chosedIndex, setChosedIndex] = useState();
+  const [chosedIndex, setChosedIndex] = useState(0);
   const [storyAuthorsInfo, setStoryAuthorsInfo] = useState();
   const intervalRef = useRef();
   const navigate = useNavigate();
@@ -71,12 +71,7 @@ export default function LoadStories() {
   useEffect(() => {
     searchStoriesAvailable();
   }, []);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setChosedIndex((prev) => prev + 1);
-    }, 5000);
-  }, []);
+  const [imgLoading, setImgLoading] = useState(true);
 
   const getAuthorInfoFunc = async () => {
     if (storiesAvailable) {
@@ -111,20 +106,41 @@ export default function LoadStories() {
     getAuthorInfoFunc();
   }, [storiesAvailable]);
 
+  const scrollable = useRef(null);
+
+  const scrollRight = () => {
+    const scrollWidth = scrollable.current.offsetWidth + 50;
+    scrollable.current.scrollBy({ left: scrollWidth, behavior: 'smooth' });
+  };
+
+  const scrollLeft = () => {
+    const scrollWidth = scrollable.current.offsetWidth + 50;
+    scrollable.current.scrollBy({ left: -scrollWidth, behavior: 'smooth' });
+  };
+
   return (
     <>
       <MyBlogProfileSubTitle>▋&nbsp;探索Distory</MyBlogProfileSubTitle>
-      <StoryOuterContainer>
-        {storiesAvailable
-          ? (storiesAvailable
-            .slice(chosedStoryIndex, chosedStoryIndex + 5)
-            .map((eachStory, index) => (
-              <StoryContainer>
-                {openStory && (
+      <StoryOuterContainer style={{ overflow: 'hidden' }}>
+        <div
+          ref={scrollable}
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            overflow: 'hidden',
+            gap: '0px 20px',
+          }}
+        >
+          {storiesAvailable
+            ? (
+              <>
+                {(openStory && chosedIndex <= storiesAvailable.length - 1) && (
                 <ShowStoryDetail
                   chosedImg={chosedImg}
                   setChosedImg={setChosedImg}
-                  time={eachStory.publishAt.seconds * 1000}
+                  time={storiesAvailable[chosedIndex].publishAt.seconds * 1000}
                   setOpenStory={setOpenStory}
                   storiesImgAvailable={storiesImgAvailable}
                   chosedIndex={chosedIndex}
@@ -132,43 +148,63 @@ export default function LoadStories() {
                   intervalRef={intervalRef}
                   storiesAuthorAll={storiesAuthor}
                   storiesTimeAll={storiesTime}
+                  imgLoading={imgLoading}
+                  setImgLoading={setImgLoading}
                 />
                 )}
-                {storyAuthorsInfo ? (
-                  <>
-                    <StoryImgContainer
-                      storyImgUrl={eachStory.imageUrl}
-                      onClick={() => {
-                        setOpenStory(true);
-                        setChosedImg(eachStory.imageUrl);
-                        setChosedIndex(chosedStoryIndex + index);
-                      }}
-                    >
-                      <div style={{
-                        width: '100%', paddingLeft: '10px', position: 'absolute', bottom: '20px', left: '20px',
-                      }}
-                      >
-                        <StoryAuthorName>
-                          {storyAuthorsInfo[chosedStoryIndex + index][1]}
-                        </StoryAuthorName>
-                        <StoryTimeAgo>{timeAgo(eachStory.publishAt.seconds * 1000)}</StoryTimeAgo>
-                      </div>
-                    </StoryImgContainer>
-                    <StoryAuthorContainer onClick={() => navigate(`/${eachStory.author}`)}>
-                      <StoryAuthorImg src={storyAuthorsInfo[chosedStoryIndex + index][0]} alt="story-author" />
-                    </StoryAuthorContainer>
 
-                  </>
-                ) : ('')}
-              </StoryContainer>
-            ))) : (<p>No Story</p>)}
+                {storiesAvailable
+                  .map((eachStory, index) => (
+                    <StoryContainer>
+
+                      {storyAuthorsInfo ? (
+                        <>
+                          <StoryImgContainer
+                            storyImgUrl={eachStory.imageUrl}
+                            onClick={() => {
+                              setOpenStory(true);
+                              setChosedImg(eachStory.imageUrl);
+                              setChosedIndex(index);
+                            }}
+                          >
+                            <div style={{
+                              width: '100%', paddingLeft: '10px', position: 'absolute', bottom: '20px', left: '20px',
+                            }}
+                            >
+                              <StoryAuthorName>
+                                {storyAuthorsInfo[index][1]}
+                              </StoryAuthorName>
+                              <StoryTimeAgo>
+                                {timeAgo(eachStory
+                                  .publishAt.seconds * 1000)}
+
+                              </StoryTimeAgo>
+                            </div>
+                          </StoryImgContainer>
+                          <StoryAuthorContainer onClick={() => navigate(`/${eachStory.author}`)}>
+                            <StoryAuthorImg
+                              src={storyAuthorsInfo[index][0]}
+                              alt="story-author"
+                            />
+                          </StoryAuthorContainer>
+
+                        </>
+                      ) : ('')}
+                    </StoryContainer>
+                  ))}
+              </>
+            ) : (<p>No Story</p>)}
+        </div>
         {storiesAvailable ? (
           (chosedStoryIndex < (storiesAvailable.length - 5) ? (
             <CircleButton
               style={{
-                position: 'absolute', top: '35%', right: '-60px', lineHeight: '0px',
+                position: 'absolute', top: '35%', right: '0px', lineHeight: '0px',
               }}
-              onClick={() => setChosedStoryIndex(chosedStoryIndex + 5)}
+              onClick={() => {
+                setChosedStoryIndex(chosedStoryIndex + 5);
+                scrollRight();
+              }}
             >
               →
             </CircleButton>
@@ -176,9 +212,12 @@ export default function LoadStories() {
         {chosedStoryIndex >= 5 ? (
           <CircleButton
             style={{
-              position: 'absolute', top: '35%', left: '-30px', lineHeight: '0px',
+              position: 'absolute', top: '35%', left: '0px', lineHeight: '0px',
             }}
-            onClick={() => setChosedStoryIndex(chosedStoryIndex - 5)}
+            onClick={() => {
+              setChosedStoryIndex(chosedStoryIndex - 5);
+              scrollLeft();
+            }}
           >
             ←
           </CircleButton>

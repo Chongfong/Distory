@@ -1,9 +1,4 @@
-import styled, { keyframes } from 'styled-components/macro';
-
-const storyStatus = keyframes`
-  0%   {width: 0%;}
-  100% {width: 100%;}
-`;
+import styled from 'styled-components/macro';
 
 export const StoryOuterContainer = styled.div`
   display: flex;
@@ -11,9 +6,9 @@ export const StoryOuterContainer = styled.div`
   flex-wrap: nowrap;
   align-items: flex-start;
   text-align: left;
-  padding: 50px 50px 100px 0px;
+  padding: 50px 50px 100px 50px;
   width: 100%;
-  height: 10%;
+  height: 15%;
   gap: 0px 20px;
   position: relative;
 `;
@@ -24,7 +19,7 @@ export const StoryContainer = styled.div`
   flex-wrap: wrap;
   margin: 5px 0px;
   max-width: 20%;
-  height: 100%;
+  height: auto;
   position: relative;
 
   @media (max-width: 912px) {
@@ -35,7 +30,7 @@ export const StoryContainer = styled.div`
 export const StoryImgContainer = styled.div`
   margin: 10px 0px;
   flex: 100%;
-  height: 80%;
+  height: auto;
   background-image: ${({ storyImgUrl }) => (storyImgUrl
     ? `url(${storyImgUrl})`
     : 'url(https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/stories%2F1657118554323?alt=media&token=fc942aeb-82d1-433d-9ed5-e1da398af0b8)')};
@@ -135,15 +130,15 @@ export const StoryPhotoContainer = styled.div`
 `;
 
 export const StoryPhotoStatusBar = styled.div`
-  animation: ${storyStatus} 5s linear 0s infinite;
   border-top: 5px solid white;
-  width:100%;
+  width: ${(props) => `${props.loadingPercent * 20}%`};
   background-color: #ccc;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   position: absolute;
   top:-6px;
   left:0;
   z-index: 1;
+  transition: width 1s linear;
 `;
 
 export const StoryCloseButton = styled.div`
