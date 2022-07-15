@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -23,9 +24,10 @@ import sky from '../img/sora.png';
 import logo from '../img/Distory Logo.png';
 import search from '../img/search.png';
 
-export default function Header() {
-  const [currentUser, setCurrentUser] = useState();
-  const [searchkey, setSearchKey] = useState();
+export default function Header({
+  currentUser, setCurrentUser, currentUserData,
+}) {
+  const [searchkey, setSearchKey] = useState('');
   const [headerLoginUserData, setHeaderLoginUserData] = useState();
   const [toggleLoginUser, setToggleLoginUser] = useState(false);
 
@@ -38,7 +40,7 @@ export default function Header() {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && searchkey !== '') {
       navigate(`/search/${searchkey}`);
     }
   };
@@ -64,11 +66,11 @@ export default function Header() {
       return (nowLoginUser);
     };
     loadingLoginUser();
-  }, [currentUser]);
+  }, [currentUser, currentUserData]);
 
   useEffect(() => {
     loadLoginUser();
-  }, [currentUser]);
+  }, [currentUser, currentUserData]);
 
   const handleLogOut = () => {
     signOut(auth)
@@ -94,18 +96,28 @@ export default function Header() {
             onChange={(e) => setSearchKey(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <HeaderSearchIconContainer
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(`/search/${searchkey}`)}
-            onKeyUp={() => navigate(`/search/${searchkey}`)}
-          >
-            <img
-              src={search}
-              alt="search"
-              style={{ width: '25px' }}
-            />
-          </HeaderSearchIconContainer>
+          { searchkey !== '' ? (
+            <HeaderSearchIconContainer
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate(`/search/${searchkey}`)}
+              onKeyUp={() => navigate(`/search/${searchkey}`)}
+            >
+              <img
+                src={search}
+                alt="search"
+                style={{ width: '25px' }}
+              />
+            </HeaderSearchIconContainer>
+          ) : (
+            <HeaderSearchIconContainer>
+              <img
+                src={search}
+                alt="search"
+                style={{ width: '25px' }}
+              />
+            </HeaderSearchIconContainer>
+          )}
 
         </div>
         {currentUser ? (
@@ -182,3 +194,16 @@ export default function Header() {
 
   );
 }
+
+Header.propTypes = {
+  currentUser: PropTypes.string,
+  setCurrentUser: PropTypes.func,
+  currentUserData: PropTypes.string,
+
+};
+
+Header.defaultProps = {
+  currentUser: '',
+  setCurrentUser: () => {},
+  currentUserData: '',
+};

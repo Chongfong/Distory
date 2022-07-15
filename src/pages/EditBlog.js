@@ -3,14 +3,15 @@
 import React, {
   useState, useCallback, useEffect, useRef,
 } from 'react';
+import PropTypes from 'prop-types';
+
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { useNavigate, useParams } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 import {
   collection, doc, updateDoc,
   getDoc,
 } from 'firebase/firestore';
-import { auth, storage, db } from '../firestore/firestore';
+import { storage, db } from '../firestore/firestore';
 
 import layoutImage from '../img/layout.png';
 import contentLayout from '../img/content-layout.png';
@@ -23,7 +24,9 @@ import {
 } from './EditBlog.style';
 import { CircleButton } from './ImageEditor.style';
 
-export default function EditBlog() {
+export default function EditBlog({
+  currentUser, currentUserData, setCurrentUserData,
+}) {
   const [blogTitle, setBlogTitle] = useState();
   const [blogIntro, setBlogIntro] = useState();
   const [blogImage, setBlogImage] = useState();
@@ -32,18 +35,10 @@ export default function EditBlog() {
   const [blogLayout, setBlogLayout] = useState();
   const [blogContentLayout, setBlogContentLayout] = useState();
   const navigate = useNavigate();
-  const [currentUserData, setCurrentUserData] = useState();
 
-  const [currentUser, setCurrentUser] = useState();
   const [currentUserImage, setCurrentUserImage] = useState();
 
   const inputUserImage = useRef();
-
-  const changeUser = () => {
-    onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
-  };
 
   const { userID } = useParams();
 
@@ -135,7 +130,7 @@ export default function EditBlog() {
       return (nowBlogSettings);
     };
     loadingUserBlogSettings();
-  }, []);
+  }, [currentUserImage]);
 
   const handleSubmit = (imageFile, uid) => {
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
@@ -173,8 +168,7 @@ export default function EditBlog() {
 
   useEffect(() => {
     loadUserBlogSettings();
-    changeUser();
-  }, []);
+  }, [currentUser, currentUserImage]);
 
   const onUserImageClick = () => {
     inputUserImage.current.click();
@@ -402,3 +396,16 @@ export default function EditBlog() {
     </>
   );
 }
+
+EditBlog.propTypes = {
+  currentUser: PropTypes.string,
+  currentUserData: PropTypes.string,
+  setCurrentUserData: PropTypes.func,
+
+};
+
+EditBlog.defaultProps = {
+  currentUser: '',
+  currentUserData: '',
+  setCurrentUserData: () => {},
+};

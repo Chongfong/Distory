@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import PropTypes from 'prop-types';
 import { auth } from '../firestore/firestore';
 
 import {
@@ -11,10 +12,9 @@ import {
 
 import { CircleButton } from './ImageEditor.style';
 
-export default function LogIn() {
+export default function LogIn({ setCurrentUser }) {
   const [logInEmail, setLogInEmail] = useState();
   const [logInPassword, setlogInPassword] = useState();
-  const [currentUser, setCurrentUser] = useState();
   const changeUser = () => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -26,7 +26,7 @@ export default function LogIn() {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         alert('You are logging in');
-        navigate(`/${currentUser.uid}`);
+        navigate('/');
       })
       .catch((err) => {
         alert(err.message);
@@ -86,3 +86,11 @@ export default function LogIn() {
     </SignUpBody>
   );
 }
+
+LogIn.propTypes = {
+  setCurrentUser: PropTypes.func,
+};
+
+LogIn.defaultProps = {
+  setCurrentUser: () => {},
+};

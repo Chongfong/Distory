@@ -135,11 +135,12 @@ export const HeaderMember = styled.div`
   position: relative;
   z-index:1;
   ::after{
-    content:"∨";
-    color: white;
+    content:"▼";
+    color: #b57c4a;
     position: absolute;
     top: 12px;
     right: 0;
+    font-size: 0.8rem;
   }
   :hover, :active, :focus{
     opacity: 0.8;

@@ -26,11 +26,17 @@ import Footer from './components/Footer';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState();
+  const [currentUserData, setCurrentUserData] = useState();
 
   return (
     <div className="App">
       <Router>
-        <Header />
+        <Header
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+          currentUserData={currentUserData}
+        />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
@@ -40,7 +46,17 @@ function App() {
           <Route path="/:userID" element={<MyBlog />}>
             <Route path=":diaryID" element={<BlogArticle />} />
           </Route>
-          <Route path="/:userID/blogedit" element={<EditBlog />} />
+          <Route
+            path="/:userID/blogedit"
+            element={(
+              <EditBlog
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                currentUserData={currentUserData}
+                setCurrentUserData={setCurrentUserData}
+              />
+)}
+          />
           <Route path="/:userID/profile" element={<Profile />} />
           <Route path="/:userID/create" element={<CreateNewDiary isOpen={isOpen} setIsOpen={setIsOpen} />} />
           <Route path="/:userID/newstory" element={<CreateNewStory />} />
