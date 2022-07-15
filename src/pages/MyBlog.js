@@ -171,6 +171,24 @@ export default function MyBlog() {
     loadingUserBlogSettings();
   }, []);
 
+  const fetchCurrentBlogSettings = (visitorUid) => new Promise((resolve) => {
+    const visitRef = doc(db, 'users', visitorUid);
+    const querySnapshot = getDoc(visitRef);
+    resolve(querySnapshot);
+  });
+
+  const loadCurrentBlogSettings = useCallback((currentUserID) => {
+    const loadingUserBlogSettings = async (currentVisitUserID) => {
+      let nowBlogSettings = {};
+      fetchCurrentBlogSettings(currentVisitUserID).then((querySnapshot) => {
+        nowBlogSettings = querySnapshot.data();
+        setCurrentUserData(querySnapshot.data());
+      });
+      return (nowBlogSettings);
+    };
+    loadingUserBlogSettings(currentUserID);
+  }, []);
+
   const getUserDiaries = useCallback(() => {
     async function gettingUserDiaries() {
       try {
@@ -249,6 +267,7 @@ export default function MyBlog() {
   useEffect(() => {
     visitMyHomeFunc();
   }, [currentUserData]);
+
   return (
     <>
       {currentUserData ? (
@@ -325,12 +344,12 @@ export default function MyBlog() {
                             role="button"
                             tabIndex={0}
                             onClick={() => {
+                              loadCurrentBlogSettings(eachVisitor.visitorID);
                               navigate(`/${eachVisitor.visitorID}`);
-                              navigate(0);
                             }}
                             onKeyUp={() => {
+                              loadCurrentBlogSettings(eachVisitor.visitorID);
                               navigate(`/${eachVisitor.visitorID}`, { replace: true });
-                              navigate(0);
                             }}
                           >
                             <MyBlogComeHomeUsers
