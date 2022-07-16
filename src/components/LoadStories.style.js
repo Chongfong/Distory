@@ -8,7 +8,7 @@ export const StoryOuterContainer = styled.div`
   text-align: left;
   padding: 50px 50px 100px 50px;
   width: 100%;
-  height: 15%;
+  height: 450px;
   gap: 0px 20px;
   position: relative;
 `;

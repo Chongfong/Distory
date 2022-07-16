@@ -5,11 +5,13 @@ export const DiaryContainerFlex = styled.div`
   flex-wrap: nowrap;
   width: 90%;
   height: 150px;
-  margin: 25px auto;
+  padding: 25px 0;
+  margin: 0 auto;
   align-items: flex-start;
   position: relative;
   justify-content: ${({ blogContentOrder }) => (blogContentOrder ? '' : 'space-between')};
   flex-direction: ${({ blogContentOrder }) => (blogContentOrder ? 'row' : 'row-reverse')};
+  border-bottom: 1px solid #ccc;
 `;
 
 export const DiaryImageDefault = styled.img`
@@ -39,7 +41,7 @@ export const DiaryContentFlex = styled.div`
 
 export const DiaryLikes = styled.p`
   position:absolute;
-  bottom: -15px;
+  bottom: 15px;
   left: ${({ blogContentOrder }) => (blogContentOrder ? '170px' : '10px')};
 `;
 
@@ -80,7 +82,7 @@ export const DiaryPage = styled.div`
   display: inline-block;
   transform: scale(1.2,1);
   font-size: 1rem;
-  margin: 5px;
+  margin: 20px 5px 5px;
   cursor: pointer;
   :hover, :active, :focus{
     border-bottom: 3px solid #ccc;

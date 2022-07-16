@@ -24,6 +24,7 @@ import Share from '../components/Share';
 import Comment from './Comment';
 import Like from './Like';
 import edit from '../img/edit.png';
+import Loader from '../components/Loader';
 
 export default function BlogArticle() {
   const [currentUser, setCurrentUser] = useState();
@@ -214,7 +215,7 @@ export default function BlogArticle() {
             </>
           ))}
         </ul>
-      ) : <div>Now Loading...</div>}
+      ) : <Loader />}
       <div />
     </>
   );

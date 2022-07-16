@@ -15,6 +15,7 @@ export const DiaryOutContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
+  height:100%;
 `;
 
 export const DiaryAllContainer = styled.div`
@@ -23,6 +24,7 @@ export const DiaryAllContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 100%;
 `;
 
 export const DiarySmallContainer = styled.div`

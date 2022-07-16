@@ -198,6 +198,7 @@ export default function CreateNewStory() {
                   onClick={() => {
                     setUrl();
                     navigate(`/${userID}`);
+                    setImageUrl();
                   }}
                   style={{ fontSize: '25px', position: 'relative', top: '-60px' }}
                 >

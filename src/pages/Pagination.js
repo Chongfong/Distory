@@ -50,7 +50,8 @@ export default function Pagination({ userID, currentUserData }) {
       totalPages.current = (Math.ceil(items.length / 3));
     };
     fetchData();
-  }, []);
+  }, [userID]);
+
   return (
     <>
       { page !== 0

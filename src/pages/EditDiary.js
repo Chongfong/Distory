@@ -29,6 +29,8 @@ import CreateNewDiaryTitle from '../components/CreateDiaryTitle';
 
 import { removeClickButtonsTag } from '../components/ShareFunctions';
 
+import Loader from '../components/Loader';
+
 export default function EditDiary({ isOpen, setIsOpen }) {
   const [titleValue, setTitleValue] = useState();
   const [diaryContentValue, setDiaryContentValue] = useState();
@@ -392,7 +394,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
           </CreateDiaryInsideBody>
         </CreateDiaryBody>
       ) : (
-        <div>Now Loading...</div>
+        <Loader />
       ) }
       <div />
     </>

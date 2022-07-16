@@ -27,6 +27,8 @@ import { changeHTMLToPureText } from '../components/ShareFunctions';
 
 import LoadStories from '../components/LoadStories';
 
+import Loader from '../components/Loader';
+
 export const previewImagesArray = [
   'https://file.coffee/u/pk6HROQiXzoh8qxIxho0F.jpg',
   'https://file.coffee/u/k9JaFxf5SM95WDSLyEZ8-.jpg',
@@ -61,6 +63,7 @@ export default function Home() {
   }, []);
 
   const [allDiariesAuthorImg, setAllDiariesAuthorImg] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
@@ -97,6 +100,7 @@ export default function Home() {
           }
         });
       }); setAllDiariesAuthorImg(diaryAuthorsArray);
+      setIsLoading(false);
     }
   };
 
@@ -105,15 +109,16 @@ export default function Home() {
   }, [allDiaries]);
 
   return (
-    <HomeBody>
-
-      <DiaryOutContainer>
-        <DiaryAllContainer
-          className="diary"
-        >
-          {allDiaries.map((eachDiary, index) => (
-            <>
-              {
+    <>
+      {isLoading ? (<Loader />) : (
+        <HomeBody>
+          <DiaryOutContainer>
+            <DiaryAllContainer
+              className="diary"
+            >
+              {allDiaries.map((eachDiary, index) => (
+                <>
+                  {
               index === 0
                 ? (
                   <>
@@ -227,12 +232,15 @@ export default function Home() {
                   </DiarySmallContainer>
                 )
             }
-              {}
-            </>
-          ))}
+                  {}
+                </>
+              ))}
 
-        </DiaryAllContainer>
-      </DiaryOutContainer>
-    </HomeBody>
+            </DiaryAllContainer>
+          </DiaryOutContainer>
+        </HomeBody>
+      )}
+      {}
+    </>
   );
 }

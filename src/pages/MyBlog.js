@@ -26,6 +26,8 @@ import {
 import BlogArticle from './BlogArticle';
 import Pagination from './Pagination';
 
+import Loader from '../components/Loader';
+
 export default function MyBlog() {
   const [currentUser, setCurrentUser] = useState();
   const [currentUserData, setCurrentUserData] = useState();
@@ -183,6 +185,7 @@ export default function MyBlog() {
       fetchCurrentBlogSettings(currentVisitUserID).then((querySnapshot) => {
         nowBlogSettings = querySnapshot.data();
         setCurrentUserData(querySnapshot.data());
+        navigate(`/${currentUserID}`);
       });
       return (nowBlogSettings);
     };
@@ -345,11 +348,9 @@ export default function MyBlog() {
                             tabIndex={0}
                             onClick={() => {
                               loadCurrentBlogSettings(eachVisitor.visitorID);
-                              navigate(`/${eachVisitor.visitorID}`);
                             }}
                             onKeyUp={() => {
                               loadCurrentBlogSettings(eachVisitor.visitorID);
-                              navigate(`/${eachVisitor.visitorID}`, { replace: true });
                             }}
                           >
                             <MyBlogComeHomeUsers
@@ -408,7 +409,7 @@ export default function MyBlog() {
             </MyBlogFLexRight>
           </MyBlogFLexContainer>
         </CreateDiaryInsideBody>
-      ) : <div>Now Loading...</div>}
+      ) : <Loader />}
       <div />
     </>
   );

@@ -24,6 +24,8 @@ import {
 } from './EditBlog.style';
 import { CircleButton } from './ImageEditor.style';
 
+import Loader from '../components/Loader';
+
 export default function EditBlog({
   currentUser, currentUserData, setCurrentUserData,
 }) {
@@ -390,7 +392,7 @@ export default function EditBlog({
 
         </CreateDiaryInsideBody>
       ) : (
-        <div>Now Loading...</div>
+        <Loader />
       )}
       <div />
     </>
