@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Body = styled.div`
   width: 98vw;
   position: relative;
-  bottom: -250px;
+  height: auto;
   padding-bottom: 30px;
 `;
 

@@ -6,10 +6,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { getDoc, doc } from 'firebase/firestore';
 import { MdCreate } from 'react-icons/md';
-import { GiQuill } from 'react-icons/gi';
 import { FaHome } from 'react-icons/fa';
 import { GoGear } from 'react-icons/go';
 import { TbLogout } from 'react-icons/tb';
+import { BiPhotoAlbum } from 'react-icons/bi';
 
 import {
   HeaderContainer, HeaderTitle, HeaderSearchBar, HeaderLogin, HeaderSignup,
@@ -147,7 +147,7 @@ export default function Header({
                 onMouseLeave={() => setHoverCreateStory(false)}
               >
                 <HeaderLoginOptions style={{ width: '25px' }}>
-                  <GiQuill />
+                  <BiPhotoAlbum />
                 </HeaderLoginOptions>
                 <HeaderOptionsExplain isHovered={hoverCreateStory}>發布動態</HeaderOptionsExplain>
               </Link>

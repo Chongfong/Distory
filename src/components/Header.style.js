@@ -181,5 +181,6 @@ export const HeaderOptionsExplain = styled.div`
   padding: 0px 3px;
   right: 0px;
   bottom: -10px;
+  color: black;
   display: ${({ isHovered }) => (isHovered ? 'block' : 'none')};
 `;
