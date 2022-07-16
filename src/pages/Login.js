@@ -13,8 +13,8 @@ import {
 import { ArrowButton } from './ImageEditor.style';
 
 export default function LogIn({ setCurrentUser }) {
-  const [logInEmail, setLogInEmail] = useState();
-  const [logInPassword, setlogInPassword] = useState();
+  const [logInEmail, setLogInEmail] = useState('test@gmail.com');
+  const [logInPassword, setlogInPassword] = useState('123456');
   const changeUser = () => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -60,7 +60,7 @@ export default function LogIn({ setCurrentUser }) {
             onKeyUp={() => { navigate('/signup'); }}
             role="button"
             tabIndex={0}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', color: 'rgb(181, 124, 74)' }}
           >
             Signup
           </SignUpInfoDetail>
@@ -78,7 +78,7 @@ export default function LogIn({ setCurrentUser }) {
               ➔
 
             </ArrowButton>
-            <div>Login</div>
+            <div style={{ color: 'rgb(181, 124, 74)' }}>Login</div>
           </div>
         </SignUpFlowIconContainer>
 

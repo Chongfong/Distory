@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CircleButton } from '../pages/ImageEditor.style';
+import { EditButton } from '../pages/ImageEditor.style';
 
 import { EditDiaryShowImageDiv } from '../pages/CreateNewDiaries.style';
 
@@ -42,7 +42,7 @@ export default function SetArticleShowImg(
             }}
           />
           {articleShowImgFile ? (
-            <CircleButton
+            <EditButton
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -55,9 +55,9 @@ export default function SetArticleShowImg(
             >
               ×
 
-            </CircleButton>
+            </EditButton>
           ) : (
-            <CircleButton
+            <EditButton
               style={{
                 fontSize: '25px',
                 position: 'absolute',
@@ -68,7 +68,7 @@ export default function SetArticleShowImg(
             >
               ✎
 
-            </CircleButton>
+            </EditButton>
           )}
           <img
             alt="background"

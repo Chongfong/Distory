@@ -27,6 +27,10 @@ export const BlogBackgroundImage = styled.img`
   height: 70%;
   max-height: 400px;
   border-radius: 25px;
+  cursor: pointer;
+    :hover {
+    opacity: 0.5;
+    }
 `;
 
 export const BlogUserImageDiv = styled.div`

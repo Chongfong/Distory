@@ -98,7 +98,6 @@ export const MyBlogVisitorDiv = styled.div`
 `;
 
 export const MyBlogProfileSubTitle = styled.p`
-  padding: 0px 50px 0px;
   font-size: 1.3rem;
   letter-spacing: 2px;
   color: #d3b092;

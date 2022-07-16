@@ -22,7 +22,7 @@ import {
   EditBlogTitle, EditBlogLayout, EditBlogFlex, BlogBackgroundImage, BlogBackgroundImageLabel,
   BlogUserImageDiv,
 } from './EditBlog.style';
-import { CircleButton } from './ImageEditor.style';
+import { EditButton, CircleButton } from './ImageEditor.style';
 
 import Loader from '../components/Loader';
 
@@ -293,7 +293,7 @@ export default function EditBlog({
 
               </CircleButton>
             ) : (
-              <CircleButton
+              <EditButton
                 style={{
                   fontSize: '25px',
                   position: 'absolute',
@@ -304,7 +304,7 @@ export default function EditBlog({
               >
                 ✎
 
-              </CircleButton>
+              </EditButton>
             )}
             <BlogBackgroundImage
               alt="background"

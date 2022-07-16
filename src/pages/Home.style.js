@@ -215,7 +215,7 @@ export const HomeInviteButton = styled.button`
   border-radius: 15px;
   background-color: white;
   border: 2px solid #d3b092;
-  line-height:40px;
+  line-height: 1rem;
   font-size: 1rem;
   letter-spacing: 2px;
   color: #d3b092;
