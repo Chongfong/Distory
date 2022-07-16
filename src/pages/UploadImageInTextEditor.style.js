@@ -1,21 +1,28 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { RiImageAddLine } from 'react-icons/ri';
 import addImageIcon from '../img/add-image.png';
 
 export const CreateDiaryUploadImage = styled('div')`
   width: 50px;
   height: 50px; 
   position: fixed;
-  right: 20px;
-  bottom: 170px;
+  right: 80px;
+  bottom: 210px;
   border-radius: 50%;
-  border: #BDC0BA 2px solid;
+  border: #7f0019 2px solid;
   background-color: white;
   text-align: center;
   font-size: 25px;
   line-height: 50px;
   cursor: pointer;
+  color: #7f0019;
+  :hover, :active, :focus{
+    background-color: #7f0019;
+    color: white;
+  }
 `;
 
 export const CreateDiaryUploadImageIcon = styled.img`
@@ -99,7 +106,7 @@ export default function DropDownButton(
 
   return (
     <CreateDiaryUploadImage onClick={toggling} onKeyUp={toggling} role="button" tabIndex={0}>
-      <CreateDiaryUploadImageIcon src={addImageIcon} alt="addImageIcon" />
+      <RiImageAddLine />
     </CreateDiaryUploadImage>
   );
 }

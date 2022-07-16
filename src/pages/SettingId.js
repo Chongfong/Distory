@@ -20,7 +20,7 @@ import { CircleButton } from './ImageEditor.style';
 
 export default function SettingId() {
   const [settingId, setSettingId] = useState();
-  const [settingImageUrl] = useState('https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png');
+  const [settingImageUrl] = useState('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
 
   const navigate = useNavigate();
   const userCollection = collection(db, 'users');
@@ -32,7 +32,7 @@ export default function SettingId() {
       userImage: settingImageUrl,
       createAt: Timestamp.now().toDate(),
       userUID: uid,
-      blogImage: 'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/background%2Fbeach.png?alt=media&token=58223990-f103-4a62-92d9-67a7ed83ca8a',
+      blogImage: 'https://file.coffee/u/5hzGTlSZl34G_c1HMtTuI.png',
       blogTitle: `${settingId}的部落格`,
       blogIntro: `Hello I'm ${settingId}`,
       blogLayout: 'A',

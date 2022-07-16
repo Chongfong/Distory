@@ -74,15 +74,15 @@ export const SignUpFinishIcons = styled.button`
   height: 40px;
   border-radius: 15px;
   background-color: white;
-  border: 2px solid #b8b8b8;
+  border: 2px solid #d3b092;
   line-height:40px;
   font-size: 1rem;
   letter-spacing: 2px;
-  color: #b8b8b8;
+  color: #d3b092;
   cursor: pointer;
   margin: 10px;
   :hover, :active, :focus{
-    background-color: #b8b8b8;
+    background-color: #d3b092;
     color: white; 
   }
 `;

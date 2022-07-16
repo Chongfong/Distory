@@ -8,6 +8,8 @@ import {
   SignUpName,
 } from './SignUp.style';
 
+import Loader from '../components/Loader';
+
 export default function Welcome() {
   const [currentUser, setCurrentUser] = useState();
   onAuthStateChanged(auth, (user) => { setCurrentUser(user); });
@@ -21,11 +23,11 @@ export default function Welcome() {
             <SignUpSubTitle>完成</SignUpSubTitle>
             <img
               style={{ width: '100px', height: '100px' }}
-              src="https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png"
+              src="https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png"
               alt="default_image"
             />
             <SignUpName>{currentUser.displayName}</SignUpName>
-            <SignUpInfoDetail style={{ textAlign: 'center' }}>歡迎來到 Distory！</SignUpInfoDetail>
+            <SignUpInfoDetail style={{ textAlign: 'center', color: '#d3b092' }}>歡迎來到 Distory！</SignUpInfoDetail>
             <Link to="/">
               <SignUpFinishIcons type="button">開始使用</SignUpFinishIcons>
 
@@ -38,7 +40,7 @@ export default function Welcome() {
         </SignUpBody>
       )
         : (
-          <div>Now Loading...</div>
+          <Loader />
         )}
       <div />
 

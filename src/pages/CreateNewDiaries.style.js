@@ -36,7 +36,7 @@ export const CreateDiaryPublish = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: #BDC0BA 2px solid;
+  border: #7f0019 2px solid;
   background-color: white;
   text-align: center;
   font-size: 25px;
@@ -45,17 +45,19 @@ export const CreateDiaryPublish = styled.div`
   right: 80px;
   bottom: 70px;
   cursor: pointer;
+  color: #7f0019;
   :hover, :active, :focus{
-    background-color: #d3b092;
+    background-color: #7f0019;
     color: white;
   }
 `;
 
 export const CreateDiaryColored = styled(CreateDiaryPublish)`
-  background-color: #d3b092;
-  color: white;
+  background-color: white;
+  color: #7f0019;
   :hover, :active, :focus{
-    background-color: #b57c4a;
+    background-color: #7f0019;
+    color: white;
   }
 `;
 
