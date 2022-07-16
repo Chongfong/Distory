@@ -173,6 +173,24 @@ export const HeaderLoginOptions = styled.div`
   }
 `;
 
+export const HeaderLoginOptionsTopContainer = styled.div`
+  display: flex;
+  flex-wrap: no-wrap;
+  position: relative;
+  margin: 15px 20px 15px 0px;
+  
+  @media (max-width: 912px) {
+    display: none;
+  }
+`;
+
+export const HeaderLoginOptionsSpecial = styled(HeaderLoginOptions)`
+  display: none;
+  @media (max-width: 912px) {
+    display: block;
+  }
+`;
+
 export const HeaderOptionsExplain = styled.div`
   width: 50px;
   font-size: 12px;

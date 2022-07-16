@@ -9,7 +9,7 @@ import { db } from '../firestore/firestore';
 
 import {
   StoryOuterContainer, StoryContainer, StoryImgContainer, StoryAuthorContainer,
-  StoryAuthorImg, StoryAuthorName, StoryTimeAgo,
+  StoryAuthorImg, StoryAuthorName, StoryTimeAgo, StoryInnerContainer,
 } from './LoadStories.style';
 
 import ShowStoryDetail from './ShowStoryDetail';
@@ -109,12 +109,12 @@ export default function LoadStories() {
   const scrollable = useRef(null);
 
   const scrollRight = () => {
-    const scrollWidth = scrollable.current.offsetWidth + 50;
+    const scrollWidth = scrollable.current.offsetWidth + 20;
     scrollable.current.scrollBy({ left: scrollWidth, behavior: 'smooth' });
   };
 
   const scrollLeft = () => {
-    const scrollWidth = scrollable.current.offsetWidth + 50;
+    const scrollWidth = scrollable.current.offsetWidth + 20;
     scrollable.current.scrollBy({ left: -scrollWidth, behavior: 'smooth' });
   };
 
@@ -122,16 +122,8 @@ export default function LoadStories() {
     <>
       <MyBlogProfileSubTitle>▋&nbsp;探索Distory</MyBlogProfileSubTitle>
       <StoryOuterContainer style={{ overflow: 'hidden' }}>
-        <div
+        <StoryInnerContainer
           ref={scrollable}
-          style={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            overflow: 'hidden',
-            gap: '0px 20px',
-          }}
         >
           {storiesAvailable
             ? (
@@ -194,7 +186,7 @@ export default function LoadStories() {
                   ))}
               </>
             ) : (<p>目前未有動態</p>)}
-        </div>
+        </StoryInnerContainer>
         {storiesAvailable ? (
           (chosedStoryIndex < (storiesAvailable.length - 5) ? (
             <ArrowButton

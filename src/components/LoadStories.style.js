@@ -9,8 +9,19 @@ export const StoryOuterContainer = styled.div`
   padding: 50px 50px 100px 50px;
   width: 100%;
   height: 450px;
-  gap: 0px 20px;
   position: relative;
+`;
+
+export const StoryInnerContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  gap: 0px 20px;
+  @media (max-width: 912px) {
+   gap: 0px 10px; 
+  }
 `;
 
 export const StoryContainer = styled.div`
@@ -23,7 +34,7 @@ export const StoryContainer = styled.div`
   position: relative;
 
   @media (max-width: 912px) {
-      width: 48%;
+    max-width: calc( (100% - 20px) / 3);
 }
 `;
 
@@ -172,5 +183,8 @@ export const StoryArrowButton = styled.div`
   :hover, :active, :focus{
     opacity: 1;
   }
+  @media (max-width: 912px) {
+    top: 20%;
+}
 
 `;

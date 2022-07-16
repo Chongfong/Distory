@@ -73,6 +73,9 @@ export const DiaryImageBox = styled.div`
   @media (max-width: 1482px) {
       outline: none;
 }
+@media (max-width: 912px) {
+    flex: 0 1 100%;
+}
 `;
 
 export const DiaryInfoBox = styled.div`
@@ -81,6 +84,13 @@ export const DiaryInfoBox = styled.div`
   flex: 0 1 50%;
   text-align: center;
   align-items: flex-start;
+`;
+
+export const DiaryIngoBoxFisrt = styled(DiaryInfoBox)`
+  @media (max-width: 912px) {
+    flex: 100%;
+    margin-top: 30px;
+}
 `;
 
 export const DiaryImageBoxNormal = styled.div`
@@ -138,6 +148,7 @@ export const DiaryTitleFirst = styled(DiaryTitle)`
   font-weight: bold;
   line-height: 2rem;
   padding: 5px 0 !important;
+  
 `;
 
 export const DiaryContent = styled.p`
@@ -172,6 +183,9 @@ export const HomeImageFirst = styled.img`
       outline: 3px solid white;
       outline-offset: -10px;
       vertical-align: middle;
+}
+@media (max-width: 912px) {
+  outline: none;
 }
 `;
 
@@ -243,9 +257,10 @@ export const HomeWelcomeWords = styled.p`
   font-weight: bold;
   letter-spacing: 3px;
   top: 50px;
-  line-height: 200px;
   font-family: 'Beth Ellen';
   color:#72677E;
+  line-height: 100px;
+  position: relative;
 `;
 
 export const SearchTitle = styled.p`

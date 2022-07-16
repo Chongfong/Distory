@@ -157,7 +157,7 @@ export default function CreateStoryPhotoEditor({
                   <ImageEditorSubmitButtonsForm>
                     <CircleButton
                       type="button"
-                      style={{ lineHeight: '20px' }}
+                      style={{ lineHeight: '20px', position: 'relative', top: '-4px' }}
                       onClick={() => { handleUploadStory(); }}
                     >
                       ＋
@@ -166,7 +166,7 @@ export default function CreateStoryPhotoEditor({
                     <CircleButton
                       type="button"
                       style={{
-                        fontSize: '25px',
+                        fontSize: '25px', position: 'relative',
                       }}
                       onClick={() => {
                         setOpenImageEditor(false);

@@ -15,7 +15,8 @@ import {
   HeaderContainer, HeaderTitle, HeaderSearchBar, HeaderLogin, HeaderSignup,
   HeaderMember, HeaderTitleContainer,
   HeaderBackgroundImage, HeaderSearchIconContainer, HeaderUserContainer,
-  HeaderLoginOptions, HeaderOptionsExplain,
+  HeaderLoginOptions, HeaderOptionsExplain, HeaderLoginOptionsSpecial,
+  HeaderLoginOptionsTopContainer,
 } from './Header.style';
 
 import { db, auth } from '../firestore/firestore';
@@ -37,11 +38,9 @@ export default function Header({
   const navigate = useNavigate();
 
   const changeUser = () => {
-    if (auth.currentUser) {
-      onAuthStateChanged(auth, (user) => {
-        setCurrentUser(user);
-      });
-    }
+    onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
   };
 
   const handleKeyDown = (event) => {
@@ -130,10 +129,7 @@ export default function Header({
             </div>
             {currentUser ? (
               <>
-                <div style={{
-                  display: 'flex', flexWrap: 'no-wrap', position: 'relative', margin: '15px 20px 15px 0px',
-                }}
-                >
+                <HeaderLoginOptionsTopContainer>
                   <Link
                     to={`${currentUser.uid}/create`}
                     style={{ position: 'relative' }}
@@ -168,11 +164,33 @@ export default function Header({
                     <HeaderOptionsExplain isHovered={hoverBackBlog}>部落格</HeaderOptionsExplain>
                   </Link>
 
-                </div>
+                </HeaderLoginOptionsTopContainer>
                 <HeaderMember type="button" onClick={() => { setToggleLoginUser((prev) => !prev); }}>
                   <img src={headerLoginUserData?.userImage} alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
                   {toggleLoginUser ? (
                     <HeaderUserContainer>
+                      <Link to={`${currentUser.uid}/create`}>
+                        <HeaderLoginOptionsSpecial>
+                          <MdCreate />
+                          &nbsp;
+                          發布文章
+                        </HeaderLoginOptionsSpecial>
+
+                      </Link>
+                      <Link to={`${currentUser.uid}/newstory`}>
+                        <HeaderLoginOptionsSpecial>
+                          <BiPhotoAlbum />
+                          &nbsp;
+                          發布動態
+                        </HeaderLoginOptionsSpecial>
+                      </Link>
+                      <Link to={`${currentUser.uid}`}>
+                        <HeaderLoginOptionsSpecial>
+                          <FaHome />
+                          &nbsp;
+                          我的部落格
+                        </HeaderLoginOptionsSpecial>
+                      </Link>
                       <Link to={`${currentUser.uid}/blogedit`}>
                         <HeaderLoginOptions>
                           <GoGear />
