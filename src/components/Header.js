@@ -25,7 +25,7 @@ import logo from '../img/Distory Logo.png';
 import search from '../img/search.png';
 
 export default function Header({
-  currentUser, setCurrentUser, currentUserData,
+  currentUser, setCurrentUser, currentUserData, isSignUp,
 }) {
   const [searchkey, setSearchKey] = useState('');
   const [headerLoginUserData, setHeaderLoginUserData] = useState();
@@ -37,9 +37,11 @@ export default function Header({
   const navigate = useNavigate();
 
   const changeUser = () => {
-    onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
+    if (auth.currentUser) {
+      onAuthStateChanged(auth, (user) => {
+        setCurrentUser(user);
+      });
+    }
   };
 
   const handleKeyDown = (event) => {
@@ -79,140 +81,145 @@ export default function Header({
     signOut(auth)
       .then(() => {
         alert('You are logged out');
+        navigate('/');
       });
   };
 
   return (
     <>
       <HeaderBackgroundImage src={sky} alt="sky" />
-      <Link to="/">
-        <HeaderTitle>
-          <HeaderTitleContainer src={logo} alt="title" />
-        </HeaderTitle>
-      </Link>
-      <HeaderContainer>
-        <div style={{ position: 'relative', margin: '20px 20px' }}>
-          <HeaderSearchBar
-            type="text"
-            value={searchkey}
-            placeholder="Search"
-            onChange={(e) => setSearchKey(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          { searchkey !== '' ? (
-            <HeaderSearchIconContainer
-              role="button"
-              tabIndex={0}
-              onClick={() => navigate(`/search/${searchkey}`)}
-              onKeyUp={() => navigate(`/search/${searchkey}`)}
-            >
-              <img
-                src={search}
-                alt="search"
-                style={{ width: '25px' }}
+      {isSignUp ? ('') : (
+        <>
+          <Link to="/">
+            <HeaderTitle>
+              <HeaderTitleContainer src={logo} alt="title" />
+            </HeaderTitle>
+          </Link>
+          <HeaderContainer>
+            <div style={{ position: 'relative', margin: '20px 20px' }}>
+              <HeaderSearchBar
+                type="text"
+                value={searchkey}
+                placeholder="Search"
+                onChange={(e) => setSearchKey(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
-            </HeaderSearchIconContainer>
-          ) : (
-            <HeaderSearchIconContainer>
-              <img
-                src={search}
-                alt="search"
-                style={{ width: '25px' }}
-              />
-            </HeaderSearchIconContainer>
-          )}
-
-        </div>
-        {currentUser ? (
-          <>
-            <div style={{
-              display: 'flex', flexWrap: 'no-wrap', position: 'relative', margin: '15px 20px 15px 0px',
-            }}
-            >
-              <Link
-                to={`${currentUser.uid}/create`}
-                style={{ position: 'relative' }}
-                onMouseOver={() => setHoverCreateNew(true)}
-                onMouseLeave={() => setHoverCreateNew(false)}
-              >
-                <HeaderLoginOptions style={{ width: '25px' }}>
-                  <MdCreate />
-                </HeaderLoginOptions>
-                <HeaderOptionsExplain isHovered={hoverCreateNew}>發布文章</HeaderOptionsExplain>
-              </Link>
-              <Link
-                to={`${currentUser.uid}/newstory`}
-                style={{ position: 'relative' }}
-                onMouseOver={() => setHoverCreateStory(true)}
-                onMouseLeave={() => setHoverCreateStory(false)}
-              >
-                <HeaderLoginOptions style={{ width: '25px' }}>
-                  <BiPhotoAlbum />
-                </HeaderLoginOptions>
-                <HeaderOptionsExplain isHovered={hoverCreateStory}>發布動態</HeaderOptionsExplain>
-              </Link>
-              <Link
-                to={`${currentUser.uid}`}
-                style={{ position: 'relative' }}
-                onMouseOver={() => setHoverBackBlog(true)}
-                onMouseLeave={() => setHoverBackBlog(false)}
-              >
-                <HeaderLoginOptions style={{ width: '25px' }}>
-                  <FaHome />
-                </HeaderLoginOptions>
-                <HeaderOptionsExplain isHovered={hoverBackBlog}>部落格</HeaderOptionsExplain>
-              </Link>
+              {searchkey !== '' ? (
+                <HeaderSearchIconContainer
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => navigate(`/search/${searchkey}`)}
+                  onKeyUp={() => navigate(`/search/${searchkey}`)}
+                >
+                  <img
+                    src={search}
+                    alt="search"
+                    style={{ width: '25px' }}
+                  />
+                </HeaderSearchIconContainer>
+              ) : (
+                <HeaderSearchIconContainer>
+                  <img
+                    src={search}
+                    alt="search"
+                    style={{ width: '25px' }}
+                  />
+                </HeaderSearchIconContainer>
+              )}
 
             </div>
-            <HeaderMember type="button" onClick={() => { setToggleLoginUser((prev) => !prev); }}>
-              <img src={headerLoginUserData?.userImage} alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
-              {toggleLoginUser ? (
-                <HeaderUserContainer>
-                  <Link to={`${currentUser.uid}/blogedit`}>
-                    <HeaderLoginOptions>
-                      <GoGear />
-                      &nbsp;
-                      編輯設定
-                    </HeaderLoginOptions>
-                  </Link>
-                  <HeaderLoginOptions
-                    style={{
-                      width: 'auto',
-                      textAlign: 'center',
-                      paddingLeft: '0px',
-                      marginTop: '10px',
-                      backgroundColor: '#e2e2e2',
-                      color: '#464646',
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    onClick={handleLogOut}
-                    onKeyUp={handleLogOut}
+            {currentUser ? (
+              <>
+                <div style={{
+                  display: 'flex', flexWrap: 'no-wrap', position: 'relative', margin: '15px 20px 15px 0px',
+                }}
+                >
+                  <Link
+                    to={`${currentUser.uid}/create`}
+                    style={{ position: 'relative' }}
+                    onMouseOver={() => setHoverCreateNew(true)}
+                    onMouseLeave={() => setHoverCreateNew(false)}
                   >
-                    <TbLogout />
-                    &nbsp;
-                    登出
+                    <HeaderLoginOptions style={{ width: '25px' }}>
+                      <MdCreate />
+                    </HeaderLoginOptions>
+                    <HeaderOptionsExplain isHovered={hoverCreateNew}>發布文章</HeaderOptionsExplain>
+                  </Link>
+                  <Link
+                    to={`${currentUser.uid}/newstory`}
+                    style={{ position: 'relative' }}
+                    onMouseOver={() => setHoverCreateStory(true)}
+                    onMouseLeave={() => setHoverCreateStory(false)}
+                  >
+                    <HeaderLoginOptions style={{ width: '25px' }}>
+                      <BiPhotoAlbum />
+                    </HeaderLoginOptions>
+                    <HeaderOptionsExplain isHovered={hoverCreateStory}>發布動態</HeaderOptionsExplain>
+                  </Link>
+                  <Link
+                    to={`${currentUser.uid}`}
+                    style={{ position: 'relative' }}
+                    onMouseOver={() => setHoverBackBlog(true)}
+                    onMouseLeave={() => setHoverBackBlog(false)}
+                  >
+                    <HeaderLoginOptions style={{ width: '25px' }}>
+                      <FaHome />
+                    </HeaderLoginOptions>
+                    <HeaderOptionsExplain isHovered={hoverBackBlog}>部落格</HeaderOptionsExplain>
+                  </Link>
 
-                  </HeaderLoginOptions>
-                </HeaderUserContainer>
-              ) : ('')}
+                </div>
+                <HeaderMember type="button" onClick={() => { setToggleLoginUser((prev) => !prev); }}>
+                  <img src={headerLoginUserData?.userImage} alt="loginUser" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
+                  {toggleLoginUser ? (
+                    <HeaderUserContainer>
+                      <Link to={`${currentUser.uid}/blogedit`}>
+                        <HeaderLoginOptions>
+                          <GoGear />
+                          &nbsp;
+                          編輯設定
+                        </HeaderLoginOptions>
+                      </Link>
+                      <HeaderLoginOptions
+                        style={{
+                          width: 'auto',
+                          textAlign: 'center',
+                          paddingLeft: '0px',
+                          marginTop: '10px',
+                          backgroundColor: '#e2e2e2',
+                          color: '#464646',
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        onClick={handleLogOut}
+                        onKeyUp={handleLogOut}
+                      >
+                        <TbLogout />
+                        &nbsp;
+                        登出
 
-            </HeaderMember>
+                      </HeaderLoginOptions>
+                    </HeaderUserContainer>
+                  ) : ('')}
 
-          </>
-        ) : (
-          <>
-            <Link to="/signup">
-              <HeaderSignup>Signup</HeaderSignup>
-            </Link>
-            <Link to="/login">
-              <HeaderLogin>Login</HeaderLogin>
-            </Link>
-          </>
-        )}
+                </HeaderMember>
 
-      </HeaderContainer>
+              </>
+            ) : (
+              <>
+                <Link to="/signup">
+                  <HeaderSignup>Signup</HeaderSignup>
+                </Link>
+                <Link to="/login">
+                  <HeaderLogin>Login</HeaderLogin>
+                </Link>
+              </>
+            )}
 
+          </HeaderContainer>
+
+        </>
+      )}
     </>
 
   );
@@ -222,11 +229,12 @@ Header.propTypes = {
   currentUser: PropTypes.string,
   setCurrentUser: PropTypes.func,
   currentUserData: PropTypes.string,
-
+  isSignUp: PropTypes.string,
 };
 
 Header.defaultProps = {
   currentUser: '',
   setCurrentUser: () => {},
   currentUserData: '',
+  isSignUp: '',
 };

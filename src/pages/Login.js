@@ -10,7 +10,7 @@ import {
   SignUpInfoTitle, SignUpInfoDetail, SignUpInput, SignUpFlowIconContainer,
 } from './SignUp.style';
 
-import { CircleButton } from './ImageEditor.style';
+import { ArrowButton } from './ImageEditor.style';
 
 export default function LogIn({ setCurrentUser }) {
   const [logInEmail, setLogInEmail] = useState();
@@ -65,7 +65,7 @@ export default function LogIn({ setCurrentUser }) {
             Signup
           </SignUpInfoDetail>
           <div>
-            <CircleButton
+            <ArrowButton
               onClick={() => {
                 handleLogIn(logInEmail, logInPassword);
               }}
@@ -77,7 +77,7 @@ export default function LogIn({ setCurrentUser }) {
             >
               ➔
 
-            </CircleButton>
+            </ArrowButton>
             <div>Login</div>
           </div>
         </SignUpFlowIconContainer>

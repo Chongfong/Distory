@@ -57,12 +57,16 @@ export const HeaderTitleWords = styled.p`
 `;
 
 export const HeaderSearchBar = styled.input`
-  border: 2px solid #ccc;
+  border: 2px solid #d3b092;
   border-radius:25px;
   background-color:rgba(255,255,255,0.8) ;
   width: 150px;
   padding: 0px 40px 0px 10px;
   height: 30px;
+  :active, :focus{
+    border: 2px solid rgb(181, 124, 74);
+    outline: none;
+  }
 `;
 
 export const HeaderSearchIconContainer = styled.div`
@@ -88,40 +92,40 @@ export const HeaderUserContainer = styled.div`
 
 export const HeaderLogin = styled.div`
   width: 100px;
-  height:40px;
-  border-radius: 20px;
+  height:30px;
+  border-radius: 15px;
   background-color: white;
-  border: 2px solid #b8b8b8;
-  line-height:40px;
+  border: 2px solid #d3b092;
+  line-height:30px;
   font-size: 1rem;
   letter-spacing: 2px;
-  color: #b8b8b8;
+  color: #d3b092;
   cursor: pointer;
-  margin: 10px;
+  margin: 20px 10px;
   text-align: center;
   outline: none;
   :hover, :active, :focus{
-    background-color: #b8b8b8;
+    background-color: #d3b092;
     color: white; 
   }
 `;
 
 export const HeaderSignup = styled.div`
   width: 100px;
-  height:40px;
-  border-radius: 20px;
+  height:30px;
+  border-radius: 15px;
   background-color: white;
-  border: 2px solid #b8b8b8;
-  line-height:40px;
+  border: 2px solid #d3b092;
+  line-height:30px;
   font-size: 1rem;
   letter-spacing: 2px;
-  color: #b8b8b8;
+  color: #d3b092;
   cursor: pointer;
-  margin: 10px;
+  margin: 20px 10px;
   text-align: center;
   outline: none;
   :hover, :active, :focus{
-    background-color: #b8b8b8;
+    background-color: #d3b092;
     color: white; 
   }
 

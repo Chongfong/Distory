@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { updateProfile, onAuthStateChanged } from 'firebase/auth';
 import {
   collection,
@@ -16,10 +18,9 @@ import {
   SignUpInfoTitle, SignUpInput, SignUpInfoDetail, SignUpFlowIconContainer,
 } from './SignUp.style';
 
-import { CircleButton } from './ImageEditor.style';
+import { ArrowButton } from './ImageEditor.style';
 
-export default function SettingId() {
-  const [settingId, setSettingId] = useState();
+export default function SettingId({ settingId, setSettingId }) {
   const [settingImageUrl] = useState('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
 
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ export default function SettingId() {
         <SignUpInfoDetail>此ID無法更改　將顯示在部落格中</SignUpInfoDetail>
         <SignUpFlowIconContainer style={{ justifyContent: 'flex-end' }}>
           <div>
-            <CircleButton
+            <ArrowButton
               onClick={() => {
                 checkDuplicateIdAndSaveDB();
               }}
@@ -101,8 +102,8 @@ export default function SettingId() {
             >
               ➔
 
-            </CircleButton>
-            <div>完成</div>
+            </ArrowButton>
+            <div style={{ color: '#d3b092' }}>完成</div>
           </div>
         </SignUpFlowIconContainer>
 
@@ -110,3 +111,13 @@ export default function SettingId() {
     </SignUpBody>
   );
 }
+
+SettingId.propTypes = {
+  settingId: PropTypes.string,
+  setSettingId: PropTypes.func,
+};
+
+SettingId.defaultProps = {
+  settingId: '',
+  setSettingId: () => {},
+};
