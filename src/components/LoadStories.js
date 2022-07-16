@@ -18,7 +18,7 @@ import { MyBlogProfileSubTitle } from '../pages/MyBlog.style';
 
 import { timeAgo } from './ShareFunctions';
 
-import { CircleButton } from '../pages/ImageEditor.style';
+import { ArrowButton } from '../pages/ImageEditor.style';
 
 export default function LoadStories() {
   const [storiesAvailable, setStoriesAvailable] = useState();
@@ -193,13 +193,13 @@ export default function LoadStories() {
                     </StoryContainer>
                   ))}
               </>
-            ) : (<p>No Story</p>)}
+            ) : (<p>目前未有動態</p>)}
         </div>
         {storiesAvailable ? (
           (chosedStoryIndex < (storiesAvailable.length - 5) ? (
-            <CircleButton
+            <ArrowButton
               style={{
-                position: 'absolute', top: '35%', right: '0px', lineHeight: '0px',
+                position: 'absolute', top: '40%', right: '0px', lineHeight: '0px',
               }}
               onClick={() => {
                 setChosedStoryIndex(chosedStoryIndex + 5);
@@ -207,12 +207,12 @@ export default function LoadStories() {
               }}
             >
               →
-            </CircleButton>
+            </ArrowButton>
           ) : (''))) : ('')}
         {chosedStoryIndex >= 5 ? (
-          <CircleButton
+          <ArrowButton
             style={{
-              position: 'absolute', top: '35%', left: '0px', lineHeight: '0px',
+              position: 'absolute', top: '40%', left: '0px', lineHeight: '0px',
             }}
             onClick={() => {
               setChosedStoryIndex(chosedStoryIndex - 5);
@@ -220,7 +220,7 @@ export default function LoadStories() {
             }}
           >
             ←
-          </CircleButton>
+          </ArrowButton>
         ) : ('')}
       </StoryOuterContainer>
 

@@ -88,18 +88,17 @@ export default function CreateNewStory() {
             <UploadImageContainer style={{ height: '84%' }}>
               {uploadFromFile === 'file'
                 ? (
-                  <form>
+                  <form style={{ height: '100%' }}>
                     <label
                       htmlFor="upload-image"
                       style={{
                         width: '100%',
-                        height: '100%',
+                        height: '90%',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: '20px',
                         cursor: 'pointer',
-                        padding: '20px',
                       }}
                     >
                       {imageFileUrl ? (

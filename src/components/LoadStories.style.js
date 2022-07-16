@@ -18,7 +18,7 @@ export const StoryContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: 5px 0px;
-  max-width: 20%;
+  max-width: calc( (100% - 80px) / 5);
   height: auto;
   position: relative;
 

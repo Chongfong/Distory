@@ -40,7 +40,45 @@ export const CircleButton = styled.button`
   text-align: center;
   font-size: 20px;
   line-height: 40px;
-  background-color: white;
-  border: solid 1px #ccc;
   cursor: pointer;
+  border: #7f0019 2px solid;
+  background-color: white;
+  position: fixed;
+  color: #7f0019;
+  :hover, :active, :focus{
+    background-color: #7f0019;
+    color: white;
+  }
+`;
+
+export const ArrowButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 20px;
+  border: rgb(211, 176, 146) 2px solid;
+  background-color: white;
+  color: rgb(211, 176, 146);
+  :hover{
+    background-color: rgb(211, 176, 146);
+    color: white;
+  }
+`;
+
+export const EditButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  border: #ccc 1px solid;
+  background-color: white;
+  position: fixed;
+  color: #ccc;
 `;
