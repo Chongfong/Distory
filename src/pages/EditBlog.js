@@ -370,7 +370,6 @@ export default function EditBlog({
           <br />
           {blogImageFile ? (
             <CreateDiaryPublish
-              style={{ zIndex: '1' }}
               onClick={() => {
                 handleSubmit(blogImageFile, currentUser.uid);
               }}
@@ -386,7 +385,6 @@ export default function EditBlog({
             </CreateDiaryPublish>
           ) : (
             <CreateDiaryPublish
-              style={{ zIndex: '1' }}
               onClick={() => {
                 saveBlogSettingsDB(currentUser.uid);
                 navigate(`/${currentUser.uid}`);

@@ -43,7 +43,7 @@ export default function SetArticleShowImg(
                 setArticleShowImgUrl(articleShowImg);
               }}
               style={{
-                fontSize: '25px', position: 'absolute', bottom: '10px', right: '20px',
+                fontSize: '25px', position: 'absolute', bottom: '10px', left: '0px',
               }}
             >
               ×

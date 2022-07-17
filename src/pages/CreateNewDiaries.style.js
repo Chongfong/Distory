@@ -31,6 +31,7 @@ export const CreateDiaryTitle = styled.input`
   border: #ccc 1px solid;
   border-radius: 10px;
   box-sizing: border-box;
+  background-color: rgba(255,255,255,0.5);
 `;
 
 export const CreateDiaryPublish = styled.div`
@@ -47,9 +48,18 @@ export const CreateDiaryPublish = styled.div`
   bottom: 70px;
   cursor: pointer;
   color: #7f0019;
-  :hover, :active, :focus{
+  :hover{
     background-color: #7f0019;
-    color: white;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'完成';
+      font-weight: normal;
+      position: absolute;
+      top: -2px;
+      left: 8px;
+      font-size:18px;
+    }
   }
   
   @media (max-width: 912px) {
@@ -59,14 +69,34 @@ export const CreateDiaryPublish = styled.div`
   line-height: 35px;
   right: 40px;
   bottom: 45px;
+  :hover{
+    ::after{
+      top: 0px;
+      left: 5px;
+      font-size: 12px;
+    }
+  }
 }
 
 `;
 
 export const CreateDiarySave = styled(CreateDiaryPublish)`
   bottom: 140px;
+  :hover{
+    ::after{
+      content:'儲存';
+      
+    }
+  }
   @media (max-width: 912px) {
   bottom: 100px;
+  :hover{
+    ::after{
+      top: 0px;
+      left: 5px;
+      font-size: 12px;
+    }
+  }
 }
 `;
 
@@ -103,6 +133,8 @@ export const CreateDiaryNavButton = styled.div`
   text-align: center;
   border-bottom: ${({ selected }) => (selected ? '4px solid #ccc' : '2px solid #ccc')};
   cursor: pointer;
+  background-color: ${({ selected }) => (selected ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0)')};
+  border-radius: 15px 15px 0px 0px;
   :hover, :focus, :active {
     border-bottom: 4px solid #ccc;
   }
@@ -133,7 +165,7 @@ export const EditDiaryShowImageDiv = styled.div`
     content:'更換';
     position:absolute;
     top: 40%;
-    left: 40%;
+    left: 20%;
     font-size: 1.5rem;
   }
 }
@@ -141,15 +173,7 @@ export const EditDiaryShowImageDiv = styled.div`
   flex: 70%;
   :hover {
     ::after{
-    left: 25%;
-  }
-  }}
-
-    @media (max-width: 912px) {
-  flex: 70%;
-  :hover {
-    ::after{
-    left: 25%;
+    left: 20%;
   }
   }}
 `;

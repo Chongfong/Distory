@@ -11,7 +11,9 @@ import {
 import { myTheme, ImageEditorSubmitButtonsForm } from '../components/imageEditorTheme';
 import '../css/textEditor.css';
 import '../css/imageEditor.css';
-import { PopUpBackDiv, PopUpContainerDiv, CircleButton } from './ImageEditor.style';
+import {
+  PopUpBackDiv, PopUpContainerDiv, CircleButton, CircleButtonCancel,
+} from './ImageEditor.style';
 
 import StickerRow from '../components/ImageEditorSticker';
 
@@ -166,7 +168,7 @@ export default function CreateStoryPhotoEditor({
                       ＋
 
                     </CircleButton>
-                    <CircleButton
+                    <CircleButtonCancel
                       type="button"
                       style={{
                         fontSize: '25px', position: 'relative',
@@ -178,7 +180,7 @@ export default function CreateStoryPhotoEditor({
                     >
                       ×
 
-                    </CircleButton>
+                    </CircleButtonCancel>
                   </ImageEditorSubmitButtonsForm>
 
                 </>

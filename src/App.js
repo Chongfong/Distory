@@ -97,9 +97,9 @@ function App() {
               />
 )}
           />
-          <Route path="/:userID/create" element={<CreateNewDiary isOpen={isOpen} setIsOpen={setIsOpen} />} />
-          <Route path="/:userID/newstory" element={<CreateNewStory />} />
-          <Route path="/:userID/edit/:diaryID" element={<EditDiary isOpen={isOpen} setIsOpen={setIsOpen} />} />
+          <Route path="/:userID/create" element={<CreateNewDiary currentUser={currentUser} isOpen={isOpen} setIsOpen={setIsOpen} />} />
+          <Route path="/:userID/newstory" element={<CreateNewStory currentUser={currentUser} />} />
+          <Route path="/:userID/edit/:diaryID" element={<EditDiary currentUser={currentUser} isOpen={isOpen} setIsOpen={setIsOpen} />} />
           <Route path="/search/:searchkey" element={<Search />} />
         </Routes>
         <Footer />

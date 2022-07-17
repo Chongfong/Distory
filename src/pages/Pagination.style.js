@@ -102,8 +102,10 @@ export const DiaryPage = styled.div`
   margin: 20px 5px 5px;
   cursor: pointer;
   :hover, :active, :focus{
-    border-bottom: 3px solid #d3b092;
-    color: #d3b092;
+    border: 2px solid #d3b092;
+    background-color: #d3b092;
+    color: white;
+    border-radius: 30%;
   }
 `;
 

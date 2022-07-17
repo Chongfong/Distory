@@ -44,7 +44,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
   const [url, setUrl] = useState();
 
   const [openImageEditor, setOpenImageEditor] = useState(false);
-  const [selectEditMode, setSelectEditMode] = useState();
+  const [selectEditMode, setSelectEditMode] = useState('new');
   const [isChoosing, setIsChoosing] = useState(false);
   const [articlePassword, setArticlePassword] = useState('');
   const [articlePasswordHint, setArticlePasswordHint] = useState('');

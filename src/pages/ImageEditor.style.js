@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const PopUpBackDiv = styled.div`
   position: fixed;
@@ -45,10 +45,27 @@ export const CircleButton = styled.button`
   background-color: white;
   position: fixed;
   color: #7f0019;
-  :hover, :active, :focus{
+  :hover{
     background-color: #7f0019;
-    color: white;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'完成';
+      position: absolute;
+      top: -2px;
+      left: 5px;
+      font-size: 12px;
+    }
   }
+
+`;
+
+export const CircleButtonCancel = styled(CircleButton)`
+  :hover{
+    ::after{
+      content:'取消';
+      }
+      }
 `;
 
 export const ArrowButton = styled.button`

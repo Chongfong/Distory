@@ -13,6 +13,7 @@ export default function SetArticlePassword(
       <div style={{ flex: '100%', display: 'flex', flexWrap: 'no-wrap' }}>
         <SetArticlePasswordTitle>設定密碼</SetArticlePasswordTitle>
         <CreateDiaryTitle
+          placeholder="選填"
           style={{ flex: '70%' }}
           type="password"
           value={articlePassword}
@@ -22,6 +23,7 @@ export default function SetArticlePassword(
       <div style={{ flex: '100%', display: 'flex', flexWrap: 'no-wrap' }}>
         <SetArticlePasswordTitle>密碼提示</SetArticlePasswordTitle>
         <CreateDiaryTitle
+          placeholder="選填"
           style={{ flex: '70%' }}
           type="input"
           value={articlePasswordHint}

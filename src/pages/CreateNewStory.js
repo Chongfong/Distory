@@ -1,7 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import React, { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PopUpBackDiv, PopUpImageContainerDiv, CircleButton } from './ImageEditor.style';
+import {
+  PopUpBackDiv, PopUpImageContainerDiv, CircleButton, CircleButtonCancel,
+} from './ImageEditor.style';
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage,
@@ -43,6 +45,9 @@ export default function CreateNewStory() {
     const base64 = await convertBase64(file);
     setImageUrl(base64);
     base64ImageUrl.current = base64;
+    setOpenImageEditor(true);
+    setImageFileUrl();
+    setImageFile();
   };
 
   return (
@@ -160,16 +165,13 @@ export default function CreateNewStory() {
                 <CircleButton
                   onClick={() => {
                     uploadImage(imageFile);
-                    setOpenImageEditor(true);
-                    setImageFileUrl();
-                    setImageFile();
                   }}
                   style={{ position: 'relative', top: '-60px' }}
                 >
                   ✓
 
                 </CircleButton>
-                <CircleButton
+                <CircleButtonCancel
                   onClick={() => {
                     setImageFileUrl();
                     setImageFile();
@@ -179,7 +181,7 @@ export default function CreateNewStory() {
                 >
                   ×
 
-                </CircleButton>
+                </CircleButtonCancel>
               </>
             ) : (
               <>
@@ -193,7 +195,7 @@ export default function CreateNewStory() {
                 >
                   ✓
                 </CircleButton>
-                <CircleButton
+                <CircleButtonCancel
                   onClick={() => {
                     setUrl();
                     navigate(`/${userID}`);
@@ -203,7 +205,7 @@ export default function CreateNewStory() {
                 >
                   ×
 
-                </CircleButton>
+                </CircleButtonCancel>
               </>
             )}
           </FlexBox>

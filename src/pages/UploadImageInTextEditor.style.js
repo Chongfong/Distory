@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { RiImageAddLine } from 'react-icons/ri';
-import addImageIcon from '../img/add-image.png';
 
 export const CreateDiaryUploadImage = styled('div')`
   width: 50px;
@@ -19,10 +17,19 @@ export const CreateDiaryUploadImage = styled('div')`
   line-height: 50px;
   cursor: pointer;
   color: #7f0019;
-  :hover, :active, :focus{
+  :hover{
     background-color: #7f0019;
-    color: white;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'加圖';
+      position: absolute;
+      top: -2px;
+      left: 8px;
+      font-size: 18px;
+    }
   }
+
   @media (max-width: 912px) {
   width: 35px;
   height: 35px;
@@ -30,7 +37,13 @@ export const CreateDiaryUploadImage = styled('div')`
   line-height: 35px;
   right: 40px;
   bottom: 155px;
-}
+  :hover{
+    ::after{
+      top: 0px;
+      left: 5px;
+      font-size: 12px;
+    }
+}}
 `;
 
 export const CreateDiaryUploadImageIcon = styled.img`

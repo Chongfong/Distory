@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Quill } from 'react-quill';
 import Resizer from 'react-image-file-resizer';
-import { PopUpBackDiv, PopUpImageContainerDiv, CircleButton } from '../pages/ImageEditor.style';
+import {
+  PopUpBackDiv, PopUpImageContainerDiv, CircleButton, CircleButtonCancel,
+} from '../pages/ImageEditor.style';
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage,
@@ -193,7 +195,7 @@ export default function UploadImageInTextEditor({
                   ✓
 
                 </CircleButton>
-                <CircleButton
+                <CircleButtonCancel
                   onClick={() => {
                     setImageFileUrl();
                     setImageFile();
@@ -203,7 +205,7 @@ export default function UploadImageInTextEditor({
                 >
                   ×
 
-                </CircleButton>
+                </CircleButtonCancel>
               </>
             ) : (
               <>
@@ -218,7 +220,7 @@ export default function UploadImageInTextEditor({
                 >
                   ✓
                 </CircleButton>
-                <CircleButton
+                <CircleButtonCancel
                   onClick={() => {
                     setIsOpen(false);
                     setUrl();
@@ -227,7 +229,7 @@ export default function UploadImageInTextEditor({
                 >
                   ×
 
-                </CircleButton>
+                </CircleButtonCancel>
               </>
             )}
           </FlexBox>
