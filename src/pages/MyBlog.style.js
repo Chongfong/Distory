@@ -1,5 +1,16 @@
 import styled from 'styled-components';
 
+export const MyBlogDiaryInsideBody = styled.div`
+  width: 70%;
+  height: 70%;
+  position: relative;
+  margin: 0 auto;
+  @media (max-width: 912px) {
+    width: calc( 100% - 100px);
+    padding: 0px 50px;
+  }
+`;
+
 export const MyBlogFLexContainer = styled.div`
   display: flex;
   flex-wrap: nowrap;
@@ -27,8 +38,8 @@ export const MyBlogFLexRight = styled.div`
   max-width: 70%;
   @media (max-width: 912px) {
     flex-basis: 100%;
-    max-width: 90%;
-    padding-bottom: 20px;
+    max-width: 100%;
+    padding: 0 0 20px 0;
 }
 `;
 
@@ -104,6 +115,9 @@ export const MyBlogProfileSubTitle = styled.p`
   text-align: left;
   width: 90%;
   margin: 0px auto !important;
+  @media (max-width: 912px) {
+    width: 100%;
+  }
 `;
 
 export const MyBlogProfileSubTitleMargin = styled(MyBlogProfileSubTitle)`

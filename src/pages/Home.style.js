@@ -267,3 +267,12 @@ export const SearchTitle = styled.p`
   font-size: 1.5rem;
   margin-bottom: 100px;
 `;
+
+export const HomeProfileSubTitle = styled.p`
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  color: #d3b092;
+  text-align: left;
+  width: 90%;
+  margin: 0px auto !important;
+`;

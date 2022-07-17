@@ -199,7 +199,7 @@ export default function BlogArticle() {
                   />
                   <br />
                   <CircleButton
-                    style={{ marginTop: '20px' }}
+                    style={{ marginTop: '20px', position: 'relative' }}
                     role="button"
                     tabIndex={0}
                     onClick={() => { checkArticlePassword(inputPassword, eachDiary.password); }}

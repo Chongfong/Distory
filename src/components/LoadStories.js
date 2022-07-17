@@ -12,9 +12,9 @@ import {
   StoryAuthorImg, StoryAuthorName, StoryTimeAgo, StoryInnerContainer,
 } from './LoadStories.style';
 
-import ShowStoryDetail from './ShowStoryDetail';
+import { HomeProfileSubTitle } from '../pages/Home.style';
 
-import { MyBlogProfileSubTitle } from '../pages/MyBlog.style';
+import ShowStoryDetail from './ShowStoryDetail';
 
 import { timeAgo } from './ShareFunctions';
 
@@ -120,7 +120,7 @@ export default function LoadStories() {
 
   return (
     <>
-      <MyBlogProfileSubTitle>▋&nbsp;探索Distory</MyBlogProfileSubTitle>
+      <HomeProfileSubTitle>▋&nbsp;探索Distory</HomeProfileSubTitle>
       <StoryOuterContainer style={{ overflow: 'hidden' }}>
         <StoryInnerContainer
           ref={scrollable}

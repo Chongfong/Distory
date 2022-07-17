@@ -12,6 +12,12 @@ export const DiaryContainerFlex = styled.div`
   justify-content: ${({ blogContentOrder }) => (blogContentOrder ? '' : 'space-between')};
   flex-direction: ${({ blogContentOrder }) => (blogContentOrder ? 'row' : 'row-reverse')};
   border-bottom: 1px solid #ccc;
+  @media (max-width: 912px) {
+    height: 100%;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+}
 `;
 
 export const DiaryImageDefault = styled.img`
@@ -24,6 +30,11 @@ export const DiaryImageDefault = styled.img`
   :hover, :active, :focus{
     opacity: 0.5;
   }
+  @media (max-width: 912px) {
+    width: 100%;
+    height: 100%;
+    flex: 100%;
+}
 `;
 
 export const DiaryContentFlex = styled.div`
@@ -36,6 +47,8 @@ export const DiaryContentFlex = styled.div`
   }
   @media (max-width: 912px) {
     max-width: 65%;
+    flex: 100%;
+    margin-left: 5px;
 }
 `;
 
@@ -43,6 +56,10 @@ export const DiaryLikes = styled.p`
   position:absolute;
   bottom: 15px;
   left: ${({ blogContentOrder }) => (blogContentOrder ? '170px' : '10px')};
+  @media (max-width: 912px) {
+    position: inherit;
+}
+  
 `;
 
 export const DiaryTitle = styled.p`
@@ -88,4 +105,18 @@ export const DiaryPage = styled.div`
     border-bottom: 3px solid #d3b092;
     color: #d3b092;
   }
+`;
+
+export const DiaryImgContainer = styled.div`
+  @media (max-width: 912px) {
+    flex: 100%;
+}
+`;
+
+export const DiaryContentFlexContainer = styled.div`
+@media (max-width: 912px) {
+  flex: 100%;
+    display: flex;
+    justify-content: space-between;
+}
 `;

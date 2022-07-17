@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
 import {
   DiaryContainerFlex, DiaryImageDefault, DiaryContentFlex, DiaryTitle, DiaryContent, DiaryPage,
-  DiaryLikes,
+  DiaryLikes, DiaryImgContainer, DiaryContentFlexContainer,
 } from './Pagination.style';
 
 import { changeHTMLToPureText } from '../components/ShareFunctions';
@@ -80,14 +80,16 @@ export default function Pagination({ userID, currentUserData }) {
                   alt={`preview-diary-${index}`}
                 />
               )}
-            <DiaryContentFlex>
-              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-              {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8' }}>輸入密碼後方可觀看</p>)}
-            </DiaryContentFlex>
-            <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
-              💗&nbsp;
-              {doc.likeDiary ? doc.likeDiary.length : 0}
-            </DiaryLikes>
+            <DiaryContentFlexContainer>
+              <DiaryContentFlex>
+                <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
+                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8' }}>輸入密碼後方可觀看</p>)}
+              </DiaryContentFlex>
+              <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
+                💗&nbsp;
+                {doc.likeDiary ? doc.likeDiary.length : 0}
+              </DiaryLikes>
+            </DiaryContentFlexContainer>
           </DiaryContainerFlex>
         ))) : ((list.slice(0, 3).map((doc, index) => (
           <DiaryContainerFlex
@@ -103,26 +105,34 @@ export default function Pagination({ userID, currentUserData }) {
           >
             {doc.showImg
               ? (
-                <DiaryImageDefault
-                  src={doc.showImg}
-                  alt={`preview-diary-${index}`}
-                />
+                <DiaryImgContainer>
+                  <DiaryImageDefault
+                    src={doc.showImg}
+                    alt={`preview-diary-${index}`}
+                  />
+                </DiaryImgContainer>
               )
               : (
-                <DiaryImageDefault
-                  src={previewImagesArray[(index % 5)]}
-                  alt={`preview-diary-${index}`}
-                />
+                <DiaryImgContainer>
+                  <DiaryImageDefault
+                    src={previewImagesArray[(index % 5)]}
+                    alt={`preview-diary-${index}`}
+                  />
+                </DiaryImgContainer>
+
               )}
-            <DiaryContentFlex>
-              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-              {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8' }}>輸入密碼後方可觀看</p>)}
-            </DiaryContentFlex>
-            <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
-              💗&nbsp;
-              {doc.likeDiary ? doc.likeDiary.length : 0}
-            </DiaryLikes>
+            <DiaryContentFlexContainer>
+              <DiaryContentFlex>
+                <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
+                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8', textAlign: 'left' }}>輸入密碼後方可觀看</p>)}
+              </DiaryContentFlex>
+              <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
+                💗&nbsp;
+                {doc.likeDiary ? doc.likeDiary.length : 0}
+              </DiaryLikes>
+            </DiaryContentFlexContainer>
           </DiaryContainerFlex>
+
         ))))}
       {totalPages ? (Array.from(Array(totalPages.current).keys())).map(
         (eachPage) => (

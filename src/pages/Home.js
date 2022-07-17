@@ -18,10 +18,8 @@ import {
   DiaryPublishTime, DiaryTitle, DiaryOutContainer, DiarySmallContainer,
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
   HomeWelcomeWords, DiaryContent, DiaryImageBoxNormal, DiaryTitleFirst, DiaryProfileImageBoxNormal,
-  DiaryAllContainer, DiaryProfileImg, DiaryIngoBoxFisrt,
+  DiaryAllContainer, DiaryProfileImg, DiaryIngoBoxFisrt, HomeProfileSubTitle,
 } from './Home.style';
-
-import { MyBlogProfileSubTitle, MyBlogProfileSubTitleMargin } from './MyBlog.style';
 
 import { changeHTMLToPureText } from '../components/ShareFunctions';
 
@@ -130,7 +128,7 @@ export default function Home() {
 
                       </div>
 
-                      <MyBlogProfileSubTitle>▋&nbsp;網友熱議</MyBlogProfileSubTitle>
+                      <HomeProfileSubTitle>▋&nbsp;網友熱議</HomeProfileSubTitle>
                       <DiaryContainer
                         role="button"
                         tabIndex={0}
@@ -180,10 +178,10 @@ export default function Home() {
                       <LoadStories />
 
                     </>
-                    <MyBlogProfileSubTitleMargin>
+                    <HomeProfileSubTitle>
                       ▋&nbsp;經典好文
 
-                    </MyBlogProfileSubTitleMargin>
+                    </HomeProfileSubTitle>
 
                   </>
                 )

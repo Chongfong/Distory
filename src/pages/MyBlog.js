@@ -14,13 +14,12 @@ import {
 } from 'firebase/firestore';
 import { auth, db } from '../firestore/firestore';
 
-import { CreateDiaryInsideBody } from './CreateNewDiaries.style';
 import { BlogBackgroundImage } from './EditBlog.style';
 import {
   MyBlogFLexContainer, MyBlogFLexLeft, MyBlogFLexRight, ClickableDiv,
   MyBlogVisitorContainer, MyBlogVisitorDiv, MyBlogUserName, MyBlogButton,
   MyBlogBottomLine, MyBlogProfileSubTitle, MyBlogComeHomeUsers, MyBlogButtonLight,
-  MyBlogProfileImg,
+  MyBlogProfileImg, MyBlogDiaryInsideBody,
 } from './MyBlog.style';
 
 import BlogArticle from './BlogArticle';
@@ -274,7 +273,7 @@ export default function MyBlog() {
   return (
     <>
       {currentUserData ? (
-        <CreateDiaryInsideBody>
+        <MyBlogDiaryInsideBody>
           <div
             role="button"
             tabIndex={0}
@@ -408,7 +407,7 @@ export default function MyBlog() {
 
             </MyBlogFLexRight>
           </MyBlogFLexContainer>
-        </CreateDiaryInsideBody>
+        </MyBlogDiaryInsideBody>
       ) : <Loader />}
       <div />
     </>
