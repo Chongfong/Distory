@@ -21,6 +21,13 @@ export const HeaderTitleContainer = styled.img`
   position: fixed;
   transform: translateX(-50%);
   margin-top: -15px;
+  left: 28%;
+
+  @media (max-width: 912px) {
+    width: 35px;
+    height: 100px;
+    margin-top: -10px;
+} 
 `;
 
 export const HeaderBackgroundImage = styled.img`

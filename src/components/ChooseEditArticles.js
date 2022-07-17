@@ -49,12 +49,12 @@ export default function ChooseEditArtices({
           display: 'flex',
           flexWrap: 'wrap',
           width: '100%',
-          height: '100%',
+          height: 'calc( 90vh - 200px)',
           alignContent: 'flex-start',
         }}
         >
           <div style={{ display: 'flex', flexWrap: 'no-wrap', flexBasis: '100%' }}>
-            <p style={{ flexBasis: '10%' }}>日期</p>
+            <p style={{ flexBasis: 'auto' }}>日期</p>
             <p style={{ flexBasis: '80%' }}>標題</p>
           </div>
           {draftDiaries ? (draftDiaries.map((eachDiary) => (
