@@ -2,11 +2,12 @@ import styled from 'styled-components';
 
 export const CreateDiaryBody = styled.div`
   width: 100%;
-  height: calc( 100vh + 200px );
+  height: calc( 100% + 200px );
   position: relative;
   background-size: 20%;
   background-repeat: no-repeat;
   background-position: bottom 20px right 40px;
+  margin-bottom: 50px;
 `;
 
 export const CreateDiaryInsideBody = styled.div`
@@ -50,6 +51,23 @@ export const CreateDiaryPublish = styled.div`
     background-color: #7f0019;
     color: white;
   }
+  
+  @media (max-width: 912px) {
+  width: 35px;
+  height: 35px;
+  font-size: 18px;
+  line-height: 35px;
+  right: 40px;
+  bottom: 45px;
+}
+
+`;
+
+export const CreateDiarySave = styled(CreateDiaryPublish)`
+  bottom: 140px;
+  @media (max-width: 912px) {
+  bottom: 100px;
+}
 `;
 
 export const CreateDiaryColored = styled(CreateDiaryPublish)`
@@ -74,6 +92,9 @@ export const CreateDiaryNavBar = styled.div`
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
+  @media (max-width: 912px) {
+      width: 100%;
+  }
 `;
 
 export const CreateDiaryNavButton = styled.div`
@@ -84,6 +105,9 @@ export const CreateDiaryNavButton = styled.div`
   cursor: pointer;
   :hover, :focus, :active {
     border-bottom: 4px solid #ccc;
+  }
+  @media (max-width: 912px) {
+    font-size: 1.2rem;
   }
 `;
 
@@ -102,6 +126,7 @@ export const EditDiaryEachDiaryRow = styled.div`
 export const EditDiaryShowImageDiv = styled.div`
   cursor: pointer;
   position: relative;
+  flex: 70%;
   :hover {
     opacity: 0.5;
     ::after{
@@ -111,5 +136,75 @@ export const EditDiaryShowImageDiv = styled.div`
     left: 40%;
     font-size: 1.5rem;
   }
+}
+  @media (max-width: 912px) {
+  flex: 70%;
+  :hover {
+    ::after{
+    left: 25%;
+  }
+  }}
+
+    @media (max-width: 912px) {
+  flex: 70%;
+  :hover {
+    ::after{
+    left: 25%;
+  }
+  }}
+`;
+
+export const EditDiaryShowImageLabel = styled.label`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+@media (max-width: 912px) {
+  align-items: baseline;
+  }
+
+`;
+
+export const SetArticlePasswordTitle = styled.p`
+  flex: 30%;
+  @media (max-width: 912px) {
+    flex: auto;
+    margin: 1rem 20px 1rem 0;
+    width: 75px;
+  }
+`;
+
+export const SetArticleSettingsOuterContainer = styled.div`
+  display: flex;
+  width: 100%;
+  margin-top: 30px;
+
+  @media (max-width: 912px) {
+    flex-wrap: wrap;
+  }
+`;
+
+export const SetArticleSettingsContainer = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px 10px;
+  @media (max-width: 912px) {
+    flex: 100%;
+  }
+
+`;
+
+export const SetArticleShowImgPhoto = styled.img`
+    width: 100%;
+    max-width: 200px;
+    max-height: 180px;
+    @media (max-width: 450px) {
+    width: 145px;
   }
 `;

@@ -14,7 +14,8 @@ import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
 import {
   CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryTitle, CreateDiaryPublish,
-  CreateDiaryNavBar, CreateDiaryNavButton, CreateDiaryColored,
+  CreateDiaryNavBar, CreateDiaryNavButton, CreateDiarySave,
+  SetArticleSettingsContainer, SetArticleSettingsOuterContainer,
 } from './CreateNewDiaries.style';
 import { db, storage } from '../firestore/firestore';
 import DropDownButton from './UploadImageInTextEditor.style';
@@ -303,19 +304,16 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
                     textEditorRef={textEditorRef}
                     textEditorCursorIndex={textEditorCursorIndex}
                   />
-                  <div style={{ display: 'flex', width: '100%', marginTop: '100px' }}>
-                    <div style={{
-                      flex: '1', width: '100%', display: 'flex', flexWrap: 'wrap',
-                    }}
-                    >
+                  <SetArticleSettingsOuterContainer>
+                    <SetArticleSettingsContainer>
                       <SetArticlePassword
                         articlePassword={articlePassword}
                         setArticlePassword={setArticlePassword}
                         articlePasswordHint={articlePasswordHint}
                         setArticlePasswordHint={setArticlePasswordHint}
                       />
-                    </div>
-                    <div style={{ flex: '1', width: '100%' }}>
+                    </SetArticleSettingsContainer>
+                    <SetArticleSettingsContainer>
                       <SetArticleShowImg
                         articleShowImg={articleShowImg}
                         setArticleShowImg={setArticleShowImg}
@@ -324,8 +322,8 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
                         articleShowImgFile={articleShowImgFile}
                         setArticleShowImgFile={setArticleShowImgFile}
                       />
-                    </div>
-                  </div>
+                    </SetArticleSettingsContainer>
+                  </SetArticleSettingsOuterContainer>
                 </>
               )
                 : (
@@ -374,8 +372,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
             />
 
             {articleShowImgFile ? (
-              <CreateDiaryPublish
-                style={{ bottom: '140px' }}
+              <CreateDiarySave
                 onClick={() => {
                   handleTempSubmit(articleShowImgFile);
                 }}
@@ -387,10 +384,9 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
               >
                 <FiSave style={{ color: '#7f0019' }} />
 
-              </CreateDiaryPublish>
+              </CreateDiarySave>
             ) : (
-              <CreateDiaryPublish
-                style={{ bottom: '140px' }}
+              <CreateDiarySave
                 onClick={() => {
                   saveTempDiaryDB();
                 }}
@@ -402,13 +398,12 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
               >
                 <FiSave />
 
-              </CreateDiaryPublish>
+              </CreateDiarySave>
             )}
             {articleShowImgFile ? (
-              <CreateDiaryColored
+              <CreateDiaryPublish
                 style={{
                   zIndex: 1,
-                  bottom: '70px',
                   fontWeight: 'bold',
                 }}
                 onClick={() => {
@@ -422,11 +417,10 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
               >
                 ✓
 
-              </CreateDiaryColored>
+              </CreateDiaryPublish>
             ) : (
-              <CreateDiaryColored
+              <CreateDiaryPublish
                 style={{
-                  bottom: '70px',
                   fontWeight: 'bold',
                 }}
                 onClick={() => {
@@ -440,7 +434,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
               >
                 ✓
 
-              </CreateDiaryColored>
+              </CreateDiaryPublish>
             )}
           </>
         )}

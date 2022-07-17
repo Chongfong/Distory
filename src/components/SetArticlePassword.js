@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CreateDiaryTitle } from '../pages/CreateNewDiaries.style';
+import { CreateDiaryTitle, SetArticlePasswordTitle } from '../pages/CreateNewDiaries.style';
 
 export default function SetArticlePassword(
   {
@@ -11,7 +11,7 @@ export default function SetArticlePassword(
   return (
     <>
       <div style={{ flex: '100%', display: 'flex', flexWrap: 'no-wrap' }}>
-        <p style={{ flex: '30%' }}>設定密碼</p>
+        <SetArticlePasswordTitle>設定密碼</SetArticlePasswordTitle>
         <CreateDiaryTitle
           style={{ flex: '70%' }}
           type="password"
@@ -20,7 +20,7 @@ export default function SetArticlePassword(
         />
       </div>
       <div style={{ flex: '100%', display: 'flex', flexWrap: 'no-wrap' }}>
-        <p style={{ flex: '30%' }}>密碼提示</p>
+        <SetArticlePasswordTitle>密碼提示</SetArticlePasswordTitle>
         <CreateDiaryTitle
           style={{ flex: '70%' }}
           type="input"

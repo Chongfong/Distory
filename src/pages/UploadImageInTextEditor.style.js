@@ -23,6 +23,14 @@ export const CreateDiaryUploadImage = styled('div')`
     background-color: #7f0019;
     color: white;
   }
+  @media (max-width: 912px) {
+  width: 35px;
+  height: 35px;
+  font-size: 18px;
+  line-height: 35px;
+  right: 40px;
+  bottom: 155px;
+}
 `;
 
 export const CreateDiaryUploadImageIcon = styled.img`

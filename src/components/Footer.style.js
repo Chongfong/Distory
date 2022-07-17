@@ -13,6 +13,11 @@ export const FooterBackgroundImage = styled.img`
   right: 20px;
   opacity: 0.3;
   z-index: -1;
+@media (max-width: 500px) {
+  width: 300px;
+  height: auto;
+  right: 0px;
+}
 `;
 
 export const FooterWords = styled.div`

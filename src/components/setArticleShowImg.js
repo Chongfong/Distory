@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 
 import { EditButton } from '../pages/ImageEditor.style';
 
-import { EditDiaryShowImageDiv } from '../pages/CreateNewDiaries.style';
+import {
+  EditDiaryShowImageDiv, EditDiaryShowImageLabel,
+  SetArticlePasswordTitle, SetArticleShowImgPhoto,
+} from '../pages/CreateNewDiaries.style';
 
 export default function SetArticleShowImg(
   {
@@ -16,20 +19,10 @@ export default function SetArticleShowImg(
       flex: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
     }}
     >
-      <p style={{ margin: '1em 20px' }}>預設圖片</p>
+      <SetArticlePasswordTitle>預設圖片</SetArticlePasswordTitle>
       <EditDiaryShowImageDiv>
-        <label
+        <EditDiaryShowImageLabel
           htmlFor="upload-blogImage"
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'center',
-            borderRadius: '20px',
-            cursor: 'pointer',
-            position: 'relative',
-          }}
         >
           <input
             type="file"
@@ -62,7 +55,7 @@ export default function SetArticleShowImg(
                 fontSize: '25px',
                 position: 'absolute',
                 bottom: '0px',
-                right: '0px',
+                left: '0px',
                 transform: 'scaleX(-1)',
               }}
             >
@@ -70,14 +63,11 @@ export default function SetArticleShowImg(
 
             </EditButton>
           )}
-          <img
+          <SetArticleShowImgPhoto
             alt="background"
             src={articleShowImgUrl}
-            style={{
-              width: '100%', maxWidth: '200px', maxHeight: '180px',
-            }}
           />
-        </label>
+        </EditDiaryShowImageLabel>
       </EditDiaryShowImageDiv>
     </div>
   );
