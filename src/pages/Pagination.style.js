@@ -40,7 +40,7 @@ export const DiaryImageDefault = styled.img`
 export const DiaryContentFlex = styled.div`
   display: flex;
   flex-wrap: wrap;
-  max-width: 70%;
+  max-width: 100%;
   cursor:pointer;
   :hover, :active, :focus{
     opacity: 0.5;

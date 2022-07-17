@@ -12,11 +12,18 @@ export default function Share({ url, title }) {
     text: `${title}`,
   };
 
-  async function shareDistoryUrl() {
-    try {
-      await navigator.share(shareData);
-    } catch (err) {
-      toast('請重新嘗試', {
+  async function shareDistoryUrl(e) {
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        toast('請重新嘗試', {
+          autoClose: 3500,
+        });
+      }
+    } else {
+      e.clipboardData.setData('text/plain', `${url}`);
+      toast('已複製網址至剪貼簿', {
         autoClose: 3500,
       });
     }
@@ -25,11 +32,11 @@ export default function Share({ url, title }) {
   return (
     <>
       <div
-        onClick={() => {
-          shareDistoryUrl();
+        onClick={(e) => {
+          shareDistoryUrl(e);
         }}
-        onKeyUp={() => {
-          shareDistoryUrl();
+        onKeyUp={(e) => {
+          shareDistoryUrl(e);
         }}
         role="button"
         tabIndex={0}
