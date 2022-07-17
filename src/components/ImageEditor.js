@@ -6,10 +6,6 @@ import React, { useRef } from 'react';
 import { Quill } from 'react-quill';
 import PropTypes from 'prop-types';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { useParams } from 'react-router-dom';
-import {
-  doc, collection, Timestamp, setDoc,
-} from 'firebase/firestore';
 import { myTheme, ImageEditorSubmitButtonsForm } from './imageEditorTheme';
 import '../css/textEditor.css';
 import '../css/imageEditor.css';
@@ -17,14 +13,13 @@ import { PopUpBackDiv, PopUpContainerDiv, CircleButton } from '../pages/ImageEdi
 
 import StickerRow from './ImageEditorSticker';
 
-import { storage, db } from '../firestore/firestore';
+import { storage } from '../firestore/firestore';
 
 export default function PhotoEditor({
   setDiaryContentValue,
   imageUrl, setImageUrl, openImageEditor, setOpenImageEditor, setUrl,
   textEditorRef, textEditorCursorIndex,
 }) {
-  const { userID } = useParams();
   const editorRef = useRef();
   const BlockEmbed = Quill.import('blots/block/embed');
   const Delta = Quill.import('delta');
@@ -161,63 +156,6 @@ export default function PhotoEditor({
       });
   };
 
-  const handleUploadStory = () => {
-    const storydoc = doc(collection(db, 'stories'));
-
-    const saveStoryDB = (storyImageUrl) => {
-      const data = {
-        imageUrl: storyImageUrl,
-        publishAt: Timestamp.now().toDate(),
-        diaryID: storydoc.id,
-        author: userID,
-      };
-      setDoc(storydoc, { ...data });
-      alert('已發布限時動態');
-    };
-
-    const editorInstance = editorRef.current.getInstance();
-    const dataURL = editorInstance.toDataURL();
-
-    const metadata = {
-      contentType: 'image/jpeg',
-    };
-
-    fetch(dataURL)
-      .then((res) => res.blob())
-      .then((imageBlob) => {
-        testURL.current = imageBlob;
-
-        const file = testURL.current;
-        const storageRef = ref(storage, `stories/${Date.now()}`);
-        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
-        uploadTask.on(
-          'state_changed',
-          () => {},
-          (error) => {
-            switch (error.code) {
-              case 'storage/unauthorized':
-                break;
-              case 'storage/canceled':
-                break;
-              case 'storage/unknown':
-                break;
-              default:
-                break;
-            }
-          },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              saveStoryDB(downloadURL);
-              setOpenImageEditor(false);
-              setImageUrl();
-              setUrl();
-            });
-          },
-        );
-      });
-  };
-
   return (
     <>
       {openImageEditor === true
@@ -276,9 +214,8 @@ export default function PhotoEditor({
               />
               <StickerRow onStickerSelected={(path) => addSticker(path)} />
               <ImageEditorSubmitButtonsForm onSubmit={handleSubmit}>
-                <CircleButton type="button" onClick={() => { handleUploadStory(); }}>＋</CircleButton>
-                <CircleButton type="submit">✓</CircleButton>
-                <CircleButton type="button" style={{ fontSize: '25px' }} onClick={() => setOpenImageEditor(false)}>×</CircleButton>
+                <CircleButton type="submit" style={{ position: 'relative' }}>✓</CircleButton>
+                <CircleButton type="button" style={{ fontSize: '25px', position: 'relative' }} onClick={() => setOpenImageEditor(false)}>×</CircleButton>
               </ImageEditorSubmitButtonsForm>
             </PopUpContainerDiv>
           </PopUpBackDiv>

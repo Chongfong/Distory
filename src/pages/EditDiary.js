@@ -19,7 +19,7 @@ import UploadImageInTextEditor from '../components/UploadImageInTextEditor';
 import '../css/loadDiary.css';
 import {
   CreateDiaryBody, CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryPublish,
-  CreateDiaryColored,
+  CreateDiarySave, SetArticleSettingsOuterContainer, SetArticleSettingsContainer,
 } from './CreateNewDiaries.style';
 
 import SetArticlePassword from '../components/SetArticlePassword';
@@ -269,19 +269,16 @@ export default function EditDiary({ isOpen, setIsOpen }) {
               textEditorRef={textEditorRef}
               textEditorCursorIndex={textEditorCursorIndex}
             />
-            <div style={{ display: 'flex', width: '100%', marginTop: '100px' }}>
-              <div style={{
-                flex: '1', width: '100%', display: 'flex', flexWrap: 'wrap',
-              }}
-              >
+            <SetArticleSettingsOuterContainer>
+              <SetArticleSettingsContainer>
                 <SetArticlePassword
                   articlePassword={articlePassword}
                   setArticlePassword={setArticlePassword}
                   articlePasswordHint={articlePasswordHint}
                   setArticlePasswordHint={setArticlePasswordHint}
                 />
-              </div>
-              <div style={{ flex: '1', width: '100%' }}>
+              </SetArticleSettingsContainer>
+              <SetArticleSettingsContainer>
                 <SetArticleShowImg
                   articleShowImg={articleShowImg}
                   setArticleShowImg={setArticleShowImg}
@@ -290,8 +287,8 @@ export default function EditDiary({ isOpen, setIsOpen }) {
                   articleShowImgFile={articleShowImgFile}
                   setArticleShowImgFile={setArticleShowImgFile}
                 />
-              </div>
-            </div>
+              </SetArticleSettingsContainer>
+            </SetArticleSettingsOuterContainer>
             <br />
             <DropDownButton
               setLoadFromFile={setLoadFromFile}
@@ -325,8 +322,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
               textEditorCursorIndex={textEditorCursorIndex}
             />
             { articleShowImgFile ? (
-              <CreateDiaryPublish
-                style={{ bottom: '140px' }}
+              <CreateDiarySave
                 onClick={() => {
                   handleTempSave(articleShowImgFile);
                 }}
@@ -336,12 +332,11 @@ export default function EditDiary({ isOpen, setIsOpen }) {
                 role="button"
                 tabIndex={0}
               >
-                <FiSave />
+                <FiSave style={{ color: '#7f0019' }} />
 
-              </CreateDiaryPublish>
+              </CreateDiarySave>
             ) : (
-              <CreateDiaryPublish
-                style={{ bottom: '140px' }}
+              <CreateDiarySave
                 onClick={() => {
                   updateTempDiaryDB();
                 }}
@@ -353,14 +348,13 @@ export default function EditDiary({ isOpen, setIsOpen }) {
               >
                 <FiSave />
 
-              </CreateDiaryPublish>
+              </CreateDiarySave>
             )}
             { articleShowImgFile ? (
-              <CreateDiaryColored
+              <CreateDiaryPublish
                 style={{
                   zIndex: 1,
                   bottom: '70px',
-                  border: '#d3b092 2px solid',
                 }}
                 onClick={() => {
                   handleSubmit(articleShowImgFile);
@@ -373,10 +367,12 @@ export default function EditDiary({ isOpen, setIsOpen }) {
               >
                 ✓
 
-              </CreateDiaryColored>
+              </CreateDiaryPublish>
             ) : (
-              <CreateDiaryColored
-                style={{ bottom: '70px', border: '#d3b092 2px solid' }}
+              <CreateDiaryPublish
+                style={{
+                  fontWeight: 'bold',
+                }}
                 onClick={() => {
                   updateDiaryDB();
                 }}
@@ -388,7 +384,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
               >
                 ✓
 
-              </CreateDiaryColored>
+              </CreateDiaryPublish>
             )}
 
           </CreateDiaryInsideBody>
