@@ -279,7 +279,7 @@ export default function MyBlog() {
               <MyBlogBottomLine />
               {visitMyHomeAll && (
                 <>
-                  <MyBlogProfileSubTitle>Visitors</MyBlogProfileSubTitle>
+                  <MyBlogProfileSubTitle style={{ width: '80%' }}>Visitors</MyBlogProfileSubTitle>
                   <MyBlogVisitorContainer>
                     {visitMyHomeAll
                       .map((eachVisitor) => (

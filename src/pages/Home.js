@@ -139,7 +139,7 @@ export default function Home() {
                           navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
                         }}
                       >
-                        <DiaryImageBox><HomeImageFirst src={previewImagesArray[0]} alt={`diary-${index}`} /></DiaryImageBox>
+                        <DiaryImageBox><HomeImageFirst src={eachDiary.showImg} alt={`diary-${index}`} /></DiaryImageBox>
                         <DiaryIngoBoxFisrt>
                           <DiaryImageInsideBox>
                             <HomeAuthorImage

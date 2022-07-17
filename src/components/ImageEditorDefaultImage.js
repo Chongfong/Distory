@@ -7,7 +7,7 @@ import {
 } from './imageEditorTheme';
 
 export const defaultImageStoryUrls = [
-  'https://file.coffee/u/fAZ1EjgIozvWAK3dLkK30.jpg',
+  'https://file.coffee/u/T4mBFiUOJI6xANqCfVCai.jpg',
   'https://file.coffee/u/mmoV1bEYOKsyvtXcdkX4i.jpg',
   'https://file.coffee/u/HMJIhQO3AaVYxd426ZZnu.png',
   'https://file.coffee/u/viDXwAAZfeQLeqMNRCJcn.png',

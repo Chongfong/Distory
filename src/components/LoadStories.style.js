@@ -83,8 +83,8 @@ export const StoryImg = styled.img`
 `;
 
 export const StoryAuthorImg = styled.img`
-  width: 20%;
-  height: 100%;
+  width: 35px;
+  height: 35px;
   background-color: white;
   border-radius: 50%;
   border: 3px solid #ccc

@@ -60,6 +60,16 @@ export const CircleButton = styled.button`
 
 `;
 
+export const CircleButtonPlus = styled(CircleButton)`
+  top: -4px;
+  :hover{
+    ::after{
+      top: 8px;
+      left: 5px;
+      }
+      }
+`;
+
 export const CircleButtonCancel = styled(CircleButton)`
   :hover{
     ::after{
