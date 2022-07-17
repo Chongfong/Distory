@@ -70,3 +70,11 @@ export const BlogBackgroundImageLabel = styled.label`
   }
   }
 `;
+
+export const BlogEditInnerContainer = styled.div`
+  display: flex;
+  @media (max-width: 912px) {
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+  }
+`;

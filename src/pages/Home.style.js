@@ -61,8 +61,8 @@ export const DiaryImageBox = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  width: 400px;
-  height: 300px;
+  max-width: 100%;
+  max-height: 300px;
   outline: 3px solid white;
   outline-offset: -10px;
   vertical-align: middle;
@@ -100,7 +100,7 @@ export const DiaryImageBoxNormal = styled.div`
   overflow: hidden;
   width: 240px;
   height: 180px;
-  flex: 0 1 48%;
+  flex: 1;
   :hover, :active, :focus{
     opacity: 0.7
   }
@@ -177,8 +177,8 @@ export const DiaryProfileImg = styled.img`
 
 export const HomeImageFirst = styled.img`
     flex-shrink: 1;
-    min-width: 100%;
-    min-height: 75%;
+    max-width: 100%;
+    max-height: 75%;
     @media (max-width: 1482px) {
       outline: 3px solid white;
       outline-offset: -10px;
@@ -261,6 +261,11 @@ export const HomeWelcomeWords = styled.p`
   color:#72677E;
   line-height: 100px;
   position: relative;
+  @media (max-width: 912px) {
+    width: 90%;
+    margin: 0 auto;
+    font-size: 50px;
+}
 `;
 
 export const SearchTitle = styled.p`

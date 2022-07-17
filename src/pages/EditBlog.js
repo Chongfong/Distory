@@ -20,7 +20,7 @@ import {
 } from './CreateNewDiaries.style';
 import {
   EditBlogTitle, EditBlogLayout, EditBlogFlex, BlogBackgroundImage, BlogBackgroundImageLabel,
-  BlogUserImageDiv,
+  BlogUserImageDiv, BlogEditInnerContainer,
 } from './EditBlog.style';
 import { EditButton, CircleButton } from './ImageEditor.style';
 
@@ -192,7 +192,7 @@ export default function EditBlog({
       {currentUserData ? (
         <CreateDiaryInsideBody style={{ textAlign: 'left', padding: '0px 10px 50px 10px' }}>
           <CreateDiaryNavTitle style={{ paddingLeft: '0px' }}>部落格編輯</CreateDiaryNavTitle>
-          <div style={{ display: 'flex' }}>
+          <BlogEditInnerContainer>
             <div style={{ flex: '1' }}>
               <EditBlogTitle>部落格標題</EditBlogTitle>
               <CreateDiaryTitle
@@ -260,7 +260,7 @@ export default function EditBlog({
               </BlogUserImageDiv>
             </div>
 
-          </div>
+          </BlogEditInnerContainer>
 
           <EditBlogTitle>進版畫面設定</EditBlogTitle>
 
