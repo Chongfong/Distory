@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import PropTypes from 'prop-types';
 import { auth } from '../firestore/firestore';
@@ -25,11 +26,26 @@ export default function LogIn({ setCurrentUser }) {
   const handleLogIn = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        alert('You are logging in');
+        toast('您已登入', {
+          autoClose: 3500,
+        });
         navigate('/');
       })
       .catch((err) => {
-        alert(err.message);
+        const errorCode = err.code;
+        if (errorCode === 'auth/wrong-password') {
+          toast('密碼錯誤', {
+            autoClose: 3500,
+          });
+        } else if (errorCode === 'auth/invalid-email') {
+          toast('請輸入正確信箱', {
+            autoClose: 3500,
+          });
+        } else {
+          toast('錯誤，請重新輸入', {
+            autoClose: 3500,
+          });
+        }
       });
   };
 

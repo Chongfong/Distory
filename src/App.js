@@ -5,11 +5,11 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
+import { ToastContainer, Slide } from 'react-toastify';
 import Home from './pages/Home';
 import CreateNewDiary from './pages/CreateNewDiary';
 import CreateNewStory from './pages/CreateNewStory';
 import EditDiary from './pages/EditDiary';
-import LoadDiaries from './pages/LoadDiaries';
 import EditBlog from './pages/EditBlog';
 import SignUp from './pages/SignUp';
 import LogIn from './pages/Login';
@@ -17,10 +17,10 @@ import SettingId from './pages/SettingId';
 import Welcome from './pages/Welcome';
 import MyBlog from './pages/MyBlog';
 import BlogArticle from './pages/BlogArticle';
-import Pagination from './pages/Pagination';
 import Search from './pages/Search';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +31,18 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer
+        position="top-center"
+        autoClose={3500}
+        transition={Slide}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Router>
         <Header
           currentUser={currentUser}
@@ -88,8 +100,6 @@ function App() {
           <Route path="/:userID/create" element={<CreateNewDiary isOpen={isOpen} setIsOpen={setIsOpen} />} />
           <Route path="/:userID/newstory" element={<CreateNewStory />} />
           <Route path="/:userID/edit/:diaryID" element={<EditDiary isOpen={isOpen} setIsOpen={setIsOpen} />} />
-          <Route path="/Diaries" element={<LoadDiaries />} />
-          <Route path="/pagination" element={<Pagination />} />
           <Route path="/search/:searchkey" element={<Search />} />
         </Routes>
         <Footer />

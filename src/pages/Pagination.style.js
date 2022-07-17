@@ -118,5 +118,6 @@ export const DiaryContentFlexContainer = styled.div`
   flex: 100%;
     display: flex;
     justify-content: space-between;
+    max-width:100%;
 }
 `;

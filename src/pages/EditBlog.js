@@ -4,6 +4,7 @@ import React, {
   useState, useCallback, useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -57,9 +58,15 @@ export default function EditBlog({
 
   const submitUserImgDB = (imageFile, uid) => {
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
-    if (!imageFile) { alert('please try again'); return; }
+    if (!imageFile) {
+      toast('請重新上傳', {
+        autoClose: 3500,
+      }); return;
+    }
     if (!imageTypes.includes(imageFile.type.slice(6))) {
-      alert('Please upload the image file');
+      toast('請上傳圖片檔', {
+        autoClose: 3500,
+      });
       return;
     }
     const storageRef = ref(storage, `files/${Date.now()}`);
@@ -136,9 +143,15 @@ export default function EditBlog({
 
   const handleSubmit = (imageFile, uid) => {
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
-    if (!imageFile) { alert('please try again'); return; }
+    if (!imageFile) {
+      toast('請重新上傳', {
+        autoClose: 3500,
+      }); return;
+    }
     if (!imageTypes.includes(imageFile.type.slice(6))) {
-      alert('Please upload the image file');
+      toast('請上傳圖片檔', {
+        autoClose: 3500,
+      });
       return;
     }
     const storageRef = ref(storage, `files/${Date.now()}`);

@@ -12,6 +12,7 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 import { db, auth } from '../firestore/firestore';
 import {
   SignUpBody, SignUpContainer, SignUpTitle, SignUpSubTitle,
@@ -49,8 +50,10 @@ export default function SettingId({ settingId, setSettingId }) {
         displayName: nickName,
       }).then(() => {
         saveNewUserDB(loggingInUser.uid);
-      }).catch((error) => {
-        alert(error.message);
+      }).catch(() => {
+        toast('請重新嘗試', {
+          autoClose: 2000,
+        });
       });
     });
   };
@@ -66,10 +69,14 @@ export default function SettingId({ settingId, setSettingId }) {
         navigate('/welcome');
         return true;
       }
-      alert('此ID已有人使用');
+      toast('此ID已有人使用', {
+        autoClose: 3500,
+      });
       return false;
     } catch (e) {
-      alert('Error querying document: ', e);
+      toast('發生錯誤', {
+        autoClose: 2000,
+      });
       return e.response;
     }
   }

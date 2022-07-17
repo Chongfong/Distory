@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import { FiSave } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
 import {
@@ -64,11 +65,15 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 
   const saveNewDiaryDB = () => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const data = {
@@ -84,17 +89,23 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
       showImg: articleShowImg,
     };
     setDoc(diarydoc, { ...data });
-    alert('文章已發布');
+    toast('文章已發布', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
   const saveNewDiaryImgDB = (imgDownloadURL) => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const data = {
@@ -110,17 +121,23 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
       showImg: imgDownloadURL,
     };
     setDoc(diarydoc, { ...data });
-    alert('文章已發布');
+    toast('文章已發布', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
   const saveTempDiaryDB = () => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const data = {
@@ -136,17 +153,23 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
       showImg: articleShowImg,
     };
     setDoc(diarydoc, { ...data });
-    alert('文章已儲存');
+    toast('文章已儲存', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
   const saveTempDiaryImgDB = (imgDownloadURL) => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const data = {
@@ -162,7 +185,9 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
       showImg: imgDownloadURL,
     };
     setDoc(diarydoc, { ...data });
-    alert('文章已儲存');
+    toast('文章已儲存', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
@@ -172,17 +197,27 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 
   const handleTempSubmit = (imageFile) => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
-    if (!imageFile) { alert('please try again'); return; }
+    if (!imageFile) {
+      toast('請重新上傳', {
+        autoClose: 3500,
+      }); return;
+    }
     if (!imageTypes.includes(imageFile.type.slice(6))) {
-      alert('Please upload the image file');
+      toast('請上傳圖片檔', {
+        autoClose: 3500,
+      });
       return;
     }
     const storageRef = ref(storage, `files/${imageFile.name}`);
@@ -214,23 +249,31 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
   const handleSubmit = (imageFile) => {
     setIsLoading(true);
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       setIsLoading(false);
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       setIsLoading(false);
       return;
     }
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
     if (!imageFile) {
-      alert('please try again');
+      toast('請重新上傳', {
+        autoClose: 3500,
+      });
       setIsLoading(false);
       return;
     }
     if (!imageTypes.includes(imageFile.type.slice(6))) {
-      alert('Please upload the image file');
+      toast('請上傳圖片檔', {
+        autoClose: 3500,
+      });
       setIsLoading(false);
       return;
     }

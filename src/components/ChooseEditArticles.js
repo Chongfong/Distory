@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
@@ -33,7 +34,10 @@ export default function ChooseEditArtices({
       }
       return false;
     } catch (e) {
-      alert('Error querying document: ', e);
+      toast('施工中，返回首頁', {
+        autoClose: 2000,
+      });
+      navigate('/');
       return e.response;
     }
   }

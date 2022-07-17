@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { toast } from 'react-toastify';
 import share from '../img/share.png';
 
 import { InteractiveImage } from '../pages/BlogArticle.style';
@@ -16,7 +16,9 @@ export default function Share({ url, title }) {
     try {
       await navigator.share(shareData);
     } catch (err) {
-      alert('發生錯誤', err);
+      toast('請重新嘗試', {
+        autoClose: 3500,
+      });
     }
   }
 

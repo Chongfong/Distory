@@ -2,6 +2,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
+import { toast } from 'react-toastify';
 import {
   doc, getDoc, getDocs, collection, query, where,
 } from 'firebase/firestore';
@@ -103,7 +104,10 @@ export default function BlogArticle() {
           return userDiariesAll;
         }
       } catch (e) {
-        alert('Error querying document: ', e);
+        toast('施工中，返回首頁', {
+          autoClose: 2000,
+        });
+        navigate('/');
         return e.response;
       } return true;
     }
@@ -129,7 +133,9 @@ export default function BlogArticle() {
     if (userInput === correct.replace(' ', '')) {
       setIsShowDiary(true);
     } else {
-      alert('密碼錯誤，請重新輸入');
+      toast('密碼錯誤，請重新輸入', {
+        autoClose: 3500,
+      });
     }
   };
 
@@ -174,7 +180,7 @@ export default function BlogArticle() {
                       <Share url={window.location.href} title={eachDiary.title} />
                     </BlogArticleInteractiveButtonContainer>
                   </BlogArticleInteractiveContainer>
-                  <MyBlogBottomLine style={{ width: '97%' }} />
+                  <MyBlogBottomLine style={{ width: '100%' }} />
                   <Comment
                     currentUser={currentUser}
                     setCommentAll={setCommentAll}

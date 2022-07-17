@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -79,7 +80,9 @@ export default function Header({
   const handleLogOut = () => {
     signOut(auth)
       .then(() => {
-        alert('You are logged out');
+        toast('您已登出', {
+          autoClose: 3500,
+        });
         navigate('/');
       });
   };

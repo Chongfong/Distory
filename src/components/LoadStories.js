@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
 
@@ -63,7 +64,10 @@ export default function LoadStories() {
       }
       return false;
     } catch (e) {
-      alert('Error querying document: ', e);
+      toast('施工中，返回首頁', {
+        autoClose: 2000,
+      });
+      navigate('/');
       return e.response;
     }
   }

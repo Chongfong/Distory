@@ -1,6 +1,7 @@
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
 import React, { useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -48,7 +49,9 @@ export default function CreateStoryPhotoEditor({
         author: userID,
       };
       setDoc(storydoc, { ...data });
-      alert('已發布限時動態');
+      toast('已發布限時動態', {
+        autoClose: 3000,
+      });
     };
 
     const editorInstance = editorRef.current.getInstance();

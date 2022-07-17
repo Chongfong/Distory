@@ -7,6 +7,7 @@ import {
   Timestamp,
   updateDoc,
 } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
@@ -91,11 +92,15 @@ export default function EditDiary({ isOpen, setIsOpen }) {
 
   const updateDiaryDB = () => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const data = {
@@ -108,7 +113,9 @@ export default function EditDiary({ isOpen, setIsOpen }) {
       passwordHint: articlePasswordHint,
     };
     updateDoc(docRef, { ...data });
-    alert('文章已修改');
+    toast('文章已修改', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
@@ -124,7 +131,9 @@ export default function EditDiary({ isOpen, setIsOpen }) {
       showImg: imgDownloadURL,
     };
     updateDoc(docRef, { ...data });
-    alert('文章已修改');
+    toast('文章已修改', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
@@ -140,17 +149,23 @@ export default function EditDiary({ isOpen, setIsOpen }) {
       showImg: imgDownloadURL,
     };
     updateDoc(docRef, { ...data });
-    alert('文章已修改');
+    toast('文章已修改', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
   const updateTempDiaryDB = () => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const data = {
@@ -164,7 +179,9 @@ export default function EditDiary({ isOpen, setIsOpen }) {
       showImg: articleShowImg,
     };
     updateDoc(docRef, { ...data });
-    alert('文章已儲存');
+    toast('文章已儲存', {
+      autoClose: 3500,
+    });
     navigate(`/${userID}`);
   };
 
@@ -174,17 +191,27 @@ export default function EditDiary({ isOpen, setIsOpen }) {
 
   const handleTempSave = (imageFile) => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
-    if (!imageFile) { alert('please try again'); return; }
+    if (!imageFile) {
+      toast('請重新上傳', {
+        autoClose: 3500,
+      }); return;
+    }
     if (!imageTypes.includes(imageFile.type.slice(6))) {
-      alert('Please upload the image file');
+      toast('請上傳圖片檔', {
+        autoClose: 3500,
+      });
       return;
     }
     const storageRef = ref(storage, `files/${imageFile.name}`);
@@ -215,17 +242,27 @@ export default function EditDiary({ isOpen, setIsOpen }) {
 
   const handleSubmit = (imageFile) => {
     if (titleValue === '') {
-      alert('請輸入標題');
+      toast('請輸入標題', {
+        autoClose: 3500,
+      });
       return;
     }
     if (diaryContentValue === '') {
-      alert('請輸入內文');
+      toast('請輸入內文', {
+        autoClose: 3500,
+      });
       return;
     }
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
-    if (!imageFile) { alert('please try again'); return; }
+    if (!imageFile) {
+      toast('請重新上傳', {
+        autoClose: 3500,
+      }); return;
+    }
     if (!imageTypes.includes(imageFile.type.slice(6))) {
-      alert('Please upload the image file');
+      toast('請上傳圖片檔', {
+        autoClose: 3500,
+      });
       return;
     }
     const storageRef = ref(storage, `files/${imageFile.name}`);

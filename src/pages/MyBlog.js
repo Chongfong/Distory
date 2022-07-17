@@ -5,19 +5,18 @@ import React, {
 } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
+import { toast } from 'react-toastify';
 import {
   doc, getDoc, getDocs, collection, query, where, updateDoc,
   Timestamp,
   setDoc,
-  arrayUnion,
-  arrayRemove,
 } from 'firebase/firestore';
 import { auth, db } from '../firestore/firestore';
 
 import { BlogBackgroundImage } from './EditBlog.style';
 import {
   MyBlogFLexContainer, MyBlogFLexLeft, MyBlogFLexRight, ClickableDiv,
-  MyBlogVisitorContainer, MyBlogVisitorDiv, MyBlogUserName, MyBlogButton,
+  MyBlogVisitorContainer, MyBlogVisitorDiv, MyBlogUserName,
   MyBlogBottomLine, MyBlogProfileSubTitle, MyBlogComeHomeUsers, MyBlogButtonLight,
   MyBlogProfileImg, MyBlogDiaryInsideBody,
 } from './MyBlog.style';
@@ -32,8 +31,7 @@ export default function MyBlog() {
   const [currentUserData, setCurrentUserData] = useState();
   const [, setUserDiaries] = useState([]);
   const [visitMyHomeAll, setVisitMyHomeAll] = useState();
-  const [followingUsers, setFollowingUsers] = useState();
-  const [loginUserData, setLoginUserData] = useState();
+  const [, setLoginUserData] = useState();
   const [, setLikeUsers] = useState([]);
 
   const navigate = useNavigate();
@@ -97,7 +95,10 @@ export default function MyBlog() {
                 .sort((a, b) => (b.visitAt.seconds - a.visitAt.seconds));
               setVisitMyHomeAll(visitMyHomeAllSort);
             } catch (e) {
-              alert('Error querying document: ', e);
+              toast('施工中，返回首頁', {
+                autoClose: 2000,
+              });
+              navigate('/');
               return e.response;
             } return true;
           }
@@ -129,7 +130,6 @@ export default function MyBlog() {
       fetchLoginUserInfo(user).then((querySnapshot) => {
         nowLoginUserInfo = querySnapshot.data();
         setLoginUserData(querySnapshot.data());
-        setFollowingUsers(querySnapshot.data().following);
       });
       return (nowLoginUserInfo);
     };
@@ -214,48 +214,16 @@ export default function MyBlog() {
           return userDiariesAll;
         }
       } catch (e) {
-        alert('Error querying document: ', e);
+        toast('施工中，返回首頁', {
+          autoClose: 2000,
+        });
+        navigate('/');
         return e.response;
       } return true;
     }
     gettingUserDiaries();
   }, []);
 
-  const saveFollowerDB = () => {
-    const userFollowdoc = doc(userCollection, currentUser.uid);
-    updateDoc(
-      userFollowdoc,
-      {
-        following: arrayUnion(userID),
-      },
-    );
-    alert('已關注');
-  };
-
-  const unFollowerDB = () => {
-    const userFollowdoc = doc(userCollection, currentUser.uid);
-    updateDoc(
-      userFollowdoc,
-      {
-        following: arrayRemove(userID),
-      },
-    );
-    alert('已取消關注');
-  };
-
-  const followThisUser = () => {
-    setFollowingUsers(userID);
-    saveFollowerDB();
-    getLoginUserInfo(currentUser);
-  };
-
-  const unFollowThisUser = () => {
-    const updatedFollwingUsers = [...followingUsers]
-      .filter((eachFollowingUser) => eachFollowingUser !== userID);
-    setFollowingUsers(updatedFollwingUsers);
-    unFollowerDB();
-    getLoginUserInfo(currentUser);
-  };
   useEffect(() => {
     loadUserBlogSettings();
     getUserDiaries();
@@ -306,34 +274,8 @@ export default function MyBlog() {
                 />
               </div>
               <MyBlogUserName>{currentUserData.distoryId}</MyBlogUserName>
-              <br />
               <p>{`Since　${transformTimeToDate(currentUserData.createBlogAt.seconds * 1000).toString()}`}</p>
 
-              {loginUserData ? (loginUserData.following ? (
-                loginUserData.userUID !== userID
-          && !(loginUserData.following.includes(userID)) ? (
-            <MyBlogButton
-              type="button"
-              onClick={() => {
-                followThisUser();
-              }}
-            >
-              關注用戶
-            </MyBlogButton>
-                  ) : (
-                    <>
-                      <MyBlogButton
-                        type="button"
-                        onClick={() => {
-                          unFollowThisUser();
-                        }}
-                      >
-                        取消關注
-                      </MyBlogButton>
-                      <br />
-
-                    </>
-                  )) : ('')) : ('') }
               <MyBlogBottomLine />
               {visitMyHomeAll && (
                 <>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { BiPhotoAlbum } from 'react-icons/bi';
 import { auth } from '../firestore/firestore';
@@ -37,14 +38,18 @@ export default function SignUp({ setIsSignUp }) {
           setIsSignUp(true);
           setIsLoading(false);
           navigate('/settingid');
-        }).catch((error) => {
+        }).catch(() => {
           setIsLoading(false);
-          alert(error.message);
+          toast('請重新嘗試', {
+            autoClose: 2000,
+          });
         });
       })
-      .catch((err) => {
+      .catch(() => {
         setIsLoading(false);
-        alert(err.message);
+        toast('請重新嘗試', {
+          autoClose: 2000,
+        });
       });
   };
   return (
