@@ -8,12 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
 import {
   DiaryContainerFlex, DiaryImageDefault, DiaryContentFlex, DiaryTitle, DiaryContent, DiaryPage,
-  DiaryLikes,
+  DiaryLikes, DiaryImgContainer, DiaryContentFlexContainer,
 } from './Pagination.style';
 
-import postImage from '../img/post2.png';
-
 import { changeHTMLToPureText } from '../components/ShareFunctions';
+import { previewImagesArray } from './Home';
 
 export default function Pagination({ userID, currentUserData }) {
   const [list, setList] = useState([]);
@@ -25,7 +24,7 @@ export default function Pagination({ userID, currentUserData }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const q = query(urlsRef, where('author', '==', userID), orderBy('publishAt', 'desc'));
+      const q = query(urlsRef, where('author', '==', userID), where('status', '==', 'published'), orderBy('publishAt', 'desc'));
       const querySnapshot = await getDocs(q);
       const items = [];
       querySnapshot.forEach((doc) => {
@@ -51,11 +50,12 @@ export default function Pagination({ userID, currentUserData }) {
       totalPages.current = (Math.ceil(items.length / 3));
     };
     fetchData();
-  }, []);
+  }, [userID]);
+
   return (
     <>
       { page !== 0
-        ? (list.slice(page * 3, page * 3 + 3).map((doc) => (
+        ? (list.slice(page * 3, page * 3 + 3).map((doc, index) => (
           <DiaryContainerFlex
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
@@ -67,17 +67,31 @@ export default function Pagination({ userID, currentUserData }) {
               navigate(`${doc.diaryID}`);
             }}
           >
-            <DiaryImageDefault src={postImage} alt="preview-diary" />
-            <DiaryContentFlex>
-              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
-            </DiaryContentFlex>
-            <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
-              💗&nbsp;
-              {doc.likeDiary ? doc.likeDiary.length : 0}
-            </DiaryLikes>
+            {doc.showImg
+              ? (
+                <DiaryImageDefault
+                  src={doc.showImg}
+                  alt={`preview-diary-${index}`}
+                />
+              )
+              : (
+                <DiaryImageDefault
+                  src={previewImagesArray[(index % 5)]}
+                  alt={`preview-diary-${index}`}
+                />
+              )}
+            <DiaryContentFlexContainer>
+              <DiaryContentFlex>
+                <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
+                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8' }}>輸入密碼後方可觀看</p>)}
+              </DiaryContentFlex>
+              <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
+                💗&nbsp;
+                {doc.likeDiary ? doc.likeDiary.length : 0}
+              </DiaryLikes>
+            </DiaryContentFlexContainer>
           </DiaryContainerFlex>
-        ))) : ((list.slice(0, 3).map((doc) => (
+        ))) : ((list.slice(0, 3).map((doc, index) => (
           <DiaryContainerFlex
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
@@ -89,16 +103,36 @@ export default function Pagination({ userID, currentUserData }) {
               navigate(`${doc.diaryID}`);
             }}
           >
-            <DiaryImageDefault src={postImage} alt="preview-diary" />
-            <DiaryContentFlex>
-              <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-              <DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>
-            </DiaryContentFlex>
-            <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
-              💗&nbsp;
-              {doc.likeDiary ? doc.likeDiary.length : 0}
-            </DiaryLikes>
+            {doc.showImg
+              ? (
+                <DiaryImgContainer>
+                  <DiaryImageDefault
+                    src={doc.showImg}
+                    alt={`preview-diary-${index}`}
+                  />
+                </DiaryImgContainer>
+              )
+              : (
+                <DiaryImgContainer>
+                  <DiaryImageDefault
+                    src={previewImagesArray[(index % 5)]}
+                    alt={`preview-diary-${index}`}
+                  />
+                </DiaryImgContainer>
+
+              )}
+            <DiaryContentFlexContainer>
+              <DiaryContentFlex>
+                <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
+                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8', textAlign: 'left' }}>輸入密碼後方可觀看</p>)}
+              </DiaryContentFlex>
+              <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
+                💗&nbsp;
+                {doc.likeDiary ? doc.likeDiary.length : 0}
+              </DiaryLikes>
+            </DiaryContentFlexContainer>
           </DiaryContainerFlex>
+
         ))))}
       {totalPages ? (Array.from(Array(totalPages.current).keys())).map(
         (eachPage) => (

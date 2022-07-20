@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   where,
+  orderBy,
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
@@ -17,14 +18,16 @@ import {
   DiaryPublishTime, DiaryTitle, DiaryOutContainer, DiarySmallContainer,
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
   HomeWelcomeWords, DiaryContent, DiaryImageBoxNormal, DiaryTitleFirst, DiaryProfileImageBoxNormal,
-  DiaryAllContainer,
+  DiaryAllContainer, DiaryProfileImg, DiaryIngoBoxFisrt, HomeProfileSubTitle,
 } from './Home.style';
-
-import { MyBlogProfileSubTitle, MyBlogProfileSubTitleMargin } from './MyBlog.style';
 
 import { changeHTMLToPureText } from '../components/ShareFunctions';
 
 import LoadStories from '../components/LoadStories';
+
+import HomeIntro from '../components/HomeIntro';
+
+import Loader from '../components/Loader';
 
 export const previewImagesArray = [
   'https://file.coffee/u/pk6HROQiXzoh8qxIxho0F.jpg',
@@ -35,7 +38,9 @@ export const previewImagesArray = [
 
 export default function Home() {
   const fetchDiaries = () => new Promise((resolve) => {
-    const querySnapshot = getDocs(collection(db, 'articles'));
+    const diariesCollection = collection(db, 'articles');
+    const q = query(diariesCollection, where('status', '==', 'published'), where('password', '==', ''), orderBy('publishAt', 'desc'));
+    const querySnapshot = getDocs(q);
     resolve(querySnapshot);
   });
   const navigate = useNavigate();
@@ -58,6 +63,7 @@ export default function Home() {
   }, []);
 
   const [allDiariesAuthorImg, setAllDiariesAuthorImg] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
@@ -94,6 +100,7 @@ export default function Home() {
           }
         });
       }); setAllDiariesAuthorImg(diaryAuthorsArray);
+      setIsLoading(false);
     }
   };
 
@@ -102,27 +109,28 @@ export default function Home() {
   }, [allDiaries]);
 
   return (
-    <HomeBody>
-
-      <DiaryOutContainer>
-        <DiaryAllContainer
-          className="diary"
-        >
-          {allDiaries.map((eachDiary, index) => (
-            <>
-              {
+    <>
+      {isLoading ? (<Loader />) : (
+        <HomeBody>
+          <DiaryOutContainer>
+            <DiaryAllContainer
+              className="diary"
+            >
+              {allDiaries.map((eachDiary, index) => (
+                <>
+                  {
               index === 0
                 ? (
                   <>
                     <>
                       <div style={{ position: 'relative', width: '100%', height: '300px' }}>
                         <HomeWelcomeWords>
-                          「　寫下你的專屬故事　」
+                          Discover your story
                         </HomeWelcomeWords>
 
                       </div>
 
-                      <MyBlogProfileSubTitle>網友熱議</MyBlogProfileSubTitle>
+                      <HomeProfileSubTitle>▋&nbsp;網友熱議</HomeProfileSubTitle>
                       <DiaryContainer
                         role="button"
                         tabIndex={0}
@@ -133,8 +141,8 @@ export default function Home() {
                           navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
                         }}
                       >
-                        <DiaryImageBox><HomeImageFirst src={previewImagesArray[0]} alt={`diary-${index}`} /></DiaryImageBox>
-                        <DiaryInfoBox>
+                        <DiaryImageBox><HomeImageFirst src={eachDiary.showImg} alt={`diary-${index}`} /></DiaryImageBox>
+                        <DiaryIngoBoxFisrt>
                           <DiaryImageInsideBox>
                             <HomeAuthorImage
                               alt="author"
@@ -142,20 +150,26 @@ export default function Home() {
                             />
                           </DiaryImageInsideBox>
                           <DiaryTitleInsideBox style={{ textAlign: 'center' }}>
-                            <DiaryTitleFirst>{eachDiary.title.slice(0, 20)}</DiaryTitleFirst>
+                            <DiaryTitleFirst>{eachDiary.title.slice(0, 15)}</DiaryTitleFirst>
                             <DiaryPublishTime>
                               {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                             </DiaryPublishTime>
                             <DiaryContent>
-                              {changeHTMLToPureText(eachDiary.content).slice(0, 80)}
+                              {`${changeHTMLToPureText(eachDiary.content).slice(0, 96)}...`}
                             </DiaryContent>
                           </DiaryTitleInsideBox>
 
-                        </DiaryInfoBox>
+                        </DiaryIngoBoxFisrt>
 
                       </DiaryContainer>
+                      <HomeIntro />
+                      <LoadStories />
                       <HomeInviteDiv>
-                        <HomeInviteTitle>加入 Distory 的世界</HomeInviteTitle>
+                        <HomeInviteTitle>
+                          加入&nbsp;
+                          <span style={{ color: '#b57c4a' }}>Distory</span>
+                          &nbsp;的世界
+                        </HomeInviteTitle>
                         <HomeInviteButtonContainer>
                           <Link to="/signup">
                             <HomeInviteButton>免費註冊</HomeInviteButton>
@@ -165,13 +179,11 @@ export default function Home() {
                           </Link>
                         </HomeInviteButtonContainer>
                       </HomeInviteDiv>
-                      <LoadStories />
-
                     </>
-                    <MyBlogProfileSubTitleMargin>
-                      經典好文
+                    <HomeProfileSubTitle>
+                      ▋&nbsp;經典好文
 
-                    </MyBlogProfileSubTitleMargin>
+                    </HomeProfileSubTitle>
 
                   </>
                 )
@@ -186,7 +198,22 @@ export default function Home() {
                       navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
                     }}
                   >
-                    <DiaryImageBoxNormal><HomeImageNormal src={previewImagesArray[(index % 5)]} alt={`diary-${index}`} /></DiaryImageBoxNormal>
+                    <DiaryImageBoxNormal>
+                      {eachDiary.showImg
+                        ? (
+                          <HomeImageNormal
+                            src={eachDiary.showImg}
+                            alt={`diary-${index}`}
+                          />
+                        )
+                        : (
+                          <HomeImageNormal
+                            src={previewImagesArray[(index % 5)]}
+                            alt={`diary-${index}`}
+                          />
+                        )}
+
+                    </DiaryImageBoxNormal>
                     <DiaryInfoBox>
                       <DiaryTitleInsideBox>
                         <DiaryTitle>{eachDiary.title.slice(0, 60)}</DiaryTitle>
@@ -196,9 +223,8 @@ export default function Home() {
                       </DiaryTitleInsideBox>
 
                       <DiaryProfileImageBoxNormal>
-                        <img
+                        <DiaryProfileImg
                           alt="author"
-                          style={{ width: '50px', height: '50px' }}
                           src={allDiariesAuthorImg[index]}
                         />
                       </DiaryProfileImageBoxNormal>
@@ -206,12 +232,15 @@ export default function Home() {
                   </DiarySmallContainer>
                 )
             }
-              {}
-            </>
-          ))}
+                  {}
+                </>
+              ))}
 
-        </DiaryAllContainer>
-      </DiaryOutContainer>
-    </HomeBody>
+            </DiaryAllContainer>
+          </DiaryOutContainer>
+        </HomeBody>
+      )}
+      {}
+    </>
   );
 }

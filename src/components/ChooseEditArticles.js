@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
@@ -33,7 +34,10 @@ export default function ChooseEditArtices({
       }
       return false;
     } catch (e) {
-      alert('Error querying document: ', e);
+      toast('施工中，返回首頁', {
+        autoClose: 2000,
+      });
+      navigate('/');
       return e.response;
     }
   }
@@ -49,12 +53,12 @@ export default function ChooseEditArtices({
           display: 'flex',
           flexWrap: 'wrap',
           width: '100%',
-          height: '100%',
+          height: 'calc( 90vh - 200px)',
           alignContent: 'flex-start',
         }}
         >
           <div style={{ display: 'flex', flexWrap: 'no-wrap', flexBasis: '100%' }}>
-            <p style={{ flexBasis: '10%' }}>日期</p>
+            <p style={{ flexBasis: 'auto' }}>日期</p>
             <p style={{ flexBasis: '80%' }}>標題</p>
           </div>
           {draftDiaries ? (draftDiaries.map((eachDiary) => (

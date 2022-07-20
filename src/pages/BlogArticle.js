@@ -2,6 +2,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
+import { toast } from 'react-toastify';
 import {
   doc, getDoc, getDocs, collection, query, where,
 } from 'firebase/firestore';
@@ -12,7 +13,10 @@ import {
   BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
   BlogArticleEditImage, BlogArticleEditImageContainer,
   BlogArticleInteractiveContainer, BlogArticleInteractiveButtonContainer,
+  BlogArticleInputPassword,
 } from './BlogArticle.style';
+
+import { CircleButton } from './ImageEditor.style';
 
 import { MyBlogBottomLine } from './MyBlog.style';
 
@@ -21,6 +25,7 @@ import Share from '../components/Share';
 import Comment from './Comment';
 import Like from './Like';
 import edit from '../img/edit.png';
+import Loader from '../components/Loader';
 
 export default function BlogArticle() {
   const [currentUser, setCurrentUser] = useState();
@@ -29,6 +34,8 @@ export default function BlogArticle() {
   const [commentAll, setCommentAll] = useState();
   const [loginUserDate, setLoginUserData] = useState();
   const [commentAuthor, setCommentAuthor] = useState();
+  const [isShowDiary, setIsShowDiary] = useState(false);
+  const [inputPassword, setInputPassword] = useState();
 
   const { userID, diaryID } = useParams();
   const navigate = useNavigate();
@@ -97,7 +104,10 @@ export default function BlogArticle() {
           return userDiariesAll;
         }
       } catch (e) {
-        alert('Error querying document: ', e);
+        toast('施工中，返回首頁', {
+          autoClose: 2000,
+        });
+        navigate('/');
         return e.response;
       } return true;
     }
@@ -119,58 +129,99 @@ export default function BlogArticle() {
     getUserDiaries();
   }, [currentUser]);
 
+  const checkArticlePassword = (userInput, correct) => {
+    if (userInput === correct.replace(' ', '')) {
+      setIsShowDiary(true);
+    } else {
+      toast('密碼錯誤，請重新輸入', {
+        autoClose: 3500,
+      });
+    }
+  };
+
   return (
     <>
       {currentUserData ? (
         <ul>
           {userDiaries.map((eachDiary) => (
             <>
-              <div className="diary" style={{ position: 'relative' }}>
-                <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
-                {currentUser ? (userID === currentUser.uid && (
-                <BlogArticleEditImageContainer
-                  onClick={() => {
-                    navigate(`/${userID}/edit/${diaryID}`);
-                  }}
-                  onKeyUp={() => {
-                    navigate(`/${userID}/edit/${diaryID}`);
-                  }}
-                  role="button"
-                  tabIndex={0}
-                >
-                  <BlogArticleEditImage src={edit} alt="edit" />
+              {eachDiary.password === '' || isShowDiary ? (
+                <>
+                  <div className="diary" style={{ position: 'relative' }}>
+                    <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
+                    {currentUser ? (userID === currentUser.uid && (
+                    <BlogArticleEditImageContainer
+                      onClick={() => {
+                        navigate(`/${userID}/edit/${diaryID}`);
+                      }}
+                      onKeyUp={() => {
+                        navigate(`/${userID}/edit/${diaryID}`);
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <BlogArticleEditImage src={edit} alt="edit" />
 
-                </BlogArticleEditImageContainer>
-                )) : ('') }
-                <BlogArticleDate>
-                  {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
-                </BlogArticleDate>
-                <BlogAtricleDetailContainer dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(eachDiary.content),
-                }}
-                />
-              </div>
-              <BlogArticleInteractiveContainer>
-                <BlogArticleInteractiveButtonContainer>
-                  <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
-                </BlogArticleInteractiveButtonContainer>
-                <BlogArticleInteractiveButtonContainer>
-                  <Share url={window.location.href} title={eachDiary.title} />
-                </BlogArticleInteractiveButtonContainer>
-              </BlogArticleInteractiveContainer>
-              <MyBlogBottomLine style={{ width: '97%' }} />
-              <Comment
-                currentUser={currentUser}
-                setCommentAll={setCommentAll}
-                commentAuthor={commentAuthor}
-                commentAll={commentAll}
-                loginUserDate={loginUserDate}
-                setCommentAuthor={setCommentAuthor}
-              />
+                    </BlogArticleEditImageContainer>
+                    )) : ('')}
+                    <BlogArticleDate>
+                      {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+                    </BlogArticleDate>
+                    <BlogAtricleDetailContainer dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(eachDiary.content),
+                    }}
+                    />
+                  </div>
+                  <BlogArticleInteractiveContainer>
+                    <BlogArticleInteractiveButtonContainer>
+                      <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+                    </BlogArticleInteractiveButtonContainer>
+                    <BlogArticleInteractiveButtonContainer>
+                      <Share url={window.location.href} title={eachDiary.title} />
+                    </BlogArticleInteractiveButtonContainer>
+                  </BlogArticleInteractiveContainer>
+                  <MyBlogBottomLine style={{ width: '100%' }} />
+                  <Comment
+                    currentUser={currentUser}
+                    setCommentAll={setCommentAll}
+                    commentAuthor={commentAuthor}
+                    commentAll={commentAll}
+                    loginUserDate={loginUserDate}
+                    setCommentAuthor={setCommentAuthor}
+                  />
+
+                </>
+
+              ) : (
+                <div>
+                  本文章需輸入密碼才能觀看
+                  <p>
+                    密碼提示：
+                    {eachDiary.passwordHint}
+                  </p>
+                  <BlogArticleInputPassword
+                    onChange={(e) => setInputPassword(e.target.value)}
+                    placeholder="請輸入密碼"
+                  />
+                  <br />
+                  <CircleButton
+                    style={{ marginTop: '20px', position: 'relative' }}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => { checkArticlePassword(inputPassword, eachDiary.password); }}
+                    onKeyUp={() => { checkArticlePassword(inputPassword, eachDiary.password); }}
+                  >
+                    ✓
+
+                  </CircleButton>
+                </div>
+              )}
+              {}
+
             </>
           ))}
         </ul>
-      ) : <div>Now Loading...</div>}
+      ) : <Loader />}
       <div />
     </>
   );

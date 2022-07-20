@@ -1,6 +1,7 @@
 export const changeHTMLToPureText = (inputText) => {
   const text = inputText;
-  return (text.replaceAll(/<[^>]+>/g, ''));
+  const textLineBreak = text.replaceAll('\n', '<br />');
+  return (textLineBreak.replaceAll(/<[^>]+>/g, ''));
 };
 
 export const removeClickButtonsTag = (inputText) => {
@@ -30,19 +31,24 @@ export const timeAgo = (seconds) => {
   const dateNow = Date.now();
   const nowMinusT = dateNow - seconds;
   let formatted;
-  if (new Date(nowMinusT).getHours() + 1 < 10) {
-    if (new Date(nowMinusT).getHours() + 1 < 1) {
-      if (new Date(nowMinusT).getMinutes() + 1 < 10) {
-        formatted = `${(`0${new Date(nowMinusT).getMinutes() + 1}`).slice(-1)} mins ago`;
-      } else {
-        formatted = `${(`${new Date(nowMinusT).getMinutes() + 1}`).slice(-2)} mins ago`;
+  if ((new Date(nowMinusT).getDate() - 1) * 24 + new Date(nowMinusT).getHours() - 8 < 10) {
+    if ((new Date(nowMinusT).getDate() - 1) * 24 + new Date(nowMinusT).getHours() - 8 < 1) {
+      if ((new Date(nowMinusT).getDate() - 1) * 86400
+      + (new Date(nowMinusT).getHours() - 8) * 60
+      + new Date(nowMinusT).getMinutes() + 1 < 10) {
+        formatted = `${(`${(new Date(nowMinusT).getDate() - 1) * 86400
+          + (new Date(nowMinusT).getHours() - 8) * 60
+          + new Date(nowMinusT).getMinutes() + 1}`).slice(-1)} mins ago`;
+        return formatted;
       }
-    } else {
-      formatted = `${(`${new Date(nowMinusT).getHours() + 1}`).slice(-1)} hrs ago`;
-    }
-  } else {
-    formatted = `${(`${new Date(nowMinusT).getMinutes() + 1}`).slice(-2)} hrs ago`;
-  }
-
+      formatted = `${(`${(new Date(nowMinusT).getDate() - 1) * 86400
+        + (new Date(nowMinusT).getHours() - 8) * 60
+        + new Date(nowMinusT).getMinutes() + 1}`).slice(-2)} mins ago`;
+      return formatted;
+    }formatted = `${(`${(new Date(nowMinusT).getDate() - 1) * 24
+      + new Date(nowMinusT).getHours() - 8}`).slice(-1)} hrs ago`;
+    return formatted;
+  } formatted = `${(`${(new Date(nowMinusT).getDate() - 1) * 24
+    + new Date(nowMinusT).getHours() - 8}`).slice(-2)} hrs ago`;
   return formatted;
 };

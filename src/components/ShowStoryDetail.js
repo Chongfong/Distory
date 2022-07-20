@@ -1,19 +1,39 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-param-reassign */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { PopUpBackDiv } from '../pages/ImageEditor.style';
 import {
   StoryPopUpContainer, StoryTime, StoryPhotoContainer, StoryCloseButton, StoryArrowButton,
-  StoryPhotoStatusBar, StoryImg,
+  StoryPhotoStatusBar, StoryImg, StoryArrowButtonLeft,
 } from './LoadStories.style';
 
 import { transformTimeToDate } from './ShareFunctions';
 
 export default function ShowStoryDetail({
   setChosedImg, setOpenStory, storiesImgAvailable, chosedIndex, setChosedIndex,
-  intervalRef, storiesTimeAll,
+  intervalRef, storiesTimeAll, imgLoading, setImgLoading,
 }) {
+  useEffect(() => {
+    clearInterval(intervalRef.current);
+  }, [imgLoading]);
+
+  const [loadingPercentage, setLoadingPercentage] = useState(0);
+
+  useEffect(() => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (loadingPercentage < 5) {
+        setLoadingPercentage((prev) => prev + 1);
+      } else {
+        setLoadingPercentage(0);
+        clearInterval(intervalRef.current);
+        setChosedIndex((prev) => prev + 1);
+      }
+    }, 1000);
+  }, [loadingPercentage, imgLoading]);
+
   return (
     <>
       {chosedIndex <= storiesImgAvailable.length - 1 ? (
@@ -35,32 +55,46 @@ export default function ShowStoryDetail({
             {chosedIndex === 0 ? (
               ''
             ) : (
-              <StoryArrowButton
-                style={{ left: '-70px' }}
+              <StoryArrowButtonLeft
                 onClick={() => {
                   setChosedImg(storiesImgAvailable[chosedIndex - 1]);
                   setChosedIndex(chosedIndex - 1);
+                  setLoadingPercentage(0);
+                  setImgLoading(false);
                   clearInterval(intervalRef.current);
                   intervalRef.current = setInterval(() => {
-                    setChosedIndex((prev) => prev + 1);
-                  }, 5000);
+                    if (loadingPercentage < 5) {
+                      setLoadingPercentage((prev) => prev + 1);
+                    } else {
+                      setLoadingPercentage(0);
+                      clearInterval(intervalRef.current);
+                      setChosedIndex((prev) => prev + 1);
+                    }
+                  }, 1000);
                 }}
               >
                 &lt;
-              </StoryArrowButton>
+              </StoryArrowButtonLeft>
             )}
             {chosedIndex === storiesImgAvailable.length - 1 ? (
               ''
             ) : (
               <StoryArrowButton
-                style={{ right: '-70px' }}
                 onClick={() => {
                   setChosedImg(storiesImgAvailable[chosedIndex + 1]);
                   setChosedIndex(chosedIndex + 1);
+                  setLoadingPercentage(0);
+                  setImgLoading(false);
                   clearInterval(intervalRef.current);
                   intervalRef.current = setInterval(() => {
-                    setChosedIndex((prev) => prev + 1);
-                  }, 5000);
+                    if (loadingPercentage < 5) {
+                      setLoadingPercentage((prev) => prev + 1);
+                    } else {
+                      setLoadingPercentage(0);
+                      clearInterval(intervalRef.current);
+                      setChosedIndex((prev) => prev + 1);
+                    }
+                  }, 1000);
                 }}
               >
                 &gt;
@@ -71,9 +105,32 @@ export default function ShowStoryDetail({
                 width: '100%', position: 'relative', borderTop: '6px solid #ccc',
               }}
               >
-                <StoryPhotoStatusBar />
+                {loadingPercentage >= 0 && (
+                <StoryPhotoStatusBar
+                  key={storiesImgAvailable[chosedIndex]}
+                  loadingPercent={loadingPercentage}
+                />
+                )}
+                <StoryImg
+                  src={storiesImgAvailable[chosedIndex]}
+                  alt="imageUrl"
+                  style={imgLoading[chosedIndex] ? { backgroundColor: 'black', opacity: '0' } : { opacity: '1' }}
+                  onLoad={() => {
+                    setLoadingPercentage(0);
+                    setImgLoading(false);
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = setInterval(() => {
+                      if (loadingPercentage < 5) {
+                        setLoadingPercentage((prev) => prev + 1);
+                      } else {
+                        setLoadingPercentage(0);
+                        clearInterval(intervalRef.current);
+                        setChosedIndex((prev) => prev + 1);
+                      }
+                    }, 1000);
+                  }}
+                />
               </div>
-              <StoryImg src={storiesImgAvailable[chosedIndex]} alt="imageUrl" />
               <StoryTime>{`${transformTimeToDate(storiesTimeAll[chosedIndex]?.seconds * 1000)}`}</StoryTime>
             </StoryPhotoContainer>
           </StoryPopUpContainer>
@@ -92,6 +149,8 @@ ShowStoryDetail.propTypes = {
   setChosedIndex: PropTypes.func,
   intervalRef: PropTypes.string,
   storiesTimeAll: PropTypes.string,
+  imgLoading: PropTypes.string,
+  setImgLoading: PropTypes.func,
 };
 
 ShowStoryDetail.defaultProps = {
@@ -102,4 +161,6 @@ ShowStoryDetail.defaultProps = {
   setChosedIndex: () => {},
   intervalRef: '',
   storiesTimeAll: '',
+  imgLoading: '',
+  setImgLoading: () => {},
 };

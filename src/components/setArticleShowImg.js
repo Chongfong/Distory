@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CircleButton } from '../pages/ImageEditor.style';
+import { EditButton } from '../pages/ImageEditor.style';
+
+import {
+  EditDiaryShowImageDiv, EditDiaryShowImageLabel,
+  SetArticlePasswordTitle, SetArticleShowImgPhoto,
+} from '../pages/CreateNewDiaries.style';
 
 export default function SetArticleShowImg(
   {
@@ -14,20 +19,10 @@ export default function SetArticleShowImg(
       flex: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
     }}
     >
-      <p style={{ margin: '1em 20px' }}>預設圖片</p>
-      <div>
-        <label
+      <SetArticlePasswordTitle>預設圖片</SetArticlePasswordTitle>
+      <EditDiaryShowImageDiv>
+        <EditDiaryShowImageLabel
           htmlFor="upload-blogImage"
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'center',
-            borderRadius: '20px',
-            cursor: 'pointer',
-            position: 'relative',
-          }}
         >
           <input
             type="file"
@@ -40,7 +35,7 @@ export default function SetArticleShowImg(
             }}
           />
           {articleShowImgFile ? (
-            <CircleButton
+            <EditButton
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -48,35 +43,32 @@ export default function SetArticleShowImg(
                 setArticleShowImgUrl(articleShowImg);
               }}
               style={{
-                fontSize: '25px', position: 'absolute', bottom: '10px', right: '20px',
+                fontSize: '25px', position: 'absolute', bottom: '10px', left: '0px',
               }}
             >
               ×
 
-            </CircleButton>
+            </EditButton>
           ) : (
-            <CircleButton
+            <EditButton
               style={{
                 fontSize: '25px',
                 position: 'absolute',
                 bottom: '0px',
-                right: '0px',
+                left: '0px',
                 transform: 'scaleX(-1)',
               }}
             >
               ✎
 
-            </CircleButton>
+            </EditButton>
           )}
-          <img
+          <SetArticleShowImgPhoto
             alt="background"
             src={articleShowImgUrl}
-            style={{
-              width: '100%', maxWidth: '200px', maxHeight: '180px',
-            }}
           />
-        </label>
-      </div>
+        </EditDiaryShowImageLabel>
+      </EditDiaryShowImageDiv>
     </div>
   );
 }

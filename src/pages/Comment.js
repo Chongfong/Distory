@@ -11,10 +11,9 @@ import { db } from '../firestore/firestore';
 
 import {
   CommentsContainer, CommentNickName, CommentTime, CommentDivContainer, CommentDetailDiv,
-  CommentDetail, CommentInput, CommentNickNameInput, CommentAuthorImgContainer,
+  CommentDetail, CommentInput, CommentNickNameInput, CommentAuthorImgContainer, CommentSubTitle,
 } from './Comment.style';
 
-import { MyBlogProfileSubTitle } from './MyBlog.style';
 import { CircleButton } from './ImageEditor.style';
 
 export default function Comment({
@@ -149,15 +148,15 @@ export default function Comment({
         </CommentsContainer>
       )
         : ('')}
-      <MyBlogProfileSubTitle style={{ marginBottom: '40px' }}>發表留言</MyBlogProfileSubTitle>
-      <CommentDivContainer style={{ flexWrap: 'wrap' }}>
+      <CommentSubTitle>▋&nbsp;發表留言</CommentSubTitle>
+      <CommentDivContainer style={{ flexWrap: 'wrap', width: '100%' }}>
         {loginUserDate ? (
           <>
             <img
               src={loginUserDate.userImage}
               alt="loginUser"
               style={{
-                width: '50px', height: '50px', borderRadius: '50%', flexBasis: '10%',
+                maxWidth: '50px', height: '50px', borderRadius: '50%', flexBasis: '10%',
               }}
             />
             <CommentNickName style={{ flexBasis: '88%' }}>
@@ -175,17 +174,22 @@ export default function Comment({
             />
           </>
         )}
-        <CommentDetailDiv style={{ alignItems: 'flex-end' }}>
+        <CommentDetailDiv style={{ alignItems: 'flex-end', position: 'relative' }}>
           <CommentInput
             type="text"
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
           />
           <CircleButton
+            style={{
+              position: 'absolute',
+              bottom: '15px',
+              right: '15px',
+            }}
             role="button"
             tabIndex={0}
-            onClick={() => { postCommentDB(); }}
-            onKeyUp={() => { postCommentDB(); }}
+            onClick={(e) => { postCommentDB(e); setCommentContent(''); }}
+            onKeyUp={(e) => { postCommentDB(e); setCommentContent(''); }}
           >
             ✓
 

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const PopUpBackDiv = styled.div`
   position: fixed;
@@ -24,8 +24,8 @@ export const PopUpContainerDiv = styled.div`
 `;
 
 export const PopUpImageContainerDiv = styled(PopUpContainerDiv)`
-  width: 35%;
-  height: 50%;
+  width: 85%;
+  height: 85%;
   @media (max-width: 912px) {
     width: 70%;
     height: 80%;
@@ -40,7 +40,72 @@ export const CircleButton = styled.button`
   text-align: center;
   font-size: 20px;
   line-height: 40px;
-  background-color: white;
-  border: solid 1px #ccc;
   cursor: pointer;
+  border: #7f0019 2px solid;
+  background-color: white;
+  position: fixed;
+  color: #7f0019;
+  :hover{
+    background-color: #7f0019;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'完成';
+      position: absolute;
+      top: -2px;
+      left: 5px;
+      font-size: 12px;
+    }
+  }
+
+`;
+
+export const CircleButtonPlus = styled(CircleButton)`
+  top: -4px;
+  :hover{
+    ::after{
+      top: 8px;
+      left: 5px;
+      }
+      }
+`;
+
+export const CircleButtonCancel = styled(CircleButton)`
+  :hover{
+    ::after{
+      content:'取消';
+      }
+      }
+`;
+
+export const ArrowButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 20px;
+  border: rgb(211, 176, 146) 2px solid;
+  background-color: white;
+  color: rgb(211, 176, 146);
+  :hover{
+    background-color: rgb(211, 176, 146);
+    color: white;
+  }
+`;
+
+export const EditButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  border: #ccc 1px solid;
+  background-color: white;
+  position: fixed;
+  color: #ccc;
 `;

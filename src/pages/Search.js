@@ -3,12 +3,16 @@ import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
+
+import { previewImagesArray } from './Home';
 
 import {
   HomeBody, DiaryOutContainer, DiarySmallContainer, HomeImageNormal, DiaryInfoBox,
   DiaryTitleInsideBox, DiaryTitle, DiaryPublishTime,
+  DiaryImageBoxNormal, DiaryProfileImageBoxNormal, DiaryProfileImg, SearchTitle,
 } from './Home.style';
 
 export default function Search() {
@@ -42,7 +46,10 @@ export default function Search() {
         return userDiariesAll;
       }
     } catch (e) {
-      alert('Error querying document: ', e);
+      toast('施工中，返回首頁', {
+        autoClose: 2000,
+      });
+      navigate('/');
       return e.response;
     } return true;
   }
@@ -51,37 +58,99 @@ export default function Search() {
     searchTitle();
   }, []);
 
+  const [allDiariesAuthorImg, setAllDiariesAuthorImg] = useState([]);
+
+  const getAuthorInfoFunc = async () => {
+    if (searchTitleResult) {
+      const diaryAuthorsArray = [];
+      const diary = await Promise.all(searchTitleResult.map((eachDiary) => {
+        async function gettingAuthorInfo() {
+          try {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('userUID', '==', eachDiary.author));
+            const querySnapshot = await getDocs(q);
+            return querySnapshot;
+          } catch (e) {
+            return e.response;
+          }
+        }
+        return gettingAuthorInfo();
+      }));
+      diary.forEach((querySnapshot) => {
+        querySnapshot.forEach((querySnapshotEach) => {
+          if (!querySnapshotEach.empty) {
+            diaryAuthorsArray.push(querySnapshotEach.data().userImage);
+          }
+        });
+      }); setAllDiariesAuthorImg(diaryAuthorsArray);
+    }
+  };
+
+  useEffect(() => {
+    getAuthorInfoFunc();
+  }, [searchTitleResult]);
+
   return (
     <HomeBody>
       {searchTitleResult
 && (
 <DiaryOutContainer>
+  <SearchTitle>
+    搜尋
+    {' '}
+    {searchkey}
+    {' '}
+    的結果
+  </SearchTitle>
   <div className="diary" style={{ display: 'flex', flexWrap: 'wrap' }}>
     {(searchTitleResult.map((eachDiary, index) => (
-      <DiarySmallContainer
-        role="button"
-        tabIndex={0}
-        onClick={() => {
-          navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-        }}
-        onKeyUp={() => {
-          navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-        }}
-      >
-        <HomeImageNormal src="https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/blog_images%2F12230.png?alt=media&token=8a7679cf-1e33-49f9-81dd-73ae6aab9bc8" alt={`diary-${index}`} />
+
+      <DiarySmallContainer>
+        <DiaryImageBoxNormal
+          role="button"
+          tabIndex={0}
+          onClick={() => {
+            navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+          }}
+          onKeyUp={() => {
+            navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+          }}
+        >
+          {eachDiary.showImg ? (<HomeImageNormal src={eachDiary.showImg} alt={`diary-${index}`} />)
+            : (<HomeImageNormal src={previewImagesArray[Math.floor(Math.random() * 5)]} alt={`diary-${index}`} />)}
+        </DiaryImageBoxNormal>
         <DiaryInfoBox>
-          <DiaryTitleInsideBox>
-            <DiaryTitle>{eachDiary.title}</DiaryTitle>
+          <DiaryTitleInsideBox
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+            }}
+            onKeyUp={() => {
+              navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+            }}
+          >
+            <DiaryTitle>{eachDiary.title.slice(0, 60)}</DiaryTitle>
             <DiaryPublishTime>
               {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
             </DiaryPublishTime>
           </DiaryTitleInsideBox>
 
-          <img
-            alt="author"
-            style={{ width: '50px', height: '50px' }}
-            src="https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png"
-          />
+          <DiaryProfileImageBoxNormal
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              navigate(`/${eachDiary.author}`);
+            }}
+            onKeyUp={() => {
+              navigate(`/${eachDiary.author}`);
+            }}
+          >
+            <DiaryProfileImg
+              alt="author"
+              src={allDiariesAuthorImg[index]}
+            />
+          </DiaryProfileImageBoxNormal>
         </DiaryInfoBox>
       </DiarySmallContainer>
     )))}

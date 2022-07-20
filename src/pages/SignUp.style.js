@@ -2,12 +2,11 @@ import styled from 'styled-components';
 
 export const SignUpBody = styled.div`
   width: 320px;
-  margin: 0px auto;
+  margin: 50px auto 100px;
 `;
 
 export const SignUpContainer = styled.div`
-  width: 100%;
-  padding: 40px 30px 0px;
+  width: 100%
 `;
 
 export const SignUpTitle = styled.p`
@@ -40,6 +39,13 @@ export const SignUpIcons = styled.img`
   margin: 10px 20px 0px 20px;
 `;
 
+export const SignUpIconsStory = styled.div`
+  weight: 50px;
+  height: 50px;
+  margin: 5px 20px 25px 20px;
+  font-size: 55px;
+`;
+
 export const SignUpInfoTitle = styled.p`
   text-align: left;
   font-size: 1.5rem;
@@ -66,7 +72,7 @@ export const SignUpFlowIconContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
-  align-items: flex-end;
+  align-items: center;
 `;
 
 export const SignUpFinishIcons = styled.button`
@@ -74,15 +80,15 @@ export const SignUpFinishIcons = styled.button`
   height: 40px;
   border-radius: 15px;
   background-color: white;
-  border: 2px solid #b8b8b8;
+  border: 2px solid #d3b092;
   line-height:40px;
   font-size: 1rem;
   letter-spacing: 2px;
-  color: #b8b8b8;
+  color: #d3b092;
   cursor: pointer;
   margin: 10px;
   :hover, :active, :focus{
-    background-color: #b8b8b8;
+    background-color: #d3b092;
     color: white; 
   }
 `;

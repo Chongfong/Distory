@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import PropTypes from 'prop-types';
 import { auth } from '../firestore/firestore';
 
 import {
@@ -9,12 +11,11 @@ import {
   SignUpInfoTitle, SignUpInfoDetail, SignUpInput, SignUpFlowIconContainer,
 } from './SignUp.style';
 
-import { CircleButton } from './ImageEditor.style';
+import { ArrowButton } from './ImageEditor.style';
 
-export default function LogIn() {
-  const [logInEmail, setLogInEmail] = useState();
-  const [logInPassword, setlogInPassword] = useState();
-  const [currentUser, setCurrentUser] = useState();
+export default function LogIn({ setCurrentUser }) {
+  const [logInEmail, setLogInEmail] = useState('test@gmail.com');
+  const [logInPassword, setlogInPassword] = useState('123456');
   const changeUser = () => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -25,11 +26,26 @@ export default function LogIn() {
   const handleLogIn = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        alert('You are logging in');
-        navigate(`/${currentUser.uid}`);
+        toast('您已登入', {
+          autoClose: 3500,
+        });
+        navigate('/');
       })
       .catch((err) => {
-        alert(err.message);
+        const errorCode = err.code;
+        if (errorCode === 'auth/wrong-password') {
+          toast('密碼錯誤', {
+            autoClose: 3500,
+          });
+        } else if (errorCode === 'auth/invalid-email') {
+          toast('請輸入正確信箱', {
+            autoClose: 3500,
+          });
+        } else {
+          toast('錯誤，請重新輸入', {
+            autoClose: 3500,
+          });
+        }
       });
   };
 
@@ -60,12 +76,12 @@ export default function LogIn() {
             onKeyUp={() => { navigate('/signup'); }}
             role="button"
             tabIndex={0}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', color: 'rgb(181, 124, 74)' }}
           >
             Signup
           </SignUpInfoDetail>
           <div>
-            <CircleButton
+            <ArrowButton
               onClick={() => {
                 handleLogIn(logInEmail, logInPassword);
               }}
@@ -77,8 +93,8 @@ export default function LogIn() {
             >
               ➔
 
-            </CircleButton>
-            <div>Login</div>
+            </ArrowButton>
+            <div style={{ color: 'rgb(181, 124, 74)' }}>Login</div>
           </div>
         </SignUpFlowIconContainer>
 
@@ -86,3 +102,11 @@ export default function LogIn() {
     </SignUpBody>
   );
 }
+
+LogIn.propTypes = {
+  setCurrentUser: PropTypes.func,
+};
+
+LogIn.defaultProps = {
+  setCurrentUser: () => {},
+};

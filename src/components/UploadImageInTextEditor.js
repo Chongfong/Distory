@@ -1,8 +1,11 @@
 /* eslint-disable no-nested-ternary */
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Quill } from 'react-quill';
-import { PopUpBackDiv, PopUpImageContainerDiv, CircleButton } from '../pages/ImageEditor.style';
+import Resizer from 'react-image-file-resizer';
+import {
+  PopUpBackDiv, PopUpImageContainerDiv, CircleButton, CircleButtonCancel,
+} from '../pages/ImageEditor.style';
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage,
@@ -22,9 +25,30 @@ export default function UploadImageInTextEditor({
   const [imageFileUrl, setImageFileUrl] = useState();
   const [imageFile, setImageFile] = useState();
   const [uploadImageMethod] = useState(false);
-  const base64ImageUrl = useRef();
-  const insertEditablePhoto = (uploadImageUrl) => {
-    const cursorPosition = textEditorRef.current.editor.getSelection().index;
+
+  const resizeFile = (file) => new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      500,
+      500,
+      'PNG',
+      50,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      'base64',
+    );
+  });
+
+  const insertEditablePhoto = async (upload) => {
+    let uploadImageUrl;
+    if (upload.type) {
+      uploadImageUrl = await resizeFile(upload);
+    } else {
+      uploadImageUrl = upload;
+    }
+    const cursorPosition = textEditorRef.current.editor.selection.savedRange.index;
     textEditorRef.current.editor.insertEmbed(cursorPosition, 'image', {
       alt: `image${Date.now()}`,
       url: uploadImageUrl,
@@ -46,25 +70,9 @@ export default function UploadImageInTextEditor({
     textEditorRef.current.editor.setSelection(cursorPosition);
   };
 
-  const convertBase64 = (file) => new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
-
   const uploadImage = async (event) => {
     const file = event.target.files[0];
-    const base64 = await convertBase64(file);
-    setImageUrl(base64);
-    base64ImageUrl.current = base64;
-    insertEditablePhoto(base64ImageUrl.current);
+    insertEditablePhoto(file);
   };
 
   return (
@@ -108,15 +116,15 @@ export default function UploadImageInTextEditor({
 
               </UploadImageNavButtom>
             </UploadNavBar>
-            <UploadImageContainer>
+            <UploadImageContainer style={{ height: '84%' }}>
               {uploadFromFile === 'file'
                 ? (
-                  <form>
+                  <form style={{ height: '100%' }}>
                     <label
                       htmlFor="upload-image"
                       style={{
                         width: '100%',
-                        height: '270px',
+                        height: '90%',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -162,7 +170,13 @@ export default function UploadImageInTextEditor({
                     {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
                   </form>
                 ) : (
-                  <ImageEditorDefaultImage url={url} setUrl={setUrl} />
+                  <ImageEditorDefaultImage
+                    setImageUrl={setImageUrl}
+                    insertEditablePhoto={insertEditablePhoto}
+                    setIsOpen={setIsOpen}
+                    url={url}
+                    setUrl={setUrl}
+                  />
                 )
 
                 )}
@@ -181,7 +195,7 @@ export default function UploadImageInTextEditor({
                   ✓
 
                 </CircleButton>
-                <CircleButton
+                <CircleButtonCancel
                   onClick={() => {
                     setImageFileUrl();
                     setImageFile();
@@ -191,7 +205,7 @@ export default function UploadImageInTextEditor({
                 >
                   ×
 
-                </CircleButton>
+                </CircleButtonCancel>
               </>
             ) : (
               <>
@@ -206,7 +220,7 @@ export default function UploadImageInTextEditor({
                 >
                   ✓
                 </CircleButton>
-                <CircleButton
+                <CircleButtonCancel
                   onClick={() => {
                     setIsOpen(false);
                     setUrl();
@@ -215,7 +229,7 @@ export default function UploadImageInTextEditor({
                 >
                   ×
 
-                </CircleButton>
+                </CircleButtonCancel>
               </>
             )}
           </FlexBox>

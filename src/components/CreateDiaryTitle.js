@@ -7,7 +7,7 @@ export default function CreateNewDiaryTitle({ titleValue, setTitleValue }) {
   return (
     <CreateDiaryTitle
       onChange={(e) => setTitleValue(e.target.value)}
-      placeholder={titleValue}
+      value={titleValue}
     />
   );
 }
@@ -18,6 +18,6 @@ CreateNewDiaryTitle.propTypes = {
 };
 
 CreateNewDiaryTitle.defaultProps = {
-  titleValue: 'Please enter the title',
+  titleValue: '',
   setTitleValue: () => {},
 };

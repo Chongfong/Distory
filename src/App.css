@@ -44,3 +44,12 @@ ul{
 *{
   text-decoration: none;
 }
+
+::-webkit-scrollbar {
+  height: 3px;
+  width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+  background: #cabeba;
+  border-radius: 10px;
+}

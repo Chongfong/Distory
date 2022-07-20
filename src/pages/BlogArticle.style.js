@@ -64,3 +64,10 @@ export const NonInteractiveImage = styled(InteractiveImage)`
     opacity:1;
   }
 `;
+
+export const BlogArticleInputPassword = styled.input`
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  height: 1.5rem;
+  padding: 3px 5px;
+`;

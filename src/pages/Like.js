@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   collection, doc, updateDoc, arrayUnion, arrayRemove,
 } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { db } from '../firestore/firestore';
@@ -49,7 +50,9 @@ export default function Like({ currentUser, nowlikeUsers }) {
         }
       }
     } else {
-      alert('登入後即可按讚');
+      toast('登入後即可按讚', {
+        autoClose: 3500,
+      });
     }
   };
 
@@ -63,7 +66,11 @@ export default function Like({ currentUser, nowlikeUsers }) {
         setLikeUsers(likeUsersCopy);
         saveUnLikerDB(articleID);
       }
-    } else { alert('請先登入'); }
+    } else {
+      toast('請先登入', {
+        autoClose: 3500,
+      });
+    }
   };
   return (
     <>

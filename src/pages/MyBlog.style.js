@@ -1,5 +1,16 @@
 import styled from 'styled-components';
 
+export const MyBlogDiaryInsideBody = styled.div`
+  width: 70%;
+  height: 70%;
+  position: relative;
+  margin: 0 auto;
+  @media (max-width: 912px) {
+    width: calc( 100% - 100px);
+    padding: 0px 50px;
+  }
+`;
+
 export const MyBlogFLexContainer = styled.div`
   display: flex;
   flex-wrap: nowrap;
@@ -27,8 +38,8 @@ export const MyBlogFLexRight = styled.div`
   max-width: 70%;
   @media (max-width: 912px) {
     flex-basis: 100%;
-    max-width: 90%;
-    padding-bottom: 20px;
+    max-width: 100%;
+    padding: 0 0 20px 0;
 }
 `;
 
@@ -62,31 +73,31 @@ export const MyBlogButton = styled.button`
   width: 80%;
   height: 40px;
   border-radius: 10px;
-  background-color: #b8b8b8;
-  border: 2px solid #b8b8b8;
+  background-color: #d3b092;
+  border: 2px solid #d3b092;
   font-size: 1rem;
   letter-spacing: 3px;
   color: white;
   cursor: pointer;
   :hover, :active, :focus{
     background-color: white;
-    color: #b8b8b8; 
+    color: #d3b092; 
   }
 `;
 
 export const MyBlogButtonLight = styled(MyBlogButton)`
   background-color: white;
-  color: #b8b8b8;
+  color: #d3b092;
   margin: 8px 0px;
   :hover, :active, :focus{
-    background-color: #b8b8b8;
+    background-color: #d3b092;
     color: white; 
   }
 `;
 
 export const MyBlogBottomLine = styled.div`
   width: 80%;
-  border-bottom: 1px #b8b8b8 solid;
+  border-bottom: 1px #d3b092 solid;
   margin: 20px auto;
   @media (max-width: 912px) {
     width: 100%;
@@ -98,17 +109,29 @@ export const MyBlogVisitorDiv = styled.div`
 `;
 
 export const MyBlogProfileSubTitle = styled.p`
-  padding: 0px 50px 0px;
   font-size: 1.3rem;
   letter-spacing: 2px;
-  color: #b8b8b8;
+  color: #d3b092;
   text-align: left;
   width: 90%;
   margin: 0px auto !important;
+  @media (max-width: 912px) {
+    width: 100%;
+  }
 `;
 
 export const MyBlogProfileSubTitleMargin = styled(MyBlogProfileSubTitle)`
-  margin: 100px auto 50px !important;
+  margin: 10px auto 50px !important;
+`;
+
+export const MyBlogProfileImg = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  cursor: pointer;
+  :hover, :active, :focus{
+    opacity: 0.5;
+  }
 `;
 
 export const ClickableDiv = styled.div`

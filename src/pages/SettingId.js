@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { updateProfile, onAuthStateChanged } from 'firebase/auth';
 import {
   collection,
@@ -10,17 +12,17 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 import { db, auth } from '../firestore/firestore';
 import {
   SignUpBody, SignUpContainer, SignUpTitle, SignUpSubTitle,
   SignUpInfoTitle, SignUpInput, SignUpInfoDetail, SignUpFlowIconContainer,
 } from './SignUp.style';
 
-import { CircleButton } from './ImageEditor.style';
+import { ArrowButton } from './ImageEditor.style';
 
-export default function SettingId() {
-  const [settingId, setSettingId] = useState();
-  const [settingImageUrl] = useState('https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png');
+export default function SettingId({ settingId, setSettingId }) {
+  const [settingImageUrl] = useState('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
 
   const navigate = useNavigate();
   const userCollection = collection(db, 'users');
@@ -32,7 +34,7 @@ export default function SettingId() {
       userImage: settingImageUrl,
       createAt: Timestamp.now().toDate(),
       userUID: uid,
-      blogImage: 'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/background%2Fbeach.png?alt=media&token=58223990-f103-4a62-92d9-67a7ed83ca8a',
+      blogImage: 'https://file.coffee/u/5hzGTlSZl34G_c1HMtTuI.png',
       blogTitle: `${settingId}的部落格`,
       blogIntro: `Hello I'm ${settingId}`,
       blogLayout: 'A',
@@ -48,8 +50,10 @@ export default function SettingId() {
         displayName: nickName,
       }).then(() => {
         saveNewUserDB(loggingInUser.uid);
-      }).catch((error) => {
-        alert(error.message);
+      }).catch(() => {
+        toast('請重新嘗試', {
+          autoClose: 2000,
+        });
       });
     });
   };
@@ -65,10 +69,14 @@ export default function SettingId() {
         navigate('/welcome');
         return true;
       }
-      alert('此ID已有人使用');
+      toast('此ID已有人使用', {
+        autoClose: 3500,
+      });
       return false;
     } catch (e) {
-      alert('Error querying document: ', e);
+      toast('發生錯誤', {
+        autoClose: 2000,
+      });
       return e.response;
     }
   }
@@ -89,7 +97,7 @@ export default function SettingId() {
         <SignUpInfoDetail>此ID無法更改　將顯示在部落格中</SignUpInfoDetail>
         <SignUpFlowIconContainer style={{ justifyContent: 'flex-end' }}>
           <div>
-            <CircleButton
+            <ArrowButton
               onClick={() => {
                 checkDuplicateIdAndSaveDB();
               }}
@@ -101,8 +109,8 @@ export default function SettingId() {
             >
               ➔
 
-            </CircleButton>
-            <div>完成</div>
+            </ArrowButton>
+            <div style={{ color: '#d3b092' }}>完成</div>
           </div>
         </SignUpFlowIconContainer>
 
@@ -110,3 +118,13 @@ export default function SettingId() {
     </SignUpBody>
   );
 }
+
+SettingId.propTypes = {
+  settingId: PropTypes.string,
+  setSettingId: PropTypes.func,
+};
+
+SettingId.defaultProps = {
+  settingId: '',
+  setSettingId: () => {},
+};
