@@ -491,14 +491,14 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
 }
 
 CreateNewDiary.propTypes = {
-  isOpen: PropTypes.string,
+  isOpen: PropTypes.bool,
   setIsOpen: PropTypes.func,
-  currentUser: PropTypes.string,
+  currentUser: PropTypes.shape,
 };
 
 CreateNewDiary.defaultProps = {
-  isOpen: '',
+  isOpen: false,
   setIsOpen: () => {},
-  currentUser: PropTypes.string,
+  currentUser: {},
 
 };

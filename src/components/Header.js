@@ -247,15 +247,15 @@ export default function Header({
 }
 
 Header.propTypes = {
-  currentUser: PropTypes.string,
+  currentUser: PropTypes.shape,
   setCurrentUser: PropTypes.func,
   currentUserData: PropTypes.string,
-  isSignUp: PropTypes.string,
+  isSignUp: PropTypes.bool,
 };
 
 Header.defaultProps = {
-  currentUser: '',
+  currentUser: {},
   setCurrentUser: () => {},
   currentUserData: '',
-  isSignUp: '',
+  isSignUp: false,
 };

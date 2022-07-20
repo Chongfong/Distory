@@ -151,7 +151,7 @@ export default function LoadStories() {
 
                 {storiesAvailable
                   .map((eachStory, index) => (
-                    <StoryContainer>
+                    <StoryContainer key={`story-${Date.now() + index}`}>
 
                       {storyAuthorsInfo ? (
                         <>

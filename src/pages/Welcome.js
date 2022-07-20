@@ -86,7 +86,7 @@ export default function Welcome(
 }
 
 Welcome.propTypes = {
-  currentUser: PropTypes.string,
+  currentUser: PropTypes.shape,
   setCurrentUser: PropTypes.func,
   setCurrentUserData: PropTypes.func,
   setIsSignUp: PropTypes.func,
@@ -94,7 +94,7 @@ Welcome.propTypes = {
 };
 
 Welcome.defaultProps = {
-  currentUser: '',
+  currentUser: {},
   setCurrentUser: () => {},
   setCurrentUserData: () => {},
   setIsSignUp: () => {},

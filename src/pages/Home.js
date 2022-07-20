@@ -117,7 +117,7 @@ export default function Home() {
               className="diary"
             >
               {allDiaries.map((eachDiary, index) => (
-                <>
+                <React.Fragment key={`${Date.now() + index}`}>
                   {
               index === 0
                 ? (
@@ -233,7 +233,7 @@ export default function Home() {
                 )
             }
                   {}
-                </>
+                </React.Fragment>
               ))}
 
             </DiaryAllContainer>

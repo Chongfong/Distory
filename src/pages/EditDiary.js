@@ -435,11 +435,11 @@ export default function EditDiary({ isOpen, setIsOpen }) {
 }
 
 EditDiary.propTypes = {
-  isOpen: PropTypes.string,
+  isOpen: PropTypes.bool,
   setIsOpen: PropTypes.func,
 };
 
 EditDiary.defaultProps = {
-  isOpen: '',
+  isOpen: false,
   setIsOpen: () => {},
 };

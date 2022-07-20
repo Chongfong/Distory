@@ -236,9 +236,9 @@ export default function CreateNewStory({ currentUser }) {
 }
 
 CreateNewStory.propTypes = {
-  currentUser: PropTypes.string,
+  currentUser: PropTypes.shape,
 };
 
 CreateNewStory.defaultProps = {
-  currentUser: PropTypes.string,
+  currentUser: {},
 };

@@ -17,7 +17,7 @@ export default function HomeIntro() {
       &nbsp;的精采世界
       </HomeInviteTitle>
       <HomeIntroWord>
-        <p>圖文整合　一次編輯</p>
+        <span>圖文整合　一次編輯</span>
       &nbsp;保存你的每一個驚喜瞬間
 
       </HomeIntroWord>

@@ -415,14 +415,14 @@ export default function EditBlog({
 }
 
 EditBlog.propTypes = {
-  currentUser: PropTypes.string,
+  currentUser: PropTypes.shape,
   currentUserData: PropTypes.string,
   setCurrentUserData: PropTypes.func,
 
 };
 
 EditBlog.defaultProps = {
-  currentUser: '',
+  currentUser: {},
   currentUserData: '',
   setCurrentUserData: () => {},
 };
