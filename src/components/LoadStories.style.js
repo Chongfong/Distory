@@ -10,6 +10,9 @@ export const StoryOuterContainer = styled.div`
   width: 100%;
   height: 450px;
   position: relative;
+  @media (max-width: 912px) {
+    height: 400px;
+  }
 `;
 
 export const StoryInnerContainer = styled.div`
@@ -80,6 +83,25 @@ export const StoryImg = styled.img`
   max-height: 450px;
   margin: 10px auto;
   box-shadow: -3px -3px 3px 3px #eee;
+  @media (max-width: 912px) {
+    max-height: 400px;
+}
+  @media (max-width: 400px) {
+    max-height: 300px;
+}
+`;
+
+export const StoryAuthContainer = styled.div`
+  width: calc( 100% - 10px);
+  padding-left: 10px;
+  position: absolute;
+  bottom: 20px;
+  overflow: hidden;  
+    @media (max-width: 912px) {
+    width: calc( 100% - 10px);
+    padding-left: 5px;
+    left: 0px; 
+}
 `;
 
 export const StoryAuthorImg = styled.img`
@@ -114,7 +136,12 @@ export const StoryPopUpContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   border-radius: 7px;
-
+  @media (max-width: 912px) {
+    height:70%;
+}
+@media (max-width: 400px) {
+    height:60%;
+}
 
 `;
 
@@ -126,6 +153,12 @@ export const StoryTime = styled.p`
   text-align: end;
   position: absolute;
   bottom: -50px;
+  @media (max-width: 912px) {
+    font-size: 40px;
+}
+@media (max-width: 400px) {
+  font-size: 30px;
+}
 `;
 
 export const StoryPhotoContainer = styled.div`
@@ -137,7 +170,6 @@ export const StoryPhotoContainer = styled.div`
   justify-content: flex-end;
   margin: 0px 15px;
   position: relative;
-  
 `;
 
 export const StoryPhotoStatusBar = styled.div`
@@ -176,15 +208,23 @@ export const StoryArrowButton = styled.div`
   font-size: 18px;
   line-height: 30px;
   cursor: pointer;
-  opacity: 0.2;
+  opacity: 0.7;
   position: absolute;
   top: 50%;
   right: -70px;
   :hover, :active, :focus{
     opacity: 1;
   }
-  @media (max-width: 912px) {
-    top: 20%;
+  @media (max-width: 720px) {
+    top: 102%;
+    right: 0px;
 }
+`;
 
+export const StoryArrowButtonLeft = styled(StoryArrowButton)`
+  left: -70px;
+  @media (max-width: 720px) {
+    top: 102%;
+    left: 0px;
+}
 `;

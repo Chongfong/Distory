@@ -25,6 +25,8 @@ import { changeHTMLToPureText } from '../components/ShareFunctions';
 
 import LoadStories from '../components/LoadStories';
 
+import HomeIntro from '../components/HomeIntro';
+
 import Loader from '../components/Loader';
 
 export const previewImagesArray = [
@@ -148,18 +150,20 @@ export default function Home() {
                             />
                           </DiaryImageInsideBox>
                           <DiaryTitleInsideBox style={{ textAlign: 'center' }}>
-                            <DiaryTitleFirst>{eachDiary.title.slice(0, 20)}</DiaryTitleFirst>
+                            <DiaryTitleFirst>{eachDiary.title.slice(0, 15)}</DiaryTitleFirst>
                             <DiaryPublishTime>
                               {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
                             </DiaryPublishTime>
                             <DiaryContent>
-                              {`${changeHTMLToPureText(eachDiary.content).slice(0, 80)}...`}
+                              {`${changeHTMLToPureText(eachDiary.content).slice(0, 96)}...`}
                             </DiaryContent>
                           </DiaryTitleInsideBox>
 
                         </DiaryIngoBoxFisrt>
 
                       </DiaryContainer>
+                      <HomeIntro />
+                      <LoadStories />
                       <HomeInviteDiv>
                         <HomeInviteTitle>
                           加入&nbsp;
@@ -175,8 +179,6 @@ export default function Home() {
                           </Link>
                         </HomeInviteButtonContainer>
                       </HomeInviteDiv>
-                      <LoadStories />
-
                     </>
                     <HomeProfileSubTitle>
                       ▋&nbsp;經典好文

@@ -17,7 +17,7 @@ import {
   HeaderMember, HeaderTitleContainer,
   HeaderBackgroundImage, HeaderSearchIconContainer, HeaderUserContainer,
   HeaderLoginOptions, HeaderOptionsExplain, HeaderLoginOptionsSpecial,
-  HeaderLoginOptionsTopContainer,
+  HeaderLoginOptionsTopContainer, HeaderSearchBarContainer,
 } from './Header.style';
 
 import { db, auth } from '../firestore/firestore';
@@ -98,7 +98,7 @@ export default function Header({
             </HeaderTitle>
           </Link>
           <HeaderContainer>
-            <div style={{ position: 'relative', margin: '20px 20px' }}>
+            <HeaderSearchBarContainer>
               <HeaderSearchBar
                 type="text"
                 value={searchkey}
@@ -129,7 +129,7 @@ export default function Header({
                 </HeaderSearchIconContainer>
               )}
 
-            </div>
+            </HeaderSearchBarContainer>
             {currentUser ? (
               <>
                 <HeaderLoginOptionsTopContainer>
@@ -229,10 +229,10 @@ export default function Header({
             ) : (
               <>
                 <Link to="/signup">
-                  <HeaderSignup>Signup</HeaderSignup>
+                  <HeaderSignup>註冊</HeaderSignup>
                 </Link>
                 <Link to="/login">
-                  <HeaderLogin>Login</HeaderLogin>
+                  <HeaderLogin>登入</HeaderLogin>
                 </Link>
               </>
             )}

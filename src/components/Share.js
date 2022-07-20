@@ -32,6 +32,10 @@ export default function Share({ url, title }) {
   return (
     <>
       <div
+        style={{
+          textAlign: 'right',
+          marginRight: '10px',
+        }}
         onClick={(e) => {
           shareDistoryUrl(e);
         }}

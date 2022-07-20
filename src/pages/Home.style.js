@@ -141,6 +141,7 @@ export const DiaryTitle = styled.p`
   -webkit-line-clamp: 2;
   line-clamp: 2; 
   -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;
 
 export const DiaryTitleFirst = styled(DiaryTitle)`
@@ -220,6 +221,10 @@ export const HomeInviteTitle = styled.p`
 
 export const HomeInviteButtonContainer = styled.div`
   flex: 100%;
+  justify-content: center;
+  @media (max-width: 912px) {
+    flex-wrap: wrap;
+}
 `;
 
 export const HomeInviteButton = styled.button`
@@ -261,10 +266,14 @@ export const HomeWelcomeWords = styled.p`
   color:#72677E;
   line-height: 100px;
   position: relative;
-  @media (max-width: 912px) {
-    width: 90%;
-    margin: 0 auto;
+  @media (max-width: 997px) {
     font-size: 50px;
+}
+@media (max-width: 657px) {
+    font-size: 40px;
+}
+@media (max-width: 526px) {
+    font-size: 25px;
 }
 `;
 
@@ -280,4 +289,41 @@ export const HomeProfileSubTitle = styled.p`
   text-align: left;
   width: 90%;
   margin: 0px auto !important;
+`;
+
+export const HomeIntroContainer = styled(HomeInviteDiv)`
+  height: 700px;
+  justify-content: center;
+  @media (max-width: 912px) {
+    height: auto;
+}
+`;
+
+export const HomeIntroWord = styled.p`
+  margin: 30px !important;
+  font-size: 1.3rem;
+`;
+
+export const HomeIntroImgContainer = styled.div`
+  max-width: 30%;
+  margin: 0px 10px;
+
+  @media (max-width: 912px) {
+    max-width: 51%;
+    margin: 20px auto;
+}
+`;
+
+export const HomeIntroImg = styled.img`
+  width: 100%;
+`;
+
+export const HomeIntroTitle = styled.p`
+  font-size: 1.7rem;
+  font-weight: bold;
+`;
+
+export const HomeIntroDetail = styled.p`
+  font-size: 1.2rem;
+  margin: 10px auto !important;
 `;

@@ -9,7 +9,9 @@ import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { myTheme, ImageEditorSubmitButtonsForm } from './imageEditorTheme';
 import '../css/textEditor.css';
 import '../css/imageEditor.css';
-import { PopUpBackDiv, PopUpContainerDiv, CircleButton } from '../pages/ImageEditor.style';
+import {
+  PopUpBackDiv, PopUpContainerDiv, CircleButton, CircleButtonCancel,
+} from '../pages/ImageEditor.style';
 
 import StickerRow from './ImageEditorSticker';
 
@@ -127,7 +129,7 @@ export default function PhotoEditor({
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               if (textEditorCursorIndex.current !== 0) {
                 textEditorRef.current.editor.updateContents(new Delta()
-                  .retain(textEditorCursorIndex.current - 1)
+                  .retain(textEditorCursorIndex.current)
                   .delete(1)
                   .insert({
                     image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
@@ -215,7 +217,7 @@ export default function PhotoEditor({
               <StickerRow onStickerSelected={(path) => addSticker(path)} />
               <ImageEditorSubmitButtonsForm onSubmit={handleSubmit}>
                 <CircleButton type="submit" style={{ position: 'relative' }}>✓</CircleButton>
-                <CircleButton type="button" style={{ fontSize: '25px', position: 'relative' }} onClick={() => setOpenImageEditor(false)}>×</CircleButton>
+                <CircleButtonCancel type="button" style={{ fontSize: '25px', position: 'relative' }} onClick={() => setOpenImageEditor(false)}>×</CircleButtonCancel>
               </ImageEditorSubmitButtonsForm>
             </PopUpContainerDiv>
           </PopUpBackDiv>

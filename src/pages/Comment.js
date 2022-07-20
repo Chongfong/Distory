@@ -188,8 +188,8 @@ export default function Comment({
             }}
             role="button"
             tabIndex={0}
-            onClick={() => { postCommentDB(); setCommentContent(''); }}
-            onKeyUp={() => { postCommentDB(); setCommentContent(''); }}
+            onClick={(e) => { postCommentDB(e); setCommentContent(''); }}
+            onKeyUp={(e) => { postCommentDB(e); setCommentContent(''); }}
           >
             ✓
 

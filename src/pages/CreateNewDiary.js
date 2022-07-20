@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Navigate } from 'react-router-dom';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import {
   collection,
@@ -31,8 +31,9 @@ import SetArticleShowImg from '../components/setArticleShowImg';
 import { previewImagesArray } from './Home';
 
 import loading from '../img/playingboy.png';
+import Loader from '../components/Loader';
 
-export default function CreateNewDiary({ isOpen, setIsOpen }) {
+export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [titleValue, setTitleValue] = useState('');
@@ -306,182 +307,185 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 
   return (
     <CreateDiaryBody>
-      <CreateDiaryInsideBody>
-        {isLoading ? (<img src={loading} alt="loading" />) : (
-          <>
-            <CreateDiaryNavBar>
-              <CreateDiaryNavButton
-                selected={selectEditMode === 'new'}
-                onClick={() => {
-                  setSelectEditMode('new');
-                  setIsChoosing(false);
-                }}
-              >
-                發表新文章
-
-              </CreateDiaryNavButton>
-              <CreateDiaryNavButton
-                selected={selectEditMode === 'edit'}
-                onClick={() => {
-                  setSelectEditMode('edit');
-                  setIsChoosing(true);
-                }}
-              >
-                編輯草稿
-
-              </CreateDiaryNavButton>
-            </CreateDiaryNavBar>
-            <div style={{ height: '100%' }}>
-              {isChoosing === false ? (
+      { currentUser ? (
+        currentUser?.uid === userID
+          ? (
+            <CreateDiaryInsideBody>
+              {isLoading ? (<img src={loading} alt="loading" />) : (
                 <>
-                  <CreateDiaryTitle
-                    value={titleValue}
-                    onChange={(e) => { setTitleValue(e.target.value); }}
-                    placeholder={titleValue}
+                  <CreateDiaryNavBar>
+                    <CreateDiaryNavButton
+                      selected={selectEditMode === 'new'}
+                      onClick={() => {
+                        setSelectEditMode('new');
+                        setIsChoosing(false);
+                      }}
+                    >
+                      發表新文章
+
+                    </CreateDiaryNavButton>
+                    <CreateDiaryNavButton
+                      selected={selectEditMode === 'edit'}
+                      onClick={() => {
+                        setSelectEditMode('edit');
+                        setIsChoosing(true);
+                      }}
+                    >
+                      編輯草稿
+
+                    </CreateDiaryNavButton>
+                  </CreateDiaryNavBar>
+                  <div style={{ height: '100%' }}>
+                    {isChoosing === false ? (
+                      <>
+                        <CreateDiaryTitle
+                          value={titleValue}
+                          onChange={(e) => { setTitleValue(e.target.value); }}
+                          placeholder={titleValue}
+                        />
+                        <TextEditor
+                          diaryContentValue={diaryContentValue}
+                          setDiaryContentValue={setDiaryContentValue}
+                          imageUrl={imageUrl}
+                          imageRef={imageRef}
+                          textEditorRef={textEditorRef}
+                          textEditorCursorIndex={textEditorCursorIndex}
+                        />
+                        <SetArticleSettingsOuterContainer>
+                          <SetArticleSettingsContainer>
+                            <SetArticlePassword
+                              articlePassword={articlePassword}
+                              setArticlePassword={setArticlePassword}
+                              articlePasswordHint={articlePasswordHint}
+                              setArticlePasswordHint={setArticlePasswordHint}
+                            />
+                          </SetArticleSettingsContainer>
+                          <SetArticleSettingsContainer>
+                            <SetArticleShowImg
+                              articleShowImg={articleShowImg}
+                              setArticleShowImg={setArticleShowImg}
+                              articleShowImgUrl={articleShowImgUrl}
+                              setArticleShowImgUrl={setArticleShowImgUrl}
+                              articleShowImgFile={articleShowImgFile}
+                              setArticleShowImgFile={setArticleShowImgFile}
+                            />
+                          </SetArticleSettingsContainer>
+                        </SetArticleSettingsOuterContainer>
+                      </>
+                    )
+                      : (
+                        selectEditMode === 'edit' ? (
+                          <ChooseEditArtices
+                            setTitleValue={setTitleValue}
+                            setDiaryContentValue={setDiaryContentValue}
+                            isChoosing={isChoosing}
+                            setIsChoosing={setIsChoosing}
+                          />
+                        ) : ('')
+                      )}
+
+                  </div>
+                  <br />
+                  <DropDownButton
+                    setLoadFromFile={setLoadFromFile}
+                    setLoadFromUrl={setLoadFromUrl}
+                    setImageUrl={setImageUrl}
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    textEditorCursorIndex={textEditorCursorIndex}
                   />
-                  <TextEditor
+                  <UploadImageInTextEditor
+                    loadFromFile={loadFromFile}
+                    loadFromUrl={loadFromUrl}
+                    setImageUrl={setImageUrl}
+                    url={url}
+                    setUrl={setUrl}
+                    textEditorRef={textEditorRef}
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    textEditorCursorIndex={textEditorCursorIndex}
+                  />
+                  <PhotoEditor
                     diaryContentValue={diaryContentValue}
                     setDiaryContentValue={setDiaryContentValue}
                     imageUrl={imageUrl}
-                    imageRef={imageRef}
+                    setImageUrl={setImageUrl}
+                    openImageEditor={openImageEditor}
+                    setOpenImageEditor={setOpenImageEditor}
+                    url={url}
+                    setUrl={setUrl}
                     textEditorRef={textEditorRef}
                     textEditorCursorIndex={textEditorCursorIndex}
                   />
-                  <SetArticleSettingsOuterContainer>
-                    <SetArticleSettingsContainer>
-                      <SetArticlePassword
-                        articlePassword={articlePassword}
-                        setArticlePassword={setArticlePassword}
-                        articlePasswordHint={articlePasswordHint}
-                        setArticlePasswordHint={setArticlePasswordHint}
-                      />
-                    </SetArticleSettingsContainer>
-                    <SetArticleSettingsContainer>
-                      <SetArticleShowImg
-                        articleShowImg={articleShowImg}
-                        setArticleShowImg={setArticleShowImg}
-                        articleShowImgUrl={articleShowImgUrl}
-                        setArticleShowImgUrl={setArticleShowImgUrl}
-                        articleShowImgFile={articleShowImgFile}
-                        setArticleShowImgFile={setArticleShowImgFile}
-                      />
-                    </SetArticleSettingsContainer>
-                  </SetArticleSettingsOuterContainer>
+
+                  {articleShowImgFile ? (
+                    <CreateDiarySave
+                      onClick={() => {
+                        handleTempSubmit(articleShowImgFile);
+                      }}
+                      onKeyUp={() => {
+                        handleTempSubmit(articleShowImgFile);
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <FiSave style={{ color: '#7f0019' }} />
+
+                    </CreateDiarySave>
+                  ) : (
+                    <CreateDiarySave
+                      onClick={() => {
+                        saveTempDiaryDB();
+                      }}
+                      onKeyUp={() => {
+                        saveTempDiaryDB();
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <FiSave />
+
+                    </CreateDiarySave>
+                  )}
+                  {articleShowImgFile ? (
+                    <CreateDiaryPublish
+                      style={{
+                        fontWeight: 'bold',
+                      }}
+                      onClick={() => {
+                        handleSubmit(articleShowImgFile);
+                      }}
+                      onKeyUp={() => {
+                        handleSubmit(articleShowImgFile);
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      ✓
+
+                    </CreateDiaryPublish>
+                  ) : (
+                    <CreateDiaryPublish
+                      style={{
+                        fontWeight: 'bold',
+                      }}
+                      onClick={() => {
+                        saveNewDiaryDB();
+                      }}
+                      onKeyUp={() => {
+                        saveNewDiaryDB();
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      ✓
+
+                    </CreateDiaryPublish>
+                  )}
                 </>
-              )
-                : (
-                  selectEditMode === 'edit' ? (
-                    <ChooseEditArtices
-                      setTitleValue={setTitleValue}
-                      setDiaryContentValue={setDiaryContentValue}
-                      isChoosing={isChoosing}
-                      setIsChoosing={setIsChoosing}
-                    />
-                  ) : ('')
-                )}
-
-            </div>
-            <br />
-            <DropDownButton
-              setLoadFromFile={setLoadFromFile}
-              setLoadFromUrl={setLoadFromUrl}
-              setImageUrl={setImageUrl}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              textEditorCursorIndex={textEditorCursorIndex}
-            />
-            <UploadImageInTextEditor
-              loadFromFile={loadFromFile}
-              loadFromUrl={loadFromUrl}
-              setImageUrl={setImageUrl}
-              url={url}
-              setUrl={setUrl}
-              textEditorRef={textEditorRef}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              textEditorCursorIndex={textEditorCursorIndex}
-            />
-            <PhotoEditor
-              diaryContentValue={diaryContentValue}
-              setDiaryContentValue={setDiaryContentValue}
-              imageUrl={imageUrl}
-              setImageUrl={setImageUrl}
-              openImageEditor={openImageEditor}
-              setOpenImageEditor={setOpenImageEditor}
-              url={url}
-              setUrl={setUrl}
-              textEditorRef={textEditorRef}
-              textEditorCursorIndex={textEditorCursorIndex}
-            />
-
-            {articleShowImgFile ? (
-              <CreateDiarySave
-                onClick={() => {
-                  handleTempSubmit(articleShowImgFile);
-                }}
-                onKeyUp={() => {
-                  handleTempSubmit(articleShowImgFile);
-                }}
-                role="button"
-                tabIndex={0}
-              >
-                <FiSave style={{ color: '#7f0019' }} />
-
-              </CreateDiarySave>
-            ) : (
-              <CreateDiarySave
-                onClick={() => {
-                  saveTempDiaryDB();
-                }}
-                onKeyUp={() => {
-                  saveTempDiaryDB();
-                }}
-                role="button"
-                tabIndex={0}
-              >
-                <FiSave />
-
-              </CreateDiarySave>
-            )}
-            {articleShowImgFile ? (
-              <CreateDiaryPublish
-                style={{
-                  zIndex: 1,
-                  fontWeight: 'bold',
-                }}
-                onClick={() => {
-                  handleSubmit(articleShowImgFile);
-                }}
-                onKeyUp={() => {
-                  handleSubmit(articleShowImgFile);
-                }}
-                role="button"
-                tabIndex={0}
-              >
-                ✓
-
-              </CreateDiaryPublish>
-            ) : (
-              <CreateDiaryPublish
-                style={{
-                  fontWeight: 'bold',
-                }}
-                onClick={() => {
-                  saveNewDiaryDB();
-                }}
-                onKeyUp={() => {
-                  saveNewDiaryDB();
-                }}
-                role="button"
-                tabIndex={0}
-              >
-                ✓
-
-              </CreateDiaryPublish>
-            )}
-          </>
-        )}
-      </CreateDiaryInsideBody>
+              )}
+            </CreateDiaryInsideBody>
+          ) : (<Navigate to="/" replace />)) : (<Loader />)}
     </CreateDiaryBody>
   );
 }
@@ -489,9 +493,12 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 CreateNewDiary.propTypes = {
   isOpen: PropTypes.string,
   setIsOpen: PropTypes.func,
+  currentUser: PropTypes.string,
 };
 
 CreateNewDiary.defaultProps = {
   isOpen: '',
   setIsOpen: () => {},
+  currentUser: PropTypes.string,
+
 };

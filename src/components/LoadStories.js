@@ -10,7 +10,7 @@ import { db } from '../firestore/firestore';
 
 import {
   StoryOuterContainer, StoryContainer, StoryImgContainer, StoryAuthorContainer,
-  StoryAuthorImg, StoryAuthorName, StoryTimeAgo, StoryInnerContainer,
+  StoryAuthorImg, StoryAuthorName, StoryTimeAgo, StoryInnerContainer, StoryAuthContainer,
 } from './LoadStories.style';
 
 import { HomeProfileSubTitle } from '../pages/Home.style';
@@ -163,10 +163,7 @@ export default function LoadStories() {
                               setChosedIndex(index);
                             }}
                           >
-                            <div style={{
-                              width: '100%', paddingLeft: '10px', position: 'absolute', bottom: '20px', left: '20px',
-                            }}
-                            >
+                            <StoryAuthContainer>
                               <StoryAuthorName>
                                 {storyAuthorsInfo[index][1]}
                               </StoryAuthorName>
@@ -175,7 +172,7 @@ export default function LoadStories() {
                                   .publishAt.seconds * 1000)}
 
                               </StoryTimeAgo>
-                            </div>
+                            </StoryAuthContainer>
                           </StoryImgContainer>
                           <StoryAuthorContainer onClick={() => navigate(`/${eachStory.author}`)}>
                             <StoryAuthorImg

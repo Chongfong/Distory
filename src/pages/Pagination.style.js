@@ -41,12 +41,13 @@ export const DiaryContentFlex = styled.div`
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
+  margin-right: 30px;
   cursor:pointer;
   :hover, :active, :focus{
     opacity: 0.5;
   }
   @media (max-width: 912px) {
-    max-width: 65%;
+    max-width: 90%;
     flex: 100%;
     margin-left: 5px;
 }
@@ -116,10 +117,13 @@ export const DiaryImgContainer = styled.div`
 `;
 
 export const DiaryContentFlexContainer = styled.div`
+width: calc( 100% - 172px);
+
 @media (max-width: 912px) {
   flex: 100%;
     display: flex;
     justify-content: space-between;
     max-width:100%;
+    
 }
 `;

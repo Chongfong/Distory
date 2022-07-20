@@ -1,6 +1,7 @@
 export const changeHTMLToPureText = (inputText) => {
   const text = inputText;
-  return (text.replaceAll(/<[^>]+>/g, ''));
+  const textLineBreak = text.replaceAll('\n', '<br />');
+  return (textLineBreak.replaceAll(/<[^>]+>/g, ''));
 };
 
 export const removeClickButtonsTag = (inputText) => {

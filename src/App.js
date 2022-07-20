@@ -91,7 +91,6 @@ function App() {
             element={(
               <EditBlog
                 currentUser={currentUser}
-                setCurrentUser={setCurrentUser}
                 currentUserData={currentUserData}
                 setCurrentUserData={setCurrentUserData}
               />

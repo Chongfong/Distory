@@ -63,6 +63,14 @@ export const HeaderTitleWords = styled.p`
   color: black;
 `;
 
+export const HeaderSearchBarContainer = styled.div`
+  position: relative;
+  margin: 20px 20px;
+  @media (max-width: 912px) {
+    margin: 20px 5px;
+}
+`;
+
 export const HeaderSearchBar = styled.input`
   border: 2px solid #d3b092;
   border-radius:25px;
@@ -74,6 +82,9 @@ export const HeaderSearchBar = styled.input`
     border: 2px solid rgb(181, 124, 74);
     outline: none;
   }
+  @media (max-width: 912px) {
+    width: 100px;
+}
 `;
 
 export const HeaderSearchIconContainer = styled.div`
@@ -108,12 +119,16 @@ export const HeaderLogin = styled.div`
   letter-spacing: 2px;
   color: #d3b092;
   cursor: pointer;
-  margin: 20px 10px;
+  margin: 20px 5px;
   text-align: center;
   outline: none;
   :hover, :active, :focus{
     background-color: #d3b092;
-    color: white; 
+    color: white;     
+  }
+  @media (max-width: 912px) {
+      letter-spacing: 0px;
+      width: 50px;
   }
 `;
 
@@ -128,12 +143,16 @@ export const HeaderSignup = styled.div`
   letter-spacing: 2px;
   color: #d3b092;
   cursor: pointer;
-  margin: 20px 10px;
+  margin: 20px 5px;
   text-align: center;
   outline: none;
   :hover, :active, :focus{
     background-color: #d3b092;
     color: white; 
+  }
+  @media (max-width: 912px) {
+      letter-spacing: 0px;
+      width: 50px;
   }
 
 `;

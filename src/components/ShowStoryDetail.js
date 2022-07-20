@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { PopUpBackDiv } from '../pages/ImageEditor.style';
 import {
   StoryPopUpContainer, StoryTime, StoryPhotoContainer, StoryCloseButton, StoryArrowButton,
-  StoryPhotoStatusBar, StoryImg,
+  StoryPhotoStatusBar, StoryImg, StoryArrowButtonLeft,
 } from './LoadStories.style';
 
 import { transformTimeToDate } from './ShareFunctions';
@@ -55,8 +55,7 @@ export default function ShowStoryDetail({
             {chosedIndex === 0 ? (
               ''
             ) : (
-              <StoryArrowButton
-                style={{ left: '-70px' }}
+              <StoryArrowButtonLeft
                 onClick={() => {
                   setChosedImg(storiesImgAvailable[chosedIndex - 1]);
                   setChosedIndex(chosedIndex - 1);
@@ -75,13 +74,12 @@ export default function ShowStoryDetail({
                 }}
               >
                 &lt;
-              </StoryArrowButton>
+              </StoryArrowButtonLeft>
             )}
             {chosedIndex === storiesImgAvailable.length - 1 ? (
               ''
             ) : (
               <StoryArrowButton
-                style={{ right: '-70px' }}
                 onClick={() => {
                   setChosedImg(storiesImgAvailable[chosedIndex + 1]);
                   setChosedIndex(chosedIndex + 1);
