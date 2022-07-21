@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react';
 import {
   collection, orderBy, query, getDocs, where,
@@ -20,10 +19,9 @@ export default function Pagination({ userID, currentUserData }) {
   const totalPages = useRef();
   const navigate = useNavigate();
 
-  const urlsRef = collection(db, 'articles');
-
   useEffect(() => {
     const fetchData = async () => {
+      const urlsRef = collection(db, 'articles');
       const q = query(urlsRef, where('author', '==', userID), where('status', '==', 'published'), orderBy('publishAt', 'desc'));
       const querySnapshot = await getDocs(q);
       const items = [];

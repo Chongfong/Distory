@@ -1,9 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import PropTypes from 'prop-types';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firestore/firestore';
 
 import {
@@ -13,14 +13,10 @@ import {
 
 import { ArrowButton } from './ImageEditor.style';
 
-export default function LogIn({ setCurrentUser }) {
+export default function LogIn() {
   const [logInEmail, setLogInEmail] = useState('test@gmail.com');
   const [logInPassword, setlogInPassword] = useState('123456');
-  const changeUser = () => {
-    onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
-  };
+
   const navigate = useNavigate();
 
   const handleLogIn = (email, password) => {
@@ -49,9 +45,6 @@ export default function LogIn({ setCurrentUser }) {
       });
   };
 
-  useEffect(() => {
-    changeUser();
-  }, []);
   return (
     <SignUpBody>
       <SignUpContainer>
@@ -102,11 +95,3 @@ export default function LogIn({ setCurrentUser }) {
     </SignUpBody>
   );
 }
-
-LogIn.propTypes = {
-  setCurrentUser: PropTypes.func,
-};
-
-LogIn.defaultProps = {
-  setCurrentUser: () => {},
-};

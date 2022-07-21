@@ -1,6 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -27,12 +24,13 @@ export default function Comment({
   const { diaryID } = useParams();
 
   const diaryRef = doc(db, 'articles', diaryID);
-  const fetchDiaryComments = () => new Promise((resolve) => {
-    const querySnapshot = getDoc(diaryRef);
-    resolve(querySnapshot);
-  });
 
   const loadDiaryComments = useCallback(() => {
+    const fetchDiaryComments = () => new Promise((resolve) => {
+      const querySnapshot = getDoc(diaryRef);
+      resolve(querySnapshot);
+    });
+
     const loadingDiaryComments = async () => {
       let nowDiaryComments = {};
       fetchDiaryComments().then((querySnapshot) => {
@@ -44,7 +42,7 @@ export default function Comment({
       return (nowDiaryComments);
     };
     loadingDiaryComments();
-  }, []);
+  }, [diaryRef, setCommentAll]);
 
   const postCommentDB = () => {
     const articlesCollection = collection(db, 'articles');
@@ -72,41 +70,44 @@ export default function Comment({
     return formatted;
   };
 
-  const getCommentAuthorInfoFunc = async () => {
-    if (commentAll) {
-      const storyAuthorsArray = [];
-      const story = await Promise.all(commentAll.map((eachComment) => {
-        async function gettingAuthorInfo() {
-          try {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, where('userUID', '==', eachComment.commentAuthorID));
-            const querySnapshot = await getDocs(q);
-            return querySnapshot;
-          } catch {
-            return [];
-          }
-        }
-        return gettingAuthorInfo();
-      }));
-      story.forEach((querySnapshot) => {
-        if (querySnapshot.empty) {
-          storyAuthorsArray.push('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
-        } else {
-          querySnapshot.forEach((querySnapshotEach) => {
-            if (!querySnapshotEach.empty) {
-              storyAuthorsArray.push(
-                querySnapshotEach.data().userImage,
-              );
+  const getCommentAuthorInfoFuncCallBack = useCallback(() => {
+    const getCommentAuthorInfoFunc = async () => {
+      if (commentAll) {
+        const storyAuthorsArray = [];
+        const story = await Promise.all(commentAll.map((eachComment) => {
+          async function gettingAuthorInfo() {
+            try {
+              const usersRef = collection(db, 'users');
+              const q = query(usersRef, where('userUID', '==', eachComment.commentAuthorID));
+              const querySnapshot = await getDocs(q);
+              return querySnapshot;
+            } catch {
+              return [];
             }
-          });
-        }
-      }); setCommentAuthorsInfo(storyAuthorsArray);
-    }
-  };
-
-  useEffect(() => {
+          }
+          return gettingAuthorInfo();
+        }));
+        story.forEach((querySnapshot) => {
+          if (querySnapshot.empty) {
+            storyAuthorsArray.push('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
+          } else {
+            querySnapshot.forEach((querySnapshotEach) => {
+              if (!querySnapshotEach.empty) {
+                storyAuthorsArray.push(
+                  querySnapshotEach.data().userImage,
+                );
+              }
+            });
+          }
+        }); setCommentAuthorsInfo(storyAuthorsArray);
+      }
+    };
     getCommentAuthorInfoFunc();
   }, [commentAll]);
+
+  useEffect(() => {
+    getCommentAuthorInfoFuncCallBack();
+  }, [getCommentAuthorInfoFuncCallBack]);
 
   return (
 
@@ -118,7 +119,7 @@ export default function Comment({
               {eachComment ? (
                 <CommentDivContainer>
                   {commentAuthorsInfo
-                    ? (eachComment.commentAuthorID ? ((
+                    && (eachComment.commentAuthorID ? ((
                       <CommentAuthorImgContainer
                         onClick={() => { navigate(`/${eachComment.commentAuthorID}`); }}
                         onKeyUp={() => { navigate(`/${eachComment.commentAuthorID}`); }}
@@ -128,8 +129,7 @@ export default function Comment({
                         <img src={commentAuthorsInfo[index]} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                       </CommentAuthorImgContainer>
                     )) : ((<div><img src={commentAuthorsInfo[index]} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /></div>
-                    )))
-                    : ('')}
+                    )))}
                   <CommentDetailDiv>
                     <div>
                       <CommentNickName>{eachComment?.commentAuthor}</CommentNickName>

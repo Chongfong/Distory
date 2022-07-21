@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
@@ -21,30 +20,32 @@ export default function ChooseEditArtices({
   const navigate = useNavigate();
   const [draftDiaries, setDraftDiaries] = useState();
 
-  async function searchDraftDiaries() {
-    try {
-      const urlsRef = collection(db, 'articles');
-      const q = query(urlsRef, where('author', '==', userID), where('status', '==', 'draft'));
-
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const draftDiariesAll = [];
-        querySnapshot.forEach((eachDiary) => { draftDiariesAll.push(eachDiary.data()); });
-        setDraftDiaries(draftDiariesAll);
+  const searchDraftDiariesCallback = useCallback(() => {
+    async function searchDraftDiaries() {
+      try {
+        const urlsRef = collection(db, 'articles');
+        const q = query(urlsRef, where('author', '==', userID), where('status', '==', 'draft'));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const draftDiariesAll = [];
+          querySnapshot.forEach((eachDiary) => { draftDiariesAll.push(eachDiary.data()); });
+          setDraftDiaries(draftDiariesAll);
+        }
+        return false;
+      } catch (e) {
+        toast('施工中，返回首頁', {
+          autoClose: 2000,
+        });
+        navigate('/');
+        return e.response;
       }
-      return false;
-    } catch (e) {
-      toast('施工中，返回首頁', {
-        autoClose: 2000,
-      });
-      navigate('/');
-      return e.response;
     }
-  }
+    searchDraftDiaries();
+  }, [navigate, userID]);
 
   useEffect(() => {
-    searchDraftDiaries();
-  }, []);
+    searchDraftDiariesCallback();
+  }, [searchDraftDiariesCallback]);
 
   return (
     <>

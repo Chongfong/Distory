@@ -1,6 +1,6 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState, useEffect, useRef, useCallback,
+} from 'react';
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
@@ -30,85 +30,88 @@ export default function LoadStories() {
   const [chosedImg, setChosedImg] = useState();
   const [chosedIndex, setChosedIndex] = useState(0);
   const [storyAuthorsInfo, setStoryAuthorsInfo] = useState();
-  const intervalRef = useRef();
   const navigate = useNavigate();
   const [chosedStoryIndex, setChosedStoryIndex] = useState(0);
 
-  async function searchStoriesAvailable() {
-    try {
-      const urlsRef = collection(db, 'stories');
-      const showBefore = new Date(Date.now() - 100000000000);
+  const searchStoriesAvailableCallBack = useCallback(() => {
+    async function searchStoriesAvailable() {
+      try {
+        const urlsRef = collection(db, 'stories');
+        const showBefore = new Date(Date.now() - 100000000000);
 
-      const q = query(urlsRef, where('publishAt', '>=', showBefore));
+        const q = query(urlsRef, where('publishAt', '>=', showBefore));
 
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const storiesAll = [];
-        const storiesImgAll = [];
-        const storiesAuthorAll = [];
-        const storiesTimeAll = [];
-        querySnapshot.forEach((eachDiary) => {
-          storiesAll.push(eachDiary.data());
-          storiesImgAll.push(eachDiary.data().imageUrl);
-          storiesAuthorAll.push(eachDiary.data().author);
-          storiesTimeAll.push(eachDiary.data().publishAt);
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const storiesAll = [];
+          const storiesImgAll = [];
+          const storiesAuthorAll = [];
+          const storiesTimeAll = [];
+          querySnapshot.forEach((eachDiary) => {
+            storiesAll.push(eachDiary.data());
+            storiesImgAll.push(eachDiary.data().imageUrl);
+            storiesAuthorAll.push(eachDiary.data().author);
+            storiesTimeAll.push(eachDiary.data().publishAt);
+          });
+          const reverseStories = storiesAll.reverse();
+          const reverseStoriesImg = storiesImgAll.reverse();
+          const reverseStoriesAuthor = storiesAuthorAll.reverse();
+          const reverseStoriesTime = storiesTimeAll.reverse();
+          setStoriesAvailable(reverseStories);
+          setStoriesImgAvailbale(reverseStoriesImg);
+          setStoriesAuthor(reverseStoriesAuthor);
+          setStoriesTime(reverseStoriesTime);
+        }
+        return false;
+      } catch (e) {
+        toast('施工中，返回首頁', {
+          autoClose: 2000,
         });
-        const reverseStories = storiesAll.reverse();
-        const reverseStoriesImg = storiesImgAll.reverse();
-        const reverseStoriesAuthor = storiesAuthorAll.reverse();
-        const reverseStoriesTime = storiesTimeAll.reverse();
-        setStoriesAvailable(reverseStories);
-        setStoriesImgAvailbale(reverseStoriesImg);
-        setStoriesAuthor(reverseStoriesAuthor);
-        setStoriesTime(reverseStoriesTime);
+        navigate('/');
+        return e.response;
       }
-      return false;
-    } catch (e) {
-      toast('施工中，返回首頁', {
-        autoClose: 2000,
-      });
-      navigate('/');
-      return e.response;
-    }
-  }
+    }searchStoriesAvailable();
+  }, [navigate]);
 
   useEffect(() => {
-    searchStoriesAvailable();
-  }, []);
+    searchStoriesAvailableCallBack();
+  }, [searchStoriesAvailableCallBack]);
   const [imgLoading, setImgLoading] = useState(true);
 
-  const getAuthorInfoFunc = async () => {
-    if (storiesAvailable) {
-      const storyAuthorsArray = [];
-      const story = await Promise.all(storiesAvailable.map((eachStory) => {
-        async function gettingAuthorInfo() {
-          try {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, where('userUID', '==', eachStory.author));
-            const querySnapshot = await getDocs(q);
-            return querySnapshot;
-          } catch (e) {
-            return e.response;
+  const getAuthorInfoFuncCallBack = useCallback(() => {
+    const getAuthorInfoFunc = async () => {
+      if (storiesAvailable) {
+        const storyAuthorsArray = [];
+        const story = await Promise.all(storiesAvailable.map((eachStory) => {
+          async function gettingAuthorInfo() {
+            try {
+              const usersRef = collection(db, 'users');
+              const q = query(usersRef, where('userUID', '==', eachStory.author));
+              const querySnapshot = await getDocs(q);
+              return querySnapshot;
+            } catch (e) {
+              return e.response;
+            }
           }
-        }
-        return gettingAuthorInfo();
-      }));
-      story.forEach((querySnapshot) => {
-        querySnapshot.forEach((querySnapshotEach) => {
-          if (!querySnapshotEach.empty) {
-            storyAuthorsArray.push(
-              [querySnapshotEach.data().userImage,
-                querySnapshotEach.data().distoryId],
-            );
-          }
-        });
-      }); setStoryAuthorsInfo(storyAuthorsArray);
-    }
-  };
+          return gettingAuthorInfo();
+        }));
+        story.forEach((querySnapshot) => {
+          querySnapshot.forEach((querySnapshotEach) => {
+            if (!querySnapshotEach.empty) {
+              storyAuthorsArray.push(
+                [querySnapshotEach.data().userImage,
+                  querySnapshotEach.data().distoryId],
+              );
+            }
+          });
+        }); setStoryAuthorsInfo(storyAuthorsArray);
+      }
+    }; getAuthorInfoFunc();
+  }, [storiesAvailable]);
 
   useEffect(() => {
-    getAuthorInfoFunc();
-  }, [storiesAvailable]);
+    getAuthorInfoFuncCallBack();
+  }, [getAuthorInfoFuncCallBack]);
 
   const scrollable = useRef(null);
 
@@ -141,7 +144,6 @@ export default function LoadStories() {
                   storiesImgAvailable={storiesImgAvailable}
                   chosedIndex={chosedIndex}
                   setChosedIndex={setChosedIndex}
-                  intervalRef={intervalRef}
                   storiesAuthorAll={storiesAuthor}
                   storiesTimeAll={storiesTime}
                   imgLoading={imgLoading}
@@ -188,7 +190,7 @@ export default function LoadStories() {
               </>
             ) : (<p>目前未有動態</p>)}
         </StoryInnerContainer>
-        {storiesAvailable ? (
+        {storiesAvailable && (
           (chosedStoryIndex < (storiesAvailable.length - 5) ? (
             <ArrowButton
               style={{
@@ -201,7 +203,7 @@ export default function LoadStories() {
             >
               →
             </ArrowButton>
-          ) : (''))) : ('')}
+          ) : ('')))}
         {chosedStoryIndex >= 5 ? (
           <ArrowButton
             style={{

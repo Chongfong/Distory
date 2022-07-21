@@ -1,9 +1,7 @@
-/* eslint-disable no-param-reassign */
 import React
   from 'react';
 import ReactQuill from 'react-quill';
 import PropTypes from 'prop-types';
-// import 'react-quill/dist/quill.snow.css';
 import '../css/textEditor.css';
 
 class CustomQuill extends ReactQuill {
@@ -14,7 +12,8 @@ class CustomQuill extends ReactQuill {
 }
 export default function TextEditor(
   {
-    diaryContentValue, setDiaryContentValue, textEditorRef, textEditorCursorIndex,
+    diaryContentValue, setDiaryContentValue,
+    textEditorRef, setTextEditorCursorIndex,
   },
 ) {
   const modules = {
@@ -50,8 +49,8 @@ export default function TextEditor(
       onChange={
         (contentValue) => {
           setDiaryContentValue(contentValue);
-          textEditorCursorIndex.current = textEditorRef
-            ?.current?.editor?.selection?.savedRange?.index;
+          setTextEditorCursorIndex(textEditorRef
+            ?.current?.editor?.selection?.savedRange?.index);
         }
 }
     />
@@ -62,12 +61,12 @@ TextEditor.propTypes = {
   diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
   textEditorRef: PropTypes.string,
-  textEditorCursorIndex: PropTypes.string,
+  setTextEditorCursorIndex: PropTypes.func,
 };
 
 TextEditor.defaultProps = {
   diaryContentValue: '',
   setDiaryContentValue: () => {},
   textEditorRef: '',
-  textEditorCursorIndex: '',
+  setTextEditorCursorIndex: () => {},
 };

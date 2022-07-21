@@ -72,6 +72,34 @@ export default function Like({ currentUser, nowlikeUsers }) {
       });
     }
   };
+
+  const renderHeartPink = () => {
+    if (currentUser) {
+      if (currentUser.uid === userID) {
+        return (
+          <BlogArticleLikesContainer>
+            <NonInteractiveImage src={heartPink} alt="heart-pink" />
+              &nbsp;
+            {likeUsers.length}
+          </BlogArticleLikesContainer>
+        );
+      }
+
+      return (
+        <BlogArticleLikesContainer
+          onClick={() => { likeDiary(diaryID); }}
+          onKeyUp={() => { likeDiary(diaryID); }}
+          role="button"
+          tabIndex={0}
+        >
+          <InteractiveImage src={heart} alt="heart" />
+  &nbsp;
+          {likeUsers.length}
+        </BlogArticleLikesContainer>
+      );
+    } return null;
+  };
+
   return (
     <>
       { currentUser ? (likeUsers
@@ -86,26 +114,7 @@ export default function Like({ currentUser, nowlikeUsers }) {
 &nbsp;
         {likeUsers.length}
       </BlogArticleLikesContainer>
-        ) : (currentUser.uid === userID ? (
-          <BlogArticleLikesContainer>
-            <NonInteractiveImage src={heartPink} alt="heart-pink" />
-&nbsp;
-            {likeUsers.length}
-          </BlogArticleLikesContainer>
-        ) : (
-          <BlogArticleLikesContainer
-            onClick={() => { likeDiary(diaryID); }}
-            onKeyUp={() => { likeDiary(diaryID); }}
-            role="button"
-            tabIndex={0}
-          >
-            <InteractiveImage src={heart} alt="heart" />
-&nbsp;
-            {likeUsers.length}
-          </BlogArticleLikesContainer>
-        )
-
-        )) : (
+        ) : renderHeartPink()) : (
           <BlogArticleLikesContainer
             onClick={() => { likeDiary(diaryID); }}
             onKeyUp={() => { likeDiary(diaryID); }}

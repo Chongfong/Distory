@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
@@ -38,7 +37,7 @@ export default function StickerRow({ onStickerSelected }) {
       <ImageEditorStickerContainer isOpenSticker={isOpenSticker} className="sticker-container">
         {stickers.map((path, i) => (
           <ImageEditorSticker
-            key={i}
+            key={`sticker-${Date.now() + i}`}
             onClick={() => { onStickerSelected(path); setIsOpenSticker(false); }}
             onKeyUp={() => { onStickerSelected(path); setIsOpenSticker(false); }}
             src={path}

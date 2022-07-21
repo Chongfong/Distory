@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Quill } from 'react-quill';
@@ -75,6 +74,60 @@ export default function UploadImageInTextEditor({
     insertEditablePhoto(file);
   };
 
+  function renderimageFileUrl() {
+    if (imageFileUrl) {
+      return (
+        <img
+          src={imageFileUrl}
+          alt="nowImage"
+          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+        />
+      );
+    }
+    return (
+      <>
+        <p style={{ opacity: '0.5' }}>請上傳圖片　</p>
+        <img src={addUploadImage} alt="defaultImage" style={{ opacity: '0.5' }} />
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          id="upload-image"
+          onChange={(e) => {
+            setImageFileUrl(URL.createObjectURL(e.target.files[0]));
+            setImageFile(e);
+          }}
+        />
+      </>
+    );
+  }
+
+  function renderUploadFromUrl() {
+    if (uploadFromFile === 'url') {
+      return (
+        <form>
+          <UploadImageFromUrl
+            type="text"
+            value={url}
+            placeholder="請新增網址"
+            onChange={(e) => setUrl(e.target.value)}
+          />
+          <br />
+          {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
+        </form>
+      );
+    }
+    return (
+      <ImageEditorDefaultImage
+        setImageUrl={setImageUrl}
+        insertEditablePhoto={insertEditablePhoto}
+        setIsOpen={setIsOpen}
+        url={url}
+        setUrl={setUrl}
+      />
+    );
+  }
+
   return (
     <>
       { isOpen && (
@@ -132,54 +185,12 @@ export default function UploadImageInTextEditor({
                         cursor: 'pointer',
                       }}
                     >
-                      {imageFileUrl ? (
-                        <img
-                          src={imageFileUrl}
-                          alt="nowImage"
-                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                        />
-                      ) : (
-                        <>
-                          <p style={{ opacity: '0.5' }}>請上傳圖片　</p>
-                          <img src={addUploadImage} alt="defaultImage" style={{ opacity: '0.5' }} />
-                          <input
-                            type="file"
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="upload-image"
-                            onChange={(e) => {
-                              setImageFileUrl(URL.createObjectURL(e.target.files[0]));
-                              setImageFile(e);
-                            }}
-                          />
-                        </>
-                      )}
+                      {renderimageFileUrl()}
                     </label>
 
                   </form>
                 )
-                : (uploadFromFile === 'url' ? (
-                  <form>
-                    <UploadImageFromUrl
-                      type="text"
-                      value={url}
-                      placeholder="請新增網址"
-                      onChange={(e) => setUrl(e.target.value)}
-                    />
-                    <br />
-                    {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
-                  </form>
-                ) : (
-                  <ImageEditorDefaultImage
-                    setImageUrl={setImageUrl}
-                    insertEditablePhoto={insertEditablePhoto}
-                    setIsOpen={setIsOpen}
-                    url={url}
-                    setUrl={setUrl}
-                  />
-                )
-
-                )}
+                : (renderUploadFromUrl()) }
             </UploadImageContainer>
             {uploadFromFile === 'file' ? (
               <>

@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firestore/firestore';
@@ -29,66 +28,70 @@ export default function Search() {
     return formatted;
   };
 
-  async function searchTitle() {
-    try {
-      const urlsRef = collection(db, 'articles');
-      const q = query(urlsRef, where('titleText', 'array-contains', [...searchkey][0]));
+  const searchTitleCallBack = useCallback(() => {
+    async function searchTitle() {
+      try {
+        const urlsRef = collection(db, 'articles');
+        const q = query(urlsRef, where('titleText', 'array-contains', [...searchkey][0]));
 
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const userDiariesAll = [];
-        querySnapshot.forEach((eachDiary) => {
-          if (eachDiary.data()
-            .title
-            .includes(searchkey)) { userDiariesAll.push(eachDiary.data()); }
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const userDiariesAll = [];
+          querySnapshot.forEach((eachDiary) => {
+            if (eachDiary.data()
+              .title
+              .includes(searchkey)) { userDiariesAll.push(eachDiary.data()); }
+          });
+          setSearchTitleResult(userDiariesAll);
+          return userDiariesAll;
+        }
+      } catch (e) {
+        toast('施工中，返回首頁', {
+          autoClose: 2000,
         });
-        setSearchTitleResult(userDiariesAll);
-        return userDiariesAll;
-      }
-    } catch (e) {
-      toast('施工中，返回首頁', {
-        autoClose: 2000,
-      });
-      navigate('/');
-      return e.response;
-    } return true;
-  }
+        navigate('/');
+        return e.response;
+      } return true;
+    }searchTitle();
+  }, [navigate, searchkey]);
 
   useEffect(() => {
-    searchTitle();
-  }, []);
+    searchTitleCallBack();
+  }, [searchTitleCallBack]);
 
   const [allDiariesAuthorImg, setAllDiariesAuthorImg] = useState([]);
 
-  const getAuthorInfoFunc = async () => {
-    if (searchTitleResult) {
-      const diaryAuthorsArray = [];
-      const diary = await Promise.all(searchTitleResult.map((eachDiary) => {
-        async function gettingAuthorInfo() {
-          try {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, where('userUID', '==', eachDiary.author));
-            const querySnapshot = await getDocs(q);
-            return querySnapshot;
-          } catch (e) {
-            return e.response;
+  const getAuthorInfoFuncCallBack = useCallback(() => {
+    const getAuthorInfoFunc = async () => {
+      if (searchTitleResult) {
+        const diaryAuthorsArray = [];
+        const diary = await Promise.all(searchTitleResult.map((eachDiary) => {
+          async function gettingAuthorInfo() {
+            try {
+              const usersRef = collection(db, 'users');
+              const q = query(usersRef, where('userUID', '==', eachDiary.author));
+              const querySnapshot = await getDocs(q);
+              return querySnapshot;
+            } catch (e) {
+              return e.response;
+            }
           }
-        }
-        return gettingAuthorInfo();
-      }));
-      diary.forEach((querySnapshot) => {
-        querySnapshot.forEach((querySnapshotEach) => {
-          if (!querySnapshotEach.empty) {
-            diaryAuthorsArray.push(querySnapshotEach.data().userImage);
-          }
-        });
-      }); setAllDiariesAuthorImg(diaryAuthorsArray);
-    }
-  };
+          return gettingAuthorInfo();
+        }));
+        diary.forEach((querySnapshot) => {
+          querySnapshot.forEach((querySnapshotEach) => {
+            if (!querySnapshotEach.empty) {
+              diaryAuthorsArray.push(querySnapshotEach.data().userImage);
+            }
+          });
+        }); setAllDiariesAuthorImg(diaryAuthorsArray);
+      }
+    }; getAuthorInfoFunc();
+  }, [searchTitleResult]);
 
   useEffect(() => {
-    getAuthorInfoFunc();
-  }, [searchTitleResult]);
+    getAuthorInfoFuncCallBack();
+  }, [getAuthorInfoFuncCallBack]);
 
   return (
     <HomeBody>

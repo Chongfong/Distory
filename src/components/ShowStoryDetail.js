@@ -1,7 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable no-param-reassign */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { PopUpBackDiv } from '../pages/ImageEditor.style';
 import {
@@ -13,8 +10,10 @@ import { transformTimeToDate } from './ShareFunctions';
 
 export default function ShowStoryDetail({
   setChosedImg, setOpenStory, storiesImgAvailable, chosedIndex, setChosedIndex,
-  intervalRef, storiesTimeAll, imgLoading, setImgLoading,
+  storiesTimeAll, imgLoading, setImgLoading,
 }) {
+  const intervalRef = useRef();
+
   useEffect(() => {
     clearInterval(intervalRef.current);
   }, [imgLoading]);
@@ -32,7 +31,7 @@ export default function ShowStoryDetail({
         setChosedIndex((prev) => prev + 1);
       }
     }, 1000);
-  }, [loadingPercentage, imgLoading]);
+  }, [loadingPercentage, imgLoading, setChosedIndex]);
 
   return (
     <>
@@ -131,7 +130,7 @@ export default function ShowStoryDetail({
                   }}
                 />
               </div>
-              <StoryTime>{`${transformTimeToDate(storiesTimeAll[chosedIndex]?.seconds * 1000)}`}</StoryTime>
+              {storiesTimeAll && (<StoryTime>{`${transformTimeToDate(storiesTimeAll[chosedIndex].seconds * 1000)}`}</StoryTime>)}
             </StoryPhotoContainer>
           </StoryPopUpContainer>
         </PopUpBackDiv>
@@ -147,7 +146,6 @@ ShowStoryDetail.propTypes = {
   storiesImgAvailable: PropTypes.string,
   chosedIndex: PropTypes.string,
   setChosedIndex: PropTypes.func,
-  intervalRef: PropTypes.string,
   storiesTimeAll: PropTypes.string,
   imgLoading: PropTypes.string,
   setImgLoading: PropTypes.func,
@@ -159,7 +157,6 @@ ShowStoryDetail.defaultProps = {
   storiesImgAvailable: '',
   chosedIndex: '',
   setChosedIndex: () => {},
-  intervalRef: '',
   storiesTimeAll: '',
   imgLoading: '',
   setImgLoading: () => {},

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useState, useRef, useEffect, useCallback,
 } from 'react';
@@ -71,7 +72,6 @@ export default function EditDiary({ isOpen, setIsOpen }) {
       return (nowEditingDiary);
     };
     loadingDiary();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

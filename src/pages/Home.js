@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useEffect, useState, useCallback,
 } from 'react';
@@ -77,36 +76,38 @@ export default function Home() {
     loadDiaries();
   }, [loadDiaries]);
 
-  const getAuthorInfoFunc = async () => {
-    if (allDiaries) {
-      const diaryAuthorsArray = [];
-      const diary = await Promise.all(allDiaries.map((eachDiary) => {
-        async function gettingAuthorInfo() {
-          try {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, where('userUID', '==', eachDiary.author));
-            const querySnapshot = await getDocs(q);
-            return querySnapshot;
-          } catch (e) {
-            return e.response;
+  const getAuthorInfoFuncCallBack = useCallback(() => {
+    const getAuthorInfoFunc = async () => {
+      if (allDiaries) {
+        const diaryAuthorsArray = [];
+        const diary = await Promise.all(allDiaries.map((eachDiary) => {
+          async function gettingAuthorInfo() {
+            try {
+              const usersRef = collection(db, 'users');
+              const q = query(usersRef, where('userUID', '==', eachDiary.author));
+              const querySnapshot = await getDocs(q);
+              return querySnapshot;
+            } catch (e) {
+              return e.response;
+            }
           }
-        }
-        return gettingAuthorInfo();
-      }));
-      diary.forEach((querySnapshot) => {
-        querySnapshot.forEach((querySnapshotEach) => {
-          if (!querySnapshotEach.empty) {
-            diaryAuthorsArray.push(querySnapshotEach.data().userImage);
-          }
-        });
-      }); setAllDiariesAuthorImg(diaryAuthorsArray);
-      setIsLoading(false);
-    }
-  };
+          return gettingAuthorInfo();
+        }));
+        diary.forEach((querySnapshot) => {
+          querySnapshot.forEach((querySnapshotEach) => {
+            if (!querySnapshotEach.empty) {
+              diaryAuthorsArray.push(querySnapshotEach.data().userImage);
+            }
+          });
+        }); setAllDiariesAuthorImg(diaryAuthorsArray);
+        setIsLoading(false);
+      }
+    }; getAuthorInfoFunc();
+  }, [allDiaries]);
 
   useEffect(() => {
-    getAuthorInfoFunc();
-  }, [allDiaries]);
+    getAuthorInfoFuncCallBack();
+  }, [allDiaries, getAuthorInfoFuncCallBack]);
 
   return (
     <>
