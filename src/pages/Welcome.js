@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 import PropTypes from 'prop-types';
 import { getDoc, doc } from 'firebase/firestore';
-import { auth, db } from '../firestore/firestore';
+import { db } from '../firestore/firestore';
+import { AppContext } from '../context/AppContext';
 
 import {
   SignUpBody, SignUpContainer, SignUpTitle, SignUpSubTitle, SignUpInfoDetail, SignUpFinishIcons,
@@ -15,27 +14,18 @@ import Loader from '../components/Loader';
 
 export default function Welcome(
   {
-    currentUser, setCurrentUser, setCurrentUserData, setIsSignUp, settingId,
+    setIsSignUp, settingId,
   },
 ) {
-  const changeUser = () => {
-    onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
-  };
-
-  useEffect(() => {
-    changeUser();
-  }, []);
-
-  const fetchLoginUser = () => new Promise((resolve) => {
-    if (currentUser) {
-      const querySnapshot = getDoc(doc(db, 'users', currentUser.uid));
-      resolve(querySnapshot);
-    }
-  });
+  const { currentUser, setCurrentUserData } = useContext(AppContext);
 
   const loadLoginUser = useCallback(() => {
+    const fetchLoginUser = () => new Promise((resolve) => {
+      if (currentUser) {
+        const querySnapshot = getDoc(doc(db, 'users', currentUser.uid));
+        resolve(querySnapshot);
+      }
+    });
     const loadingLoginUser = async () => {
       let nowLoginUser = {};
       fetchLoginUser().then((querySnapshot) => {
@@ -45,11 +35,11 @@ export default function Welcome(
       return (nowLoginUser);
     };
     loadingLoginUser();
-  }, [currentUser]);
+  }, [currentUser, setCurrentUserData]);
 
   useEffect(() => {
     loadLoginUser();
-  }, [currentUser]);
+  }, [currentUser, loadLoginUser]);
 
   return (
     <>
@@ -86,17 +76,11 @@ export default function Welcome(
 }
 
 Welcome.propTypes = {
-  currentUser: PropTypes.shape,
-  setCurrentUser: PropTypes.func,
-  setCurrentUserData: PropTypes.func,
   setIsSignUp: PropTypes.func,
   settingId: PropTypes.string,
 };
 
 Welcome.defaultProps = {
-  currentUser: {},
-  setCurrentUser: () => {},
-  setCurrentUserData: () => {},
   setIsSignUp: () => {},
   settingId: '',
 };

@@ -1,5 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect, useState, useCallback, useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
@@ -11,6 +12,7 @@ import { FaHome } from 'react-icons/fa';
 import { GoGear } from 'react-icons/go';
 import { TbLogout } from 'react-icons/tb';
 import { BiPhotoAlbum } from 'react-icons/bi';
+import { AppContext } from '../context/AppContext';
 
 import {
   HeaderContainer, HeaderTitle, HeaderSearchBar, HeaderLogin, HeaderSignup,
@@ -27,8 +29,9 @@ import logo from '../img/Distory Logo.png';
 import search from '../img/search.png';
 
 export default function Header({
-  currentUser, setCurrentUser, currentUserData, isSignUp,
+  isSignUp,
 }) {
+  const { currentUser, currentUserData, setCurrentUser } = useContext(AppContext);
   const [searchkey, setSearchKey] = useState('');
   const [headerLoginUserData, setHeaderLoginUserData] = useState();
   const [toggleLoginUser, setToggleLoginUser] = useState(false);
@@ -38,11 +41,14 @@ export default function Header({
 
   const navigate = useNavigate();
 
-  const changeUser = () => {
-    onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
-  };
+  const changeUserCallBack = useCallback(() => {
+    const changeUser = () => {
+      onAuthStateChanged(auth, (user) => {
+        setCurrentUser(user);
+      });
+    };
+    changeUser();
+  }, [setCurrentUser]);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && searchkey !== '') {
@@ -51,17 +57,17 @@ export default function Header({
   };
 
   useEffect(() => {
-    changeUser();
-  }, []);
-
-  const fetchLoginUser = () => new Promise((resolve) => {
-    if (currentUser) {
-      const querySnapshot = getDoc(doc(db, 'users', currentUser.uid));
-      resolve(querySnapshot);
-    }
-  });
+    changeUserCallBack();
+  }, [changeUserCallBack]);
 
   const loadLoginUser = useCallback(() => {
+    const fetchLoginUser = () => new Promise((resolve) => {
+      if (currentUser) {
+        const querySnapshot = getDoc(doc(db, 'users', currentUser.uid));
+        resolve(querySnapshot);
+      }
+    });
+
     const loadingLoginUser = async () => {
       let nowLoginUser = {};
       fetchLoginUser().then((querySnapshot) => {
@@ -71,11 +77,11 @@ export default function Header({
       return (nowLoginUser);
     };
     loadingLoginUser();
-  }, [currentUser, currentUserData]);
+  }, [currentUser]);
 
   useEffect(() => {
     loadLoginUser();
-  }, [currentUser, currentUserData]);
+  }, [currentUser, currentUserData, loadLoginUser]);
 
   const handleLogOut = () => {
     signOut(auth)
@@ -247,15 +253,9 @@ export default function Header({
 }
 
 Header.propTypes = {
-  currentUser: PropTypes.shape,
-  setCurrentUser: PropTypes.func,
-  currentUserData: PropTypes.string,
   isSignUp: PropTypes.bool,
 };
 
 Header.defaultProps = {
-  currentUser: {},
-  setCurrentUser: () => {},
-  currentUserData: '',
   isSignUp: false,
 };

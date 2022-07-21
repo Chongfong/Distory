@@ -1,9 +1,8 @@
-/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-nested-ternary */
 import React, {
-  useState, useCallback, useEffect, useRef,
+  useState, useCallback, useEffect, useRef, useContext,
 } from 'react';
-import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
@@ -12,6 +11,7 @@ import {
   collection, doc, updateDoc,
   getDoc,
 } from 'firebase/firestore';
+import { AppContext } from '../context/AppContext';
 import { storage, db } from '../firestore/firestore';
 
 import layoutImage from '../img/layout.png';
@@ -27,9 +27,8 @@ import { EditButton, CircleButton } from './ImageEditor.style';
 
 import Loader from '../components/Loader';
 
-export default function EditBlog({
-  currentUser, currentUserData, setCurrentUserData,
-}) {
+export default function EditBlog() {
+  const { currentUser, currentUserData, setCurrentUserData } = useContext(AppContext);
   const [blogTitle, setBlogTitle] = useState();
   const [blogIntro, setBlogIntro] = useState();
   const [blogImage, setBlogImage] = useState();
@@ -119,12 +118,11 @@ export default function EditBlog({
 
   const thisUserRef = doc(db, 'users', userID);
 
-  const fetchUserBlogSettings = () => new Promise((resolve) => {
-    const querySnapshot = getDoc(thisUserRef);
-    resolve(querySnapshot);
-  });
-
   const loadUserBlogSettings = useCallback(() => {
+    const fetchUserBlogSettings = () => new Promise((resolve) => {
+      const querySnapshot = getDoc(thisUserRef);
+      resolve(querySnapshot);
+    });
     const loadingUserBlogSettings = async () => {
       let nowBlogSettings = {};
       fetchUserBlogSettings().then((querySnapshot) => {
@@ -139,7 +137,7 @@ export default function EditBlog({
       return (nowBlogSettings);
     };
     loadingUserBlogSettings();
-  }, [currentUserImage]);
+  }, [setCurrentUserData, thisUserRef]);
 
   const handleSubmit = (imageFile, uid) => {
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
@@ -413,16 +411,3 @@ export default function EditBlog({
     </>
   );
 }
-
-EditBlog.propTypes = {
-  currentUser: PropTypes.shape,
-  currentUserData: PropTypes.string,
-  setCurrentUserData: PropTypes.func,
-
-};
-
-EditBlog.defaultProps = {
-  currentUser: {},
-  currentUserData: '',
-  setCurrentUserData: () => {},
-};

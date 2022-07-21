@@ -1,17 +1,16 @@
-/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
-  useCallback, useState, useEffect,
+  useCallback, useState, useEffect, useContext,
 } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import {
   doc, getDoc, getDocs, collection, query, where, updateDoc,
   Timestamp,
   setDoc,
 } from 'firebase/firestore';
-import { auth, db } from '../firestore/firestore';
+import { AppContext } from '../context/AppContext';
+import { db } from '../firestore/firestore';
 
 import { BlogBackgroundImage } from './EditBlog.style';
 import {
@@ -27,25 +26,22 @@ import Pagination from './Pagination';
 import Loader from '../components/Loader';
 
 export default function MyBlog() {
-  const [currentUser, setCurrentUser] = useState();
-  const [currentUserData, setCurrentUserData] = useState();
+  const {
+    currentUser, currentUserData, setCurrentUserData,
+  } = useContext(AppContext);
   const [, setUserDiaries] = useState([]);
   const [visitMyHomeAll, setVisitMyHomeAll] = useState();
-  const [, setLoginUserData] = useState();
   const [, setLikeUsers] = useState([]);
 
   const navigate = useNavigate();
   const { userID, diaryID } = useParams();
 
-  const userCollection = collection(db, 'users');
-
-  const fetchUserWhoVisited = () => new Promise((resolve) => {
-    const docRef = doc(db, 'users', userID);
-    const querySnapshot = getDoc(docRef);
-    resolve(querySnapshot);
-  });
-
   const loadUserWhoVisited = useCallback((userCamedoc, userCameEditData) => {
+    const fetchUserWhoVisited = () => new Promise((resolve) => {
+      const docRef = doc(db, 'users', userID);
+      const querySnapshot = getDoc(docRef);
+      resolve(querySnapshot);
+    });
     const loadingUserWhoVisited = async () => {
       let nowWhoVisited = {};
       fetchUserWhoVisited().then((querySnapshot) => {
@@ -61,18 +57,21 @@ export default function MyBlog() {
       return (nowWhoVisited);
     };
     loadingUserWhoVisited();
-  }, []);
+  }, [userID]);
 
-  const saveUserCameDB = (userUid) => {
-    const userCameDoc = doc(userCollection, userUid);
-    const userCameData = { [currentUser.uid]: Timestamp.now().toDate() };
-    const userCameEditData = { come: userCameData };
-    loadUserWhoVisited(userCameDoc, userCameEditData);
-  };
+  const saveUserCameDBCallBack = useCallback(() => {
+    const saveUserCameDB = (userUid) => {
+      const userCollection = collection(db, 'users');
+      const userCameDoc = doc(userCollection, userUid);
+      const userCameData = { [currentUser?.uid]: Timestamp.now().toDate() };
+      const userCameEditData = { come: userCameData };
+      loadUserWhoVisited(userCameDoc, userCameEditData);
+    }; saveUserCameDB();
+  }, [currentUser?.uid, loadUserWhoVisited]);
 
-  const visitMyHomeFunc = () => {
-    if (currentUserData) {
-      if (currentUserData.come) {
+  const visitMyHomeFuncCallBack = useCallback(() => {
+    const visitMyHomeFunc = () => {
+      if (currentUserData?.come) {
         const visitMyHomeUsersArray = Object.entries(currentUserData.come);
         const visitMyHomeUsersObject = [];
         visitMyHomeUsersArray.map((eachVisitor) => {
@@ -106,44 +105,19 @@ export default function MyBlog() {
           return visitMyHomeUsersObject;
         });
       }
-    }
-  };
+    }; visitMyHomeFunc();
+  }, [currentUserData?.come, navigate]);
 
-  const whoComes = () => {
-    if (currentUser) {
-      if (currentUser.uid === userID) {
-      } else {
-        saveUserCameDB(userID);
+  const whoComesCallBack = useCallback(() => {
+    const whoComes = () => {
+      if (currentUser) {
+        if (currentUser.uid === userID) {
+        } else {
+          saveUserCameDBCallBack(userID);
+        }
       }
-    }
-  };
-
-  const fetchLoginUserInfo = (user) => new Promise((resolve) => {
-    const loginUserRef = doc(db, 'users', user.uid);
-    const querySnapshot = getDoc(loginUserRef);
-    resolve(querySnapshot);
-  });
-
-  const getLoginUserInfo = useCallback((user) => {
-    const gettingLoginUserInfo = async () => {
-      let nowLoginUserInfo = {};
-      fetchLoginUserInfo(user).then((querySnapshot) => {
-        nowLoginUserInfo = querySnapshot.data();
-        setLoginUserData(querySnapshot.data());
-      });
-      return (nowLoginUserInfo);
-    };
-    gettingLoginUserInfo(user);
-  }, []);
-
-  const changeUser = () => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUser(user);
-        getLoginUserInfo(user);
-      }
-    });
-  };
+    }; whoComes();
+  }, [userID]);
 
   const docRef = doc(db, 'users', userID);
 
@@ -155,12 +129,11 @@ export default function MyBlog() {
     return formatted;
   };
 
-  const fetchUserBlogSettings = () => new Promise((resolve) => {
-    const querySnapshot = getDoc(docRef);
-    resolve(querySnapshot);
-  });
-
   const loadUserBlogSettings = useCallback(() => {
+    const fetchUserBlogSettings = () => new Promise((resolve) => {
+      const querySnapshot = getDoc(docRef);
+      resolve(querySnapshot);
+    });
     const loadingUserBlogSettings = async () => {
       let nowBlogSettings = {};
       fetchUserBlogSettings().then((querySnapshot) => {
@@ -170,15 +143,14 @@ export default function MyBlog() {
       return (nowBlogSettings);
     };
     loadingUserBlogSettings();
-  }, []);
-
-  const fetchCurrentBlogSettings = (visitorUid) => new Promise((resolve) => {
-    const visitRef = doc(db, 'users', visitorUid);
-    const querySnapshot = getDoc(visitRef);
-    resolve(querySnapshot);
-  });
+  }, [docRef]);
 
   const loadCurrentBlogSettings = useCallback((currentUserID) => {
+    const fetchCurrentBlogSettings = (visitorUid) => new Promise((resolve) => {
+      const visitRef = doc(db, 'users', visitorUid);
+      const querySnapshot = getDoc(visitRef);
+      resolve(querySnapshot);
+    });
     const loadingUserBlogSettings = async (currentVisitUserID) => {
       let nowBlogSettings = {};
       fetchCurrentBlogSettings(currentVisitUserID).then((querySnapshot) => {
@@ -189,7 +161,7 @@ export default function MyBlog() {
       return (nowBlogSettings);
     };
     loadingUserBlogSettings(currentUserID);
-  }, []);
+  }, [navigate]);
 
   const getUserDiaries = useCallback(() => {
     async function gettingUserDiaries() {
@@ -222,21 +194,22 @@ export default function MyBlog() {
       } return true;
     }
     gettingUserDiaries();
-  }, []);
+  }, [navigate, userID]);
 
   useEffect(() => {
     loadUserBlogSettings();
     getUserDiaries();
-    changeUser();
-  }, []);
+  }, [getUserDiaries]);
 
   useEffect(() => {
-    whoComes();
-  }, [currentUser]);
+    whoComesCallBack();
+  }, [whoComesCallBack]);
 
   useEffect(() => {
-    visitMyHomeFunc();
-  }, [currentUserData]);
+    visitMyHomeFuncCallBack();
+  }, [visitMyHomeFuncCallBack]);
+
+  console.log('rerender');
 
   return (
     <>
@@ -306,7 +279,7 @@ export default function MyBlog() {
                 </>
               )}
 
-              {currentUser ? (currentUser.uid === userID ? (
+              {currentUser && (currentUser.uid === userID ? (
                 <>
                   <MyBlogButtonLight
                     type="button"
@@ -337,7 +310,7 @@ export default function MyBlog() {
                   </MyBlogButtonLight>
 
                 </>
-              ) : ('')) : ('')}
+              ) : (''))}
             </MyBlogFLexLeft>
             <MyBlogFLexRight>
               {diaryID ? (<BlogArticle />) : (

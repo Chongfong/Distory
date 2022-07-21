@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { useNavigate, useParams, Navigate } from 'react-router-dom';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import {
@@ -11,6 +11,8 @@ import {
 import PropTypes from 'prop-types';
 import { FiSave } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import { AppContext } from '../context/AppContext';
+
 import PhotoEditor from '../components/ImageEditor';
 import TextEditor from '../components/TextEditor';
 import {
@@ -33,7 +35,8 @@ import { previewImagesArray } from './Home';
 import loading from '../img/playingboy.png';
 import Loader from '../components/Loader';
 
-export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
+export default function CreateNewDiary({ isOpen, setIsOpen }) {
+  const { currentUser } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const [titleValue, setTitleValue] = useState('');
@@ -54,10 +57,9 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
   );
   const [articleShowImgUrl, setArticleShowImgUrl] = useState(articleShowImg);
   const [articleShowImgFile, setArticleShowImgFile] = useState();
+  const [textEditorCursorIndex, setTextEditorCursorIndex] = useState();
 
   const textEditorRef = useRef();
-
-  const textEditorCursorIndex = useRef();
 
   const imageRef = useRef();
   const navigate = useNavigate();
@@ -305,6 +307,8 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
     );
   };
 
+  console.log('rerender');
+
   return (
     <CreateDiaryBody>
       { currentUser ? (
@@ -350,6 +354,7 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
                           imageRef={imageRef}
                           textEditorRef={textEditorRef}
                           textEditorCursorIndex={textEditorCursorIndex}
+                          setEditorCursorIndex={setTextEditorCursorIndex}
                         />
                         <SetArticleSettingsOuterContainer>
                           <SetArticleSettingsContainer>
@@ -393,6 +398,7 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     textEditorCursorIndex={textEditorCursorIndex}
+                    setTextEditorCursorIndex={setTextEditorCursorIndex}
                   />
                   <UploadImageInTextEditor
                     loadFromFile={loadFromFile}
@@ -404,6 +410,7 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     textEditorCursorIndex={textEditorCursorIndex}
+                    setTextEditorCursorIndex={setTextEditorCursorIndex}
                   />
                   <PhotoEditor
                     diaryContentValue={diaryContentValue}
@@ -416,6 +423,7 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
                     setUrl={setUrl}
                     textEditorRef={textEditorRef}
                     textEditorCursorIndex={textEditorCursorIndex}
+                    setTextEditorCursorIndex={setTextEditorCursorIndex}
                   />
 
                   {articleShowImgFile ? (
@@ -493,12 +501,9 @@ export default function CreateNewDiary({ currentUser, isOpen, setIsOpen }) {
 CreateNewDiary.propTypes = {
   isOpen: PropTypes.bool,
   setIsOpen: PropTypes.func,
-  currentUser: PropTypes.shape,
 };
 
 CreateNewDiary.defaultProps = {
   isOpen: false,
   setIsOpen: () => {},
-  currentUser: {},
-
 };

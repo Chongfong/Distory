@@ -1,13 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useState, useEffect } from 'react';
+import React, {
+  useCallback, useState, useEffect, useContext,
+} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import {
   doc, getDoc, getDocs, collection, query, where,
 } from 'firebase/firestore';
 import DOMPurify from 'dompurify';
-import { auth, db } from '../firestore/firestore';
+import { db } from '../firestore/firestore';
+import { AppContext } from '../context/AppContext';
 
 import {
   BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
@@ -28,8 +29,10 @@ import edit from '../img/edit.png';
 import Loader from '../components/Loader';
 
 export default function BlogArticle() {
-  const [currentUser, setCurrentUser] = useState();
-  const [currentUserData, setCurrentUserData] = useState();
+  const {
+    currentUser, currentUserData,
+    setCurrentUserData,
+  } = useContext(AppContext);
   const [userDiaries, setUserDiaries] = useState([]);
   const [commentAll, setCommentAll] = useState();
   const [loginUserDate, setLoginUserData] = useState();
@@ -42,18 +45,11 @@ export default function BlogArticle() {
 
   const docRef = doc(db, 'users', userID);
 
-  const changeUser = () => {
-    onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
-  };
-
-  const fetchUserBlogSettings = () => new Promise((resolve) => {
-    const querySnapshot = getDoc(docRef);
-    resolve(querySnapshot);
-  });
-
   const loadUserBlogSettings = useCallback(() => {
+    const fetchUserBlogSettings = () => new Promise((resolve) => {
+      const querySnapshot = getDoc(docRef);
+      resolve(querySnapshot);
+    });
     const loadingUserBlogSettings = async () => {
       let nowBlogSettings = {};
       fetchUserBlogSettings().then((querySnapshot) => {
@@ -63,16 +59,15 @@ export default function BlogArticle() {
       return (nowBlogSettings);
     };
     loadingUserBlogSettings();
-  }, []);
-
-  const fetchLoginUser = () => new Promise((resolve) => {
-    if (currentUser) {
-      const querySnapshot = getDoc(doc(db, 'users', currentUser.uid));
-      resolve(querySnapshot);
-    }
-  });
+  }, [docRef, setCurrentUserData]);
 
   const loadLoginUser = useCallback(() => {
+    const fetchLoginUser = () => new Promise((resolve) => {
+      if (currentUser) {
+        const querySnapshot = getDoc(doc(db, 'users', currentUser.uid));
+        resolve(querySnapshot);
+      }
+    });
     const loadingLoginUser = async () => {
       let nowLoginUser = {};
       fetchLoginUser().then((querySnapshot) => {
@@ -112,7 +107,7 @@ export default function BlogArticle() {
       } return true;
     }
     gettingUserDiaries();
-  }, []);
+  }, [diaryID, navigate]);
 
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
@@ -123,11 +118,10 @@ export default function BlogArticle() {
   };
 
   useEffect(() => {
-    changeUser();
     loadUserBlogSettings();
     loadLoginUser();
     getUserDiaries();
-  }, [currentUser]);
+  }, [getUserDiaries, loadLoginUser, loadUserBlogSettings]);
 
   const checkArticlePassword = (userInput, correct) => {
     if (userInput === correct.replace(' ', '')) {

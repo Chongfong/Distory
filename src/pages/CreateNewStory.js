@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {
   PopUpBackDiv, PopUpImageContainerDiv, CircleButton, CircleButtonCancel,
 } from './ImageEditor.style';
@@ -10,6 +9,8 @@ import {
   UploadImageFromUrl, UploadImagePreviewImage,
 } from './UploadImageInTextEditor.style';
 
+import { AppContext } from '../context/AppContext';
+
 import ImageEditorDefaultImage from '../components/ImageEditorDefaultImage';
 import addUploadImage from '../img/image.png';
 
@@ -17,7 +18,8 @@ import CreateStoryPhotoEditor from './CreateNewStoryImageEditor';
 
 import Loader from '../components/Loader';
 
-export default function CreateNewStory({ currentUser }) {
+export default function CreateNewStory() {
+  const { currentUser } = useContext(AppContext);
   const [imageUrl, setImageUrl] = useState();
   const [url, setUrl] = useState();
   const [uploadFromFile, setUploadFromFile] = useState('default');
@@ -234,11 +236,3 @@ export default function CreateNewStory({ currentUser }) {
     </>
   );
 }
-
-CreateNewStory.propTypes = {
-  currentUser: PropTypes.shape,
-};
-
-CreateNewStory.defaultProps = {
-  currentUser: {},
-};
