@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable max-classes-per-file */
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
@@ -20,7 +19,7 @@ import { storage } from '../firestore/firestore';
 export default function PhotoEditor({
   setDiaryContentValue,
   imageUrl, setImageUrl, openImageEditor, setOpenImageEditor, setUrl,
-  textEditorRef, textEditorCursorIndex,
+  textEditorRef, textEditorCursorIndex, setTextEditorCursorIndex,
 }) {
   const editorRef = useRef();
   const BlockEmbed = Quill.import('blots/block/embed');
@@ -35,7 +34,7 @@ export default function PhotoEditor({
         e.preventDefault();
         setOpenImageEditor(true);
         setImageUrl(value.url);
-        textEditorCursorIndex.current = textEditorRef.current.editor.getSelection().index;
+        setTextEditorCursorIndex(textEditorRef.current.editor.getSelection().index);
       }, false);
       return node;
     }
@@ -127,22 +126,22 @@ export default function PhotoEditor({
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              if (textEditorCursorIndex.current !== 0) {
+              if (textEditorCursorIndex !== 0) {
                 textEditorRef.current.editor.updateContents(new Delta()
-                  .retain(textEditorCursorIndex.current)
+                  .retain(textEditorCursorIndex - 1)
                   .delete(1)
                   .insert({
                     image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
                   })
-                  .delete(1)
-                  .retain(textEditorCursorIndex.current));
+                  .delete(2)
+                  .retain(textEditorCursorIndex));
               } else {
                 textEditorRef.current.editor.updateContents(new Delta()
-                  .retain(textEditorCursorIndex.current)
+                  .retain(textEditorCursorIndex)
                   .insert({
                     image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
                   })
-                  .retain(textEditorCursorIndex.current - 1)
+                  .retain(textEditorCursorIndex - 1)
                   .delete(2));
               }
 
@@ -171,23 +170,6 @@ export default function PhotoEditor({
                     path: imageUrl,
                     name: 'SampleImage',
                   },
-                  // locale: {
-                  //   DeleteAll: '全部刪除',
-                  //   Delete: '刪除',
-                  //   Text: '文字',
-                  //   Shape: '形狀',
-                  //   Load: '讀取檔案',
-                  //   Download: '下載檔案',
-                  //   Crop: '裁切',
-                  //   Undo: '上一步',
-                  //   Redo: '下一步',
-                  //   'Text size': '字體大小',
-                  //   Color: '顏色',
-                  //   Cancel: '取消',
-                  //   Rectangle: '矩形',
-                  //   Triangle: '三角形',
-                  //   Circle: '圓形',
-                  // },
                   theme: myTheme,
                   menu: [
                     'crop',
@@ -239,6 +221,7 @@ PhotoEditor.propTypes = {
   setUrl: PropTypes.func,
   textEditorRef: PropTypes.string,
   textEditorCursorIndex: PropTypes.string,
+  setTextEditorCursorIndex: PropTypes.func,
 };
 
 PhotoEditor.defaultProps = {
@@ -250,4 +233,5 @@ PhotoEditor.defaultProps = {
   setUrl: () => {},
   textEditorRef: '',
   textEditorCursorIndex: '',
+  setTextEditorCursorIndex: () => {},
 };

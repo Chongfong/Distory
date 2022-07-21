@@ -22,21 +22,12 @@ export default function ImageEditorDefaultImage(
     url, setUrl, setImageUrl, insertEditablePhoto, setIsOpen, setOpenImageEditor,
   },
 ) {
-  // const defaultImageUrls = ['https://file.coffee/u/ABR1uG2qfVID6UCRrX5mS.png',
-  //   'https://file.coffee/u/05c30tTkSadiyONTXjUe0.png',
-  //   'https://file.coffee/u/ramG6l5O2oYF2gHig8sOr.png',
-  //   'https://file.coffee/u/rdguG-Q0_dAy3GWVBw2PY.png',
-  //   'https://file.coffee/u/tf2kZYV2xVgDXNeTJ5OTY.png',
-  //   'https://file.coffee/u/EKzxSaYATl_hn1md5p1UH.png',
-  //   'https://file.coffee/u/YBivlcuf0YifEw8Ed15tZ.png',
-  //   'https://file.coffee/u/sZeBwM7pCZmIcdcUYAGvn.png',
-  // ];
-
   return (
     <ImageEditorDefaultImageContainer>
       {defaultImageStoryUrls.map((eachDefaultImageUrl, index) => (
         (eachDefaultImageUrl === 'https://file.coffee/u/sZeBwM7pCZmIcdcUYAGvn.png' ? (
           <ImageEditorDefaultImageInnerImageContainer
+            key={`default_image-${Date.now() + index}`}
             onClick={() => { setUrl('https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'); }}
             selected={url === 'https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'}
             onDoubleClick={() => {
@@ -51,6 +42,7 @@ export default function ImageEditorDefaultImage(
           </ImageEditorDefaultImageInnerImageContainer>
         ) : (
           <ImageEditorDefaultImageInnerImageContainer
+            key={`default_image-${Date.now() + index}`}
             onClick={() => { setUrl(eachDefaultImageUrl); }}
             selected={url === eachDefaultImageUrl}
             onDoubleClick={() => {
