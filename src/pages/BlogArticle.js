@@ -50,11 +50,13 @@ export default function BlogArticle() {
       resolve(querySnapshot);
     });
     const loadingUserBlogSettings = async () => {
-      let nowBlogSettings = {};
-      fetchUserBlogSettings().then((querySnapshot) => {
-        nowBlogSettings = querySnapshot.data();
-      });
-      return (nowBlogSettings);
+      try {
+        const querySnapshot = await fetchUserBlogSettings();
+        const nowBlogSettings = querySnapshot.data();
+        return (nowBlogSettings);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingUserBlogSettings();
   }, [userID]);
@@ -67,19 +69,21 @@ export default function BlogArticle() {
       }
     });
     const loadingLoginUser = async () => {
-      let nowLoginUser = {};
-      fetchLoginUser().then((querySnapshot) => {
-        nowLoginUser = querySnapshot.data();
-        setLoginUserData(querySnapshot.data());
-        setCommentAuthor(querySnapshot.data().distoryId);
-      });
-      return (nowLoginUser);
+      try {
+        const querySnapshot = await fetchLoginUser();
+        const nowLoginUser = querySnapshot.data();
+        setLoginUserData(nowLoginUser);
+        setCommentAuthor(nowLoginUser.distoryId);
+        return (nowLoginUser);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingLoginUser();
   }, [currentUser]);
 
   const getUserDiaries = useCallback(() => {
-    async function gettingUserDiaries() {
+    const gettingUserDiaries = async () => {
       try {
         const urlsRef = collection(db, 'articles');
         const q = query(urlsRef, where('diaryID', '==', diaryID));
@@ -96,14 +100,15 @@ export default function BlogArticle() {
           setUserDiaries(userDiariesAll);
           return userDiariesAll;
         }
+        return false;
       } catch (e) {
         toast('施工中，返回首頁', {
           autoClose: 2000,
         });
         navigate('/');
         return e.response;
-      } return true;
-    }
+      }
+    };
     gettingUserDiaries();
   }, [diaryID, navigate]);
 

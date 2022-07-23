@@ -34,7 +34,7 @@ export default function LoadStories() {
   const [chosedStoryIndex, setChosedStoryIndex] = useState(0);
 
   const searchStoriesAvailableCallBack = useCallback(() => {
-    async function searchStoriesAvailable() {
+    const searchStoriesAvailable = async () => {
       try {
         const urlsRef = collection(db, 'stories');
         const showBefore = new Date(Date.now() - 100000000000);
@@ -70,7 +70,8 @@ export default function LoadStories() {
         navigate('/');
         return e.response;
       }
-    }searchStoriesAvailable();
+    };
+    searchStoriesAvailable();
   }, [navigate]);
 
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function LoadStories() {
       if (storiesAvailable) {
         const storyAuthorsArray = [];
         const story = await Promise.all(storiesAvailable.map((eachStory) => {
-          async function gettingAuthorInfo() {
+          const gettingAuthorInfo = async () => {
             try {
               const usersRef = collection(db, 'users');
               const q = query(usersRef, where('userUID', '==', eachStory.author));
@@ -92,7 +93,7 @@ export default function LoadStories() {
             } catch (e) {
               return e.response;
             }
-          }
+          };
           return gettingAuthorInfo();
         }));
         story.forEach((querySnapshot) => {

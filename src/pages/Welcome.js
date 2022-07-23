@@ -27,12 +27,14 @@ export default function Welcome(
       }
     });
     const loadingLoginUser = async () => {
-      let nowLoginUser = {};
-      fetchLoginUser().then((querySnapshot) => {
-        nowLoginUser = querySnapshot.data();
-        setCurrentUserData(querySnapshot.data());
-      });
-      return (nowLoginUser);
+      try {
+        const querySnapshot = await fetchLoginUser();
+        const nowLoginUser = querySnapshot.data();
+        setCurrentUserData(nowLoginUser);
+        return (nowLoginUser);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingLoginUser();
   }, [currentUser, setCurrentUserData]);

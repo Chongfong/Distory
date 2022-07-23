@@ -21,32 +21,38 @@ export default function Pagination({ userID, currentUserData }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const urlsRef = collection(db, 'articles');
-      const q = query(urlsRef, where('author', '==', userID), where('status', '==', 'published'), orderBy('publishAt', 'desc'));
-      const querySnapshot = await getDocs(q);
-      const items = [];
-      querySnapshot.forEach((doc) => {
-        if (doc.data().contentLike) {
-          items.push({
-            title: doc.data().title,
-            content: doc.data().content,
-            publishAt: doc.data().publishAt,
-            likes: doc.data().contentLike.length,
-            ...doc.data(),
-          });
-        } else {
-          items.push({
-            title: doc.data().title,
-            content: doc.data().content,
-            publishAt: doc.data().publishAt,
-            likes: 0,
-            ...doc.data(),
-          });
-        }
-      });
-      setList(items);
-      totalPages.current = (Math.ceil(items.length / 3));
+      try {
+        const urlsRef = collection(db, 'articles');
+        const q = query(urlsRef, where('author', '==', userID), where('status', '==', 'published'), orderBy('publishAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const items = [];
+        querySnapshot.forEach((doc) => {
+          if (doc.data().contentLike) {
+            items.push({
+              title: doc.data().title,
+              content: doc.data().content,
+              publishAt: doc.data().publishAt,
+              likes: doc.data().contentLike.length,
+              ...doc.data(),
+            });
+          } else {
+            items.push({
+              title: doc.data().title,
+              content: doc.data().content,
+              publishAt: doc.data().publishAt,
+              likes: 0,
+              ...doc.data(),
+            });
+          }
+        });
+        setList(items);
+        totalPages.current = (Math.ceil(items.length / 3));
+        return items;
+      } catch (e) {
+        return e.response;
+      }
     };
+
     fetchData();
   }, [userID]);
 

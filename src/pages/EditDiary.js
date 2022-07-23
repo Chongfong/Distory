@@ -57,18 +57,20 @@ export default function EditDiary({ isOpen, setIsOpen }) {
     });
 
     const loadingDiary = async () => {
-      let nowEditingDiary = '';
-      fetchDiary().then((querySnapshot) => {
-        nowEditingDiary = querySnapshot.data();
-        setEditingDiary(querySnapshot.data());
-        setTitleValue(querySnapshot.data().title);
-        setDiaryContentValue(querySnapshot.data().content);
-        setArticlePassword(querySnapshot.data().password);
-        setArticlePasswordHint(querySnapshot.data().passwordHint);
-        setArticleShowImg(querySnapshot.data().showImg);
-        setArticleShowImgUrl(querySnapshot.data().showImg);
-      });
-      return (nowEditingDiary);
+      try {
+        const querySnapshot = await fetchDiary();
+        const nowEditingDiary = querySnapshot.data();
+        setEditingDiary(nowEditingDiary);
+        setTitleValue(nowEditingDiary.title);
+        setDiaryContentValue(nowEditingDiary.content);
+        setArticlePassword(nowEditingDiary.password);
+        setArticlePasswordHint(nowEditingDiary.passwordHint);
+        setArticleShowImg(nowEditingDiary.showImg);
+        setArticleShowImgUrl(nowEditingDiary.showImg);
+        return (nowEditingDiary);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingDiary();
   }, [diaryID]);

@@ -32,14 +32,16 @@ export default function Comment({
     });
 
     const loadingDiaryComments = async () => {
-      let nowDiaryComments = {};
-      fetchDiaryComments().then((querySnapshot) => {
-        nowDiaryComments = querySnapshot.data();
-        const CommentAllSort = [].concat(querySnapshot.data().comments)
+      try {
+        const querySnapshot = await fetchDiaryComments();
+        const nowDiaryComments = querySnapshot.data();
+        const CommentAllSort = [].concat(nowDiaryComments.comments)
           .sort((a, b) => (b.commentTime.seconds - a.commentTime.seconds));
         setCommentAll(CommentAllSort);
-      });
-      return (nowDiaryComments);
+        return (nowDiaryComments);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingDiaryComments();
   }, [diaryRef, setCommentAll]);
@@ -75,7 +77,7 @@ export default function Comment({
       if (commentAll) {
         const storyAuthorsArray = [];
         const story = await Promise.all(commentAll.map((eachComment) => {
-          async function gettingAuthorInfo() {
+          const gettingAuthorInfo = async () => {
             try {
               const usersRef = collection(db, 'users');
               const q = query(usersRef, where('userUID', '==', eachComment.commentAuthorID));
@@ -84,7 +86,7 @@ export default function Comment({
             } catch {
               return [];
             }
-          }
+          };
           return gettingAuthorInfo();
         }));
         story.forEach((querySnapshot) => {

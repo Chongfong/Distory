@@ -43,7 +43,7 @@ export default function SettingId({ settingId, setSettingId }) {
     setDoc(userdoc, { ...userData });
   };
 
-  const handleSettingIdName = (nickName) => {
+  const handleSettingIdName = async (nickName) => {
     onAuthStateChanged(auth, (loggingInUser) => {
       updateProfile(loggingInUser, {
         displayName: nickName,
@@ -57,7 +57,7 @@ export default function SettingId({ settingId, setSettingId }) {
     });
   };
 
-  async function checkDuplicateIdAndSaveDB() {
+  const checkDuplicateIdAndSaveDB = async () => {
     try {
       const urlsRef = collection(db, 'users');
       const q = query(urlsRef, where('distoryId', '==', settingId));
@@ -78,7 +78,7 @@ export default function SettingId({ settingId, setSettingId }) {
       });
       return e.response;
     }
-  }
+  };
 
   return (
 

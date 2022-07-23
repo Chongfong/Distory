@@ -48,15 +48,17 @@ export default function Home() {
 
   const loadDiaries = useCallback(() => {
     const loadingDiaries = async () => {
-      const output = [];
-      fetchDiaries().then((querySnapshot) => {
+      try {
+        const output = [];
+        const querySnapshot = await fetchDiaries();
         querySnapshot.forEach((querySnapshotdoc) => {
           output.push(querySnapshotdoc.data());
         });
         setAllDiaries([...output]);
-      });
-
-      return (output);
+        return output;
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingDiaries();
   }, []);

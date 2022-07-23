@@ -29,7 +29,7 @@ export default function Search() {
   };
 
   const searchTitleCallBack = useCallback(() => {
-    async function searchTitle() {
+    const searchTitle = async () => {
       try {
         const urlsRef = collection(db, 'articles');
         const q = query(urlsRef, where('titleText', 'array-contains', [...searchkey][0]));
@@ -52,7 +52,9 @@ export default function Search() {
         navigate('/');
         return e.response;
       } return true;
-    }searchTitle();
+    };
+
+    searchTitle();
   }, [navigate, searchkey]);
 
   useEffect(() => {

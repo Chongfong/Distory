@@ -12,7 +12,7 @@ export default function Share({ url, title }) {
     text: `${title}`,
   };
 
-  async function shareDistoryUrl(e) {
+  const shareDistoryUrl = async (e) => {
     if (navigator.share) {
       try {
         await navigator.share(shareData);
@@ -27,7 +27,7 @@ export default function Share({ url, title }) {
         autoClose: 3500,
       });
     }
-  }
+  };
 
   return (
     <>

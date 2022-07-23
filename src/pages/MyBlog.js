@@ -42,9 +42,9 @@ export default function MyBlog() {
       resolve(querySnapshot);
     });
     const loadingUserWhoVisited = async () => {
-      let nowWhoVisited = {};
-      fetchUserWhoVisited().then((querySnapshot) => {
-        nowWhoVisited = querySnapshot.data();
+      try {
+        const querySnapshot = await fetchUserWhoVisited();
+        const nowWhoVisited = querySnapshot.data();
         if (nowWhoVisited) {
           if (nowWhoVisited.come) {
             if (nowWhoVisited.come.userUid) {
@@ -52,8 +52,10 @@ export default function MyBlog() {
             }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
           }setDoc(userCamedoc, { ...userCameEditData }, { merge: true });
         }
-      });
-      return (nowWhoVisited);
+        return (nowWhoVisited);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingUserWhoVisited();
   }, [userID]);
@@ -135,12 +137,14 @@ export default function MyBlog() {
       resolve(querySnapshot);
     });
     const loadingUserBlogSettings = async () => {
-      let nowBlogSettings = {};
-      fetchUserBlogSettings().then((querySnapshot) => {
-        nowBlogSettings = querySnapshot.data();
-        setCurrentUserData(querySnapshot.data());
-      });
-      return (nowBlogSettings);
+      try {
+        const querySnapshot = await fetchUserBlogSettings();
+        const nowBlogSettings = querySnapshot.data();
+        setCurrentUserData(nowBlogSettings);
+        return (nowBlogSettings);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingUserBlogSettings();
   }, [setCurrentUserData, userID]);
@@ -152,13 +156,15 @@ export default function MyBlog() {
       resolve(querySnapshot);
     });
     const loadingUserBlogSettings = async (currentVisitUserID) => {
-      let nowBlogSettings = {};
-      fetchCurrentBlogSettings(currentVisitUserID).then((querySnapshot) => {
-        nowBlogSettings = querySnapshot.data();
-        setCurrentUserData(querySnapshot.data());
+      try {
+        const querySnapshot = await fetchCurrentBlogSettings(currentVisitUserID);
+        const nowBlogSettings = querySnapshot.data();
+        setCurrentUserData(nowBlogSettings);
         navigate(`/${currentUserID}`);
-      });
-      return (nowBlogSettings);
+        return (nowBlogSettings);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingUserBlogSettings(currentUserID);
   }, [navigate, setCurrentUserData]);

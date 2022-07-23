@@ -121,17 +121,19 @@ export default function EditBlog() {
       resolve(querySnapshot);
     });
     const loadingUserBlogSettings = async () => {
-      let nowBlogSettings = {};
-      fetchUserBlogSettings().then((querySnapshot) => {
-        nowBlogSettings = querySnapshot.data();
-        setCurrentUserData(querySnapshot.data());
-        setBlogTitle(querySnapshot.data().blogTitle);
-        setBlogIntro(querySnapshot.data().blogIntro);
-        setBlogImage(querySnapshot.data().blogImage);
-        setBlogLayout(querySnapshot.data().blogLayout);
-        setBlogContentLayout(querySnapshot.data().blogContentLayout);
-      });
-      return (nowBlogSettings);
+      try {
+        const querySnapshot = await fetchUserBlogSettings();
+        const nowBlogSettings = querySnapshot.data();
+        setCurrentUserData(nowBlogSettings);
+        setBlogTitle(nowBlogSettings.blogTitle);
+        setBlogIntro(nowBlogSettings.blogIntro);
+        setBlogImage(nowBlogSettings.blogImage);
+        setBlogLayout(nowBlogSettings.blogLayout);
+        setBlogContentLayout(nowBlogSettings.blogContentLayout);
+        return (nowBlogSettings);
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingUserBlogSettings();
   }, [setCurrentUserData, userID]);

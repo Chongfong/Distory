@@ -45,13 +45,18 @@ export default function CreateNewStory() {
   });
 
   const uploadImage = async (event) => {
-    const file = event.target.files[0];
-    const base64 = await convertBase64(file);
-    setImageUrl(base64);
-    base64ImageUrl.current = base64;
-    setOpenImageEditor(true);
-    setImageFileUrl();
-    setImageFile();
+    try {
+      const file = event.target.files[0];
+      const base64 = await convertBase64(file);
+      setImageUrl(base64);
+      base64ImageUrl.current = base64;
+      setOpenImageEditor(true);
+      setImageFileUrl();
+      setImageFile();
+      return (false);
+    } catch (e) {
+      return e.response;
+    }
   };
 
   const renderUploadImg = () => {

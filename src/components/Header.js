@@ -69,12 +69,14 @@ export default function Header({
     });
 
     const loadingLoginUser = async () => {
-      let nowLoginUser = {};
-      fetchLoginUser().then((querySnapshot) => {
-        nowLoginUser = querySnapshot.data();
-        setHeaderLoginUserData(querySnapshot.data());
-      });
-      return (nowLoginUser);
+      try {
+        const querySnapshot = await fetchLoginUser();
+        const nowLoginUser = querySnapshot.data();
+        setHeaderLoginUserData(nowLoginUser);
+        return nowLoginUser;
+      } catch (e) {
+        return e.response;
+      }
     };
     loadingLoginUser();
   }, [currentUser]);
@@ -83,14 +85,17 @@ export default function Header({
     loadLoginUser();
   }, [currentUser, currentUserData, loadLoginUser]);
 
-  const handleLogOut = () => {
-    signOut(auth)
-      .then(() => {
-        toast('您已登出', {
-          autoClose: 3500,
-        });
-        navigate('/');
+  const handleLogOut = async () => {
+    try {
+      await signOut(auth);
+      toast('您已登出', {
+        autoClose: 3500,
       });
+      navigate('/');
+      return true;
+    } catch (e) {
+      return e.response;
+    }
   };
 
   return (
