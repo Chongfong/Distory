@@ -6,20 +6,20 @@ import {
   Route,
 } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
-import Home from './pages/Home';
-import CreateNewDiary from './pages/CreateNewDiary';
-import CreateNewStory from './pages/CreateNewStory';
-import EditDiary from './pages/EditDiary';
-import EditBlog from './pages/EditBlog';
-import SignUp from './pages/SignUp';
-import LogIn from './pages/Login';
-import SettingId from './pages/SettingId';
-import Welcome from './pages/Welcome';
-import MyBlog from './pages/MyBlog';
-import BlogArticle from './pages/BlogArticle';
-import Search from './pages/Search';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Home from './pages/home/Home';
+import CreateNewDiary from './pages/createNewDiary/CreateNewDiary';
+import CreateNewStory from './pages/createNewStory/CreateNewStory';
+import EditDiary from './pages/editDiary/EditDiary';
+import EditBlog from './pages/editBlog/EditBlog';
+import SignUp from './pages/login/SignUp';
+import LogIn from './pages/login/Login';
+import SettingId from './pages/login/SettingId';
+import Welcome from './pages/login/Welcome';
+import MyBlog from './pages/myBlog/MyBlog';
+import BlogArticle from './pages/blogArticle/BlogArticle';
+import Search from './pages/search/Search';
+import Header from './components/share/Header';
+import Footer from './components/share/Footer';
 import 'react-toastify/dist/ReactToastify.css';
 import AppContextProvider from './context/AppContext';
 
