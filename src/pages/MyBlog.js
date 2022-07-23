@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useCallback, useState, useEffect, useContext,
 } from 'react';
@@ -60,14 +59,16 @@ export default function MyBlog() {
   }, [userID]);
 
   const saveUserCameDBCallBack = useCallback(() => {
-    const saveUserCameDB = (userUid) => {
-      const userCollection = collection(db, 'users');
-      const userCameDoc = doc(userCollection, userUid);
-      const userCameData = { [currentUser?.uid]: Timestamp.now().toDate() };
-      const userCameEditData = { come: userCameData };
-      loadUserWhoVisited(userCameDoc, userCameEditData);
-    }; saveUserCameDB();
-  }, [currentUser?.uid, loadUserWhoVisited]);
+    if (currentUser.uid) {
+      const saveUserCameDB = (userUid) => {
+        const userCollection = collection(db, 'users');
+        const userCameDoc = doc(userCollection, userUid);
+        const userCameData = { [currentUser.uid]: Timestamp.now().toDate() };
+        const userCameEditData = { come: userCameData };
+        loadUserWhoVisited(userCameDoc, userCameEditData);
+      }; saveUserCameDB(userID);
+    }
+  }, [currentUser?.uid, loadUserWhoVisited, userID]);
 
   const visitMyHomeFuncCallBack = useCallback(() => {
     const visitMyHomeFunc = () => {
@@ -117,9 +118,7 @@ export default function MyBlog() {
         }
       }
     }; whoComes();
-  }, [userID]);
-
-  const docRef = doc(db, 'users', userID);
+  }, [currentUser, saveUserCameDBCallBack, userID]);
 
   const transformTimeToDate = (seconds) => {
     const t = new Date(seconds);
@@ -131,6 +130,7 @@ export default function MyBlog() {
 
   const loadUserBlogSettings = useCallback(() => {
     const fetchUserBlogSettings = () => new Promise((resolve) => {
+      const docRef = doc(db, 'users', userID);
       const querySnapshot = getDoc(docRef);
       resolve(querySnapshot);
     });
@@ -143,7 +143,7 @@ export default function MyBlog() {
       return (nowBlogSettings);
     };
     loadingUserBlogSettings();
-  }, [docRef]);
+  }, [setCurrentUserData, userID]);
 
   const loadCurrentBlogSettings = useCallback((currentUserID) => {
     const fetchCurrentBlogSettings = (visitorUid) => new Promise((resolve) => {
@@ -161,7 +161,7 @@ export default function MyBlog() {
       return (nowBlogSettings);
     };
     loadingUserBlogSettings(currentUserID);
-  }, [navigate]);
+  }, [navigate, setCurrentUserData]);
 
   const getUserDiaries = useCallback(() => {
     async function gettingUserDiaries() {
@@ -199,7 +199,7 @@ export default function MyBlog() {
   useEffect(() => {
     loadUserBlogSettings();
     getUserDiaries();
-  }, [getUserDiaries]);
+  }, [getUserDiaries, loadUserBlogSettings]);
 
   useEffect(() => {
     whoComesCallBack();
@@ -208,8 +208,6 @@ export default function MyBlog() {
   useEffect(() => {
     visitMyHomeFuncCallBack();
   }, [visitMyHomeFuncCallBack]);
-
-  console.log('rerender');
 
   return (
     <>
@@ -247,7 +245,7 @@ export default function MyBlog() {
                 />
               </div>
               <MyBlogUserName>{currentUserData.distoryId}</MyBlogUserName>
-              <p>{`Since　${transformTimeToDate(currentUserData.createBlogAt.seconds * 1000).toString()}`}</p>
+              {currentUserData && <p>{`Since　${transformTimeToDate(currentUserData.createBlogAt.seconds * 1000).toString()}`}</p>}
 
               <MyBlogBottomLine />
               {visitMyHomeAll && (

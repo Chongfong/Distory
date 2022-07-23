@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useState, useRef, useEffect, useCallback,
 } from 'react';
@@ -47,16 +46,16 @@ export default function EditDiary({ isOpen, setIsOpen }) {
 
   const { userID, diaryID } = useParams();
   const [editingDiary, setEditingDiary] = useState();
-  const docRef = doc(db, 'articles', diaryID);
-
   const navigate = useNavigate();
 
-  const fetchDiary = () => new Promise((resolve) => {
-    const querySnapshot = getDoc(docRef);
-    resolve(querySnapshot);
-  });
-
   const loadDiary = useCallback(() => {
+    const docRef = doc(db, 'articles', diaryID);
+
+    const fetchDiary = () => new Promise((resolve) => {
+      const querySnapshot = getDoc(docRef);
+      resolve(querySnapshot);
+    });
+
     const loadingDiary = async () => {
       let nowEditingDiary = '';
       fetchDiary().then((querySnapshot) => {
@@ -72,7 +71,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
       return (nowEditingDiary);
     };
     loadingDiary();
-  }, []);
+  }, [diaryID]);
 
   useEffect(() => {
     loadDiary();
@@ -91,6 +90,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
   const imageRef = useRef();
 
   const updateDiaryDB = () => {
+    const docRef = doc(db, 'articles', diaryID);
     if (titleValue === '') {
       toast('請輸入標題', {
         autoClose: 3500,
@@ -120,6 +120,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
   };
 
   const updateDiaryImgDB = (imgDownloadURL) => {
+    const docRef = doc(db, 'articles', diaryID);
     const data = {
       title: titleValue,
       titleText: [...titleValue.replace(' ', '')],
@@ -138,6 +139,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
   };
 
   const updateTempDiaryImgDB = (imgDownloadURL) => {
+    const docRef = doc(db, 'articles', diaryID);
     const data = {
       title: titleValue,
       titleText: [...titleValue.replace(' ', '')],
@@ -156,6 +158,7 @@ export default function EditDiary({ isOpen, setIsOpen }) {
   };
 
   const updateTempDiaryDB = () => {
+    const docRef = doc(db, 'articles', diaryID);
     if (titleValue === '') {
       toast('請輸入標題', {
         autoClose: 3500,

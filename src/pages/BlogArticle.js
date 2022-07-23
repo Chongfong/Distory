@@ -31,7 +31,6 @@ import Loader from '../components/Loader';
 export default function BlogArticle() {
   const {
     currentUser, currentUserData,
-    setCurrentUserData,
   } = useContext(AppContext);
   const [userDiaries, setUserDiaries] = useState([]);
   const [commentAll, setCommentAll] = useState();
@@ -43,9 +42,9 @@ export default function BlogArticle() {
   const { userID, diaryID } = useParams();
   const navigate = useNavigate();
 
-  const docRef = doc(db, 'users', userID);
-
   const loadUserBlogSettings = useCallback(() => {
+    const docRef = doc(db, 'users', userID);
+
     const fetchUserBlogSettings = () => new Promise((resolve) => {
       const querySnapshot = getDoc(docRef);
       resolve(querySnapshot);
@@ -54,12 +53,11 @@ export default function BlogArticle() {
       let nowBlogSettings = {};
       fetchUserBlogSettings().then((querySnapshot) => {
         nowBlogSettings = querySnapshot.data();
-        setCurrentUserData(querySnapshot.data());
       });
       return (nowBlogSettings);
     };
     loadingUserBlogSettings();
-  }, [docRef, setCurrentUserData]);
+  }, [userID]);
 
   const loadLoginUser = useCallback(() => {
     const fetchLoginUser = () => new Promise((resolve) => {

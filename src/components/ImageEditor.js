@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
 import React, { useRef } from 'react';

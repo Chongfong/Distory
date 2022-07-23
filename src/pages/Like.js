@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import {
   collection, doc, updateDoc, arrayUnion, arrayRemove,
@@ -100,31 +99,57 @@ export default function Like({ currentUser, nowlikeUsers }) {
     } return null;
   };
 
-  return (
-    <>
-      { currentUser ? (likeUsers
-    && likeUsers.includes(currentUser.uid) ? (
+  const renderLikeInnerSpace = () => {
+    if (likeUsers.includes(currentUser.uid)) {
+      return (
+        <BlogArticleLikesContainer
+          onClick={() => { unlikeDiary(diaryID); }}
+          onKeyUp={() => { unlikeDiary(diaryID); }}
+          role="button"
+          tabIndex={0}
+        >
+          <InteractiveImage src={heartPink} alt="heart-pink" />
+&nbsp;
+          {likeUsers.length}
+        </BlogArticleLikesContainer>
+      );
+    }
+    return (renderHeartPink());
+  };
+
+  const renderLikeUsers = () => {
+    if (likeUsers) {
+      return (
+        renderLikeInnerSpace()
+      );
+    }
+    return (
       <BlogArticleLikesContainer
-        onClick={() => { unlikeDiary(diaryID); }}
-        onKeyUp={() => { unlikeDiary(diaryID); }}
+        onClick={() => { likeDiary(diaryID); }}
+        onKeyUp={() => { likeDiary(diaryID); }}
         role="button"
         tabIndex={0}
       >
-        <InteractiveImage src={heartPink} alt="heart-pink" />
+        <InteractiveImage src={heart} alt="heart" />
 &nbsp;
         {likeUsers.length}
       </BlogArticleLikesContainer>
-        ) : renderHeartPink()) : (
-          <BlogArticleLikesContainer
-            onClick={() => { likeDiary(diaryID); }}
-            onKeyUp={() => { likeDiary(diaryID); }}
-            role="button"
-            tabIndex={0}
-          >
-            <InteractiveImage src={heartPink} alt="heart-pink" />
+    );
+  };
+
+  return (
+    <>
+      { currentUser ? (renderLikeUsers()) : (
+        <BlogArticleLikesContainer
+          onClick={() => { likeDiary(diaryID); }}
+          onKeyUp={() => { likeDiary(diaryID); }}
+          role="button"
+          tabIndex={0}
+        >
+          <InteractiveImage src={heartPink} alt="heart-pink" />
 &nbsp;
-            {likeUsers.length}
-          </BlogArticleLikesContainer>
+          {likeUsers.length}
+        </BlogArticleLikesContainer>
       )}
       {}
     </>

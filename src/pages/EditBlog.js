@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-nested-ternary */
 import React, {
   useState, useCallback, useEffect, useRef, useContext,
 } from 'react';
@@ -116,9 +114,8 @@ export default function EditBlog() {
     updateDoc(userBlogdoc, { ...userBlogData });
   };
 
-  const thisUserRef = doc(db, 'users', userID);
-
   const loadUserBlogSettings = useCallback(() => {
+    const thisUserRef = doc(db, 'users', userID);
     const fetchUserBlogSettings = () => new Promise((resolve) => {
       const querySnapshot = getDoc(thisUserRef);
       resolve(querySnapshot);
@@ -137,7 +134,7 @@ export default function EditBlog() {
       return (nowBlogSettings);
     };
     loadingUserBlogSettings();
-  }, [setCurrentUserData, thisUserRef]);
+  }, [setCurrentUserData, userID]);
 
   const handleSubmit = (imageFile, uid) => {
     const imageTypes = ['jpg', 'gif', 'bmp', 'png', 'jpeg'];
@@ -181,7 +178,7 @@ export default function EditBlog() {
 
   useEffect(() => {
     loadUserBlogSettings();
-  }, [currentUser, currentUserImage]);
+  }, [currentUser, currentUserImage, loadUserBlogSettings]);
 
   const onUserImageClick = () => {
     inputUserImage.current.click();
@@ -198,215 +195,243 @@ export default function EditBlog() {
 
   const [checkLoadUserImage, setCheckLoadUserImage] = useState(false);
 
+  const renderImageEditButton = () => {
+    if (blogImageFile) {
+      return (
+        <CircleButton
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setBlogImageFile();
+            setBlogImage(currentUserData.blogImage);
+          }}
+          style={{
+            fontSize: '25px', position: 'absolute', bottom: '10px', right: '20px',
+          }}
+        >
+          ×
+
+        </CircleButton>
+      );
+    }
+    return (
+      <EditButton
+        style={{
+          fontSize: '25px',
+          position: 'absolute',
+          bottom: '10px',
+          right: '20px',
+          transform: 'scaleX(-1)',
+        }}
+      >
+        ✎
+
+      </EditButton>
+    );
+  };
+
+  const renderShowProfileImg = () => {
+    if (currentUserImage) {
+      return (
+        <>
+          <img
+            style={{
+              width: '200px', height: '200px', borderRadius: '50%', border: '#ccc solid 2px',
+            }}
+            src={renderUploadImage(currentUserImage, 'user')}
+            alt={currentUserImage ? currentUserImage.name : null}
+          />
+          {!checkLoadUserImage && (
+          <>
+            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); submitUserImgDB(currentUserImage, userID); setCheckLoadUserImage(true); }}>確認</button>
+            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentUserImage(); }}>取消</button>
+          </>
+          )}
+        </>
+      );
+    }
+    return (
+      <img
+        style={{
+          width: '200px', height: '200px', borderRadius: '50%',
+        }}
+        src={currentUserData.userImage}
+        alt="userImage"
+      />
+    );
+  };
+
+  const renderChangeBlogImg = () => {
+    if (blogImageFile) {
+      return (
+        <CreateDiaryPublish
+          onClick={() => {
+            handleSubmit(blogImageFile, currentUser.uid);
+          }}
+          onKeyUp={() => {
+            handleSubmit(blogImageFile, currentUser.uid);
+            navigate(`/${currentUser.uid}`);
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          ✓
+
+        </CreateDiaryPublish>
+      );
+    }
+    return (
+      <CreateDiaryPublish
+        onClick={() => {
+          saveBlogSettingsDB(currentUser.uid);
+          navigate(`/${currentUser.uid}`);
+        }}
+        onKeyUp={() => {
+          saveBlogSettingsDB(currentUser.uid);
+          navigate(`/${currentUser.uid}`);
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        ✓
+
+      </CreateDiaryPublish>
+    );
+  };
+
+  const renderEditBlogSpace = () => {
+    if (currentUserData) {
+      return (
+        <CreateDiaryInsideBody style={{ textAlign: 'left', padding: '0px 10px 50px 10px' }}>
+          <CreateDiaryNavTitle style={{ paddingLeft: '0px' }}>部落格編輯</CreateDiaryNavTitle>
+          <BlogEditInnerContainer>
+            <div style={{ flex: '1' }}>
+              <EditBlogTitle>部落格標題</EditBlogTitle>
+              <CreateDiaryTitle
+                type="text"
+                value={blogTitle}
+                onChange={(e) => setBlogTitle(e.target.value)}
+              />
+              <EditBlogTitle>部落格介紹</EditBlogTitle>
+              <CreateDiaryTitle
+                type="text"
+                value={blogIntro}
+                onChange={(e) => setBlogIntro(e.target.value)}
+              />
+
+            </div>
+            <div style={{ flex: '1', position: 'relative' }}>
+              <EditBlogTitle style={{ margin: '10px 60px' }}>編輯大頭貼</EditBlogTitle>
+              <BlogUserImageDiv
+                onClick={() => {
+                  onUserImageClick();
+                }}
+                onKeyUp={() => {
+                  onUserImageClick();
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="user-image"
+                  ref={inputUserImage}
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
+                  }}
+                />
+                {renderShowProfileImg()}
+              </BlogUserImageDiv>
+            </div>
+
+          </BlogEditInnerContainer>
+
+          <EditBlogTitle>進版畫面設定</EditBlogTitle>
+
+          <BlogBackgroundImageLabel
+            htmlFor="upload-blogImage"
+          >
+            <input
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              id="upload-blogImage"
+              onChange={(e) => {
+                setBlogImage(URL.createObjectURL(e.target.files[0]));
+                setBlogImageFile(e.target.files[0]);
+              }}
+            />
+            {renderImageEditButton()}
+            <BlogBackgroundImage
+              alt="background"
+              src={blogImage}
+            />
+          </BlogBackgroundImageLabel>
+
+          <EditBlogTitle>基本版面設定</EditBlogTitle>
+          <EditBlogFlex>
+            <div
+              onClick={() => setBlogLayout('A')}
+              onKeyUp={() => setBlogLayout('A')}
+              role="button"
+              tabIndex={0}
+            >
+              <EditBlogLayout isToggled={blogLayout === 'A'} alt="layout-left" src={layoutImage} />
+
+            </div>
+            <div
+              onClick={() => setBlogLayout('B')}
+              onKeyUp={() => setBlogLayout('B')}
+              role="button"
+              tabIndex={0}
+            >
+              <EditBlogLayout isToggled={blogLayout === 'B'} style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={layoutImage} />
+
+            </div>
+          </EditBlogFlex>
+          <EditBlogTitle>文章版面設定</EditBlogTitle>
+          <EditBlogFlex>
+            <div
+              onClick={() => setBlogContentLayout('A')}
+              onKeyUp={() => setBlogContentLayout('A')}
+              role="button"
+              tabIndex={0}
+            >
+              <EditBlogLayout isToggled={blogContentLayout === 'A'} alt="layout-left" src={contentLayout} />
+
+            </div>
+            <div
+              onClick={() => setBlogContentLayout('B')}
+              onKeyUp={() => setBlogContentLayout('B')}
+              role="button"
+              tabIndex={0}
+            >
+              <EditBlogLayout isToggled={blogContentLayout === 'B'} style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={contentLayout} />
+            </div>
+          </EditBlogFlex>
+          <br />
+          {renderChangeBlogImg()}
+
+        </CreateDiaryInsideBody>
+      );
+    }
+    return (<Loader />);
+  };
+
+  const renderEditBlogOuterSpace = () => {
+    if (currentUser.uid === userID) {
+      return (
+        renderEditBlogSpace()
+      );
+    }
+    return (<Navigate to="/" replace />);
+  };
+
   return (
     <>
-      { currentUser ? (
-        currentUser?.uid === userID
-          ? (
-            currentUserData ? (
-              <CreateDiaryInsideBody style={{ textAlign: 'left', padding: '0px 10px 50px 10px' }}>
-                <CreateDiaryNavTitle style={{ paddingLeft: '0px' }}>部落格編輯</CreateDiaryNavTitle>
-                <BlogEditInnerContainer>
-                  <div style={{ flex: '1' }}>
-                    <EditBlogTitle>部落格標題</EditBlogTitle>
-                    <CreateDiaryTitle
-                      type="text"
-                      value={blogTitle}
-                      onChange={(e) => setBlogTitle(e.target.value)}
-                    />
-                    <EditBlogTitle>部落格介紹</EditBlogTitle>
-                    <CreateDiaryTitle
-                      type="text"
-                      value={blogIntro}
-                      onChange={(e) => setBlogIntro(e.target.value)}
-                    />
-
-                  </div>
-                  <div style={{ flex: '1', position: 'relative' }}>
-                    <EditBlogTitle style={{ margin: '10px 60px' }}>編輯大頭貼</EditBlogTitle>
-                    <BlogUserImageDiv
-                      onClick={() => {
-                        onUserImageClick();
-                      }}
-                      onKeyUp={() => {
-                        onUserImageClick();
-                      }}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      {currentUser ? (currentUser.uid === userID ? (
-                        <input
-                          type="file"
-                          accept="image/*"
-                          id="user-image"
-                          ref={inputUserImage}
-                          style={{ display: 'none' }}
-                          onChange={(e) => {
-                            if (e.target.files[0]) { setCurrentUserImage(e.target.files[0]); }
-                          }}
-                        />
-                      ) : ('')) : ('')}
-                      {currentUserImage ? (
-                        <>
-                          <img
-                            style={{
-                              width: '200px', height: '200px', borderRadius: '50%', border: '#ccc solid 2px',
-                            }}
-                            src={renderUploadImage(currentUserImage, 'user')}
-                            alt={currentUserImage ? currentUserImage.name : null}
-                          />
-                          {!checkLoadUserImage ? (
-                            <>
-                              <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); submitUserImgDB(currentUserImage, userID); setCheckLoadUserImage(true); }}>確認</button>
-                              <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentUserImage(); }}>取消</button>
-                            </>
-                          ) : ('')}
-                        </>
-                      ) : (
-                        <img
-                          style={{
-                            width: '200px', height: '200px', borderRadius: '50%',
-                          }}
-                          src={currentUserData.userImage}
-                          alt="userImage"
-                        />
-                      ) }
-                    </BlogUserImageDiv>
-                  </div>
-
-                </BlogEditInnerContainer>
-
-                <EditBlogTitle>進版畫面設定</EditBlogTitle>
-
-                <BlogBackgroundImageLabel
-                  htmlFor="upload-blogImage"
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    id="upload-blogImage"
-                    onChange={(e) => {
-                      setBlogImage(URL.createObjectURL(e.target.files[0]));
-                      setBlogImageFile(e.target.files[0]);
-                    }}
-                  />
-                  {blogImageFile ? (
-                    <CircleButton
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setBlogImageFile();
-                        setBlogImage(currentUserData.blogImage);
-                      }}
-                      style={{
-                        fontSize: '25px', position: 'absolute', bottom: '10px', right: '20px',
-                      }}
-                    >
-                      ×
-
-                    </CircleButton>
-                  ) : (
-                    <EditButton
-                      style={{
-                        fontSize: '25px',
-                        position: 'absolute',
-                        bottom: '10px',
-                        right: '20px',
-                        transform: 'scaleX(-1)',
-                      }}
-                    >
-                      ✎
-
-                    </EditButton>
-                  )}
-                  <BlogBackgroundImage
-                    alt="background"
-                    src={blogImage}
-                  />
-                </BlogBackgroundImageLabel>
-
-                <EditBlogTitle>基本版面設定</EditBlogTitle>
-                <EditBlogFlex>
-                  <div
-                    onClick={() => setBlogLayout('A')}
-                    onKeyUp={() => setBlogLayout('A')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <EditBlogLayout isToggled={blogLayout === 'A'} alt="layout-left" src={layoutImage} />
-
-                  </div>
-                  <div
-                    onClick={() => setBlogLayout('B')}
-                    onKeyUp={() => setBlogLayout('B')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <EditBlogLayout isToggled={blogLayout === 'B'} style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={layoutImage} />
-
-                  </div>
-                </EditBlogFlex>
-                <EditBlogTitle>文章版面設定</EditBlogTitle>
-                <EditBlogFlex>
-                  <div
-                    onClick={() => setBlogContentLayout('A')}
-                    onKeyUp={() => setBlogContentLayout('A')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <EditBlogLayout isToggled={blogContentLayout === 'A'} alt="layout-left" src={contentLayout} />
-
-                  </div>
-                  <div
-                    onClick={() => setBlogContentLayout('B')}
-                    onKeyUp={() => setBlogContentLayout('B')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <EditBlogLayout isToggled={blogContentLayout === 'B'} style={{ transform: 'scaleX(-1)' }} alt="layout-left" src={contentLayout} />
-                  </div>
-                </EditBlogFlex>
-                <br />
-                {blogImageFile ? (
-                  <CreateDiaryPublish
-                    onClick={() => {
-                      handleSubmit(blogImageFile, currentUser.uid);
-                    }}
-                    onKeyUp={() => {
-                      handleSubmit(blogImageFile, currentUser.uid);
-                      navigate(`/${currentUser.uid}`);
-                    }}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    ✓
-
-                  </CreateDiaryPublish>
-                ) : (
-                  <CreateDiaryPublish
-                    onClick={() => {
-                      saveBlogSettingsDB(currentUser.uid);
-                      navigate(`/${currentUser.uid}`);
-                    }}
-                    onKeyUp={() => {
-                      saveBlogSettingsDB(currentUser.uid);
-                      navigate(`/${currentUser.uid}`);
-                    }}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    ✓
-
-                  </CreateDiaryPublish>
-                ) }
-
-              </CreateDiaryInsideBody>
-            ) : (
-              <Loader />
-            )
-
-          ) : (<Navigate to="/" replace />)) : (<Loader />)}
+      { currentUser ? renderEditBlogOuterSpace() : (<Loader />)}
       {}
     </>
   );
