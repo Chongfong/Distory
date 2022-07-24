@@ -8,7 +8,7 @@ import { myTheme, ImageEditorSubmitButtonsForm } from './imageEditorTheme';
 import '../../../css/textEditor.css';
 import '../../../css/imageEditor.css';
 import {
-  PopUpBackDiv, PopUpContainerDiv, CircleButton, CircleButtonCancel,
+  PopUpBackDiv, PopUpContainerDiv, CircleButtonPlusImgEditor, CircleButtonCancelImgEditor,
 } from './ImageEditor.style';
 
 import StickerRow from './ImageEditorSticker';
@@ -197,8 +197,8 @@ export default function PhotoEditor({
               />
               <StickerRow onStickerSelected={(path) => addSticker(path)} />
               <ImageEditorSubmitButtonsForm onSubmit={handleSubmit}>
-                <CircleButton type="submit" style={{ position: 'relative' }}>✓</CircleButton>
-                <CircleButtonCancel type="button" style={{ fontSize: '25px', position: 'relative' }} onClick={() => setOpenImageEditor(false)}>×</CircleButtonCancel>
+                <CircleButtonPlusImgEditor type="submit">✓</CircleButtonPlusImgEditor>
+                <CircleButtonCancelImgEditor type="button" onClick={() => setOpenImageEditor(false)}>×</CircleButtonCancelImgEditor>
               </ImageEditorSubmitButtonsForm>
             </PopUpContainerDiv>
           </PopUpBackDiv>

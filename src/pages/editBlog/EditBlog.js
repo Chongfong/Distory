@@ -15,13 +15,11 @@ import { storage, db } from '../../utils/firestore';
 import layoutImage from '../../img/layout.png';
 import contentLayout from '../../img/content-layout.png';
 import {
-  CreateDiaryInsideBody, CreateDiaryNavTitle, CreateDiaryTitle, CreateDiaryPublish,
-} from '../createNewDiary/CreateNewDiaries.style';
-import {
   EditBlogTitle, EditBlogLayout, EditBlogFlex, BlogBackgroundImage, BlogBackgroundImageLabel,
-  BlogUserImageDiv, BlogEditInnerContainer,
+  BlogUserImageDiv, BlogEditInnerContainer, EditBlogBasicContainer, BlogEditPencil,
+  BlogEditCircleButton, EditBlogProfileImg, EditBlogInsideBody, EditBlogNavTitle,
+  EditBlogInputTitle, EditBlogPublish, EditBlogInputProfileImg, EditBlogBasicContainerProfileImg,
 } from './EditBlog.style';
-import { EditButton, CircleButton } from '../../components/edit/editors/ImageEditor.style';
 
 import Loader from '../../components/share/Loader';
 
@@ -200,35 +198,24 @@ export default function EditBlog() {
   const renderImageEditButton = () => {
     if (blogImageFile) {
       return (
-        <CircleButton
+        <BlogEditCircleButton
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             setBlogImageFile();
             setBlogImage(currentUserData.blogImage);
           }}
-          style={{
-            fontSize: '25px', position: 'absolute', bottom: '10px', right: '20px',
-          }}
         >
           ×
 
-        </CircleButton>
+        </BlogEditCircleButton>
       );
     }
     return (
-      <EditButton
-        style={{
-          fontSize: '25px',
-          position: 'absolute',
-          bottom: '10px',
-          right: '20px',
-          transform: 'scaleX(-1)',
-        }}
-      >
+      <BlogEditPencil>
         ✎
 
-      </EditButton>
+      </BlogEditPencil>
     );
   };
 
@@ -236,10 +223,7 @@ export default function EditBlog() {
     if (currentUserImage) {
       return (
         <>
-          <img
-            style={{
-              width: '200px', height: '200px', borderRadius: '50%', border: '#ccc solid 2px',
-            }}
+          <EditBlogProfileImg
             src={renderUploadImage(currentUserImage, 'user')}
             alt={currentUserImage ? currentUserImage.name : null}
           />
@@ -253,10 +237,7 @@ export default function EditBlog() {
       );
     }
     return (
-      <img
-        style={{
-          width: '200px', height: '200px', borderRadius: '50%',
-        }}
+      <EditBlogProfileImg
         src={currentUserData.userImage}
         alt="userImage"
       />
@@ -266,7 +247,7 @@ export default function EditBlog() {
   const renderChangeBlogImg = () => {
     if (blogImageFile) {
       return (
-        <CreateDiaryPublish
+        <EditBlogPublish
           onClick={() => {
             handleSubmit(blogImageFile, currentUser.uid);
           }}
@@ -279,11 +260,11 @@ export default function EditBlog() {
         >
           ✓
 
-        </CreateDiaryPublish>
+        </EditBlogPublish>
       );
     }
     return (
-      <CreateDiaryPublish
+      <EditBlogPublish
         onClick={() => {
           saveBlogSettingsDB(currentUser.uid);
           navigate(`/${currentUser.uid}`);
@@ -297,33 +278,33 @@ export default function EditBlog() {
       >
         ✓
 
-      </CreateDiaryPublish>
+      </EditBlogPublish>
     );
   };
 
   const renderEditBlogSpace = () => {
     if (currentUserData) {
       return (
-        <CreateDiaryInsideBody style={{ textAlign: 'left', padding: '0px 10px 50px 10px' }}>
-          <CreateDiaryNavTitle style={{ paddingLeft: '0px' }}>部落格編輯</CreateDiaryNavTitle>
+        <EditBlogInsideBody>
+          <EditBlogNavTitle>部落格編輯</EditBlogNavTitle>
           <BlogEditInnerContainer>
-            <div style={{ flex: '1' }}>
+            <EditBlogBasicContainer>
               <EditBlogTitle>部落格標題</EditBlogTitle>
-              <CreateDiaryTitle
+              <EditBlogInputTitle
                 type="text"
                 value={blogTitle}
                 onChange={(e) => setBlogTitle(e.target.value)}
               />
               <EditBlogTitle>部落格介紹</EditBlogTitle>
-              <CreateDiaryTitle
+              <EditBlogInputTitle
                 type="text"
                 value={blogIntro}
                 onChange={(e) => setBlogIntro(e.target.value)}
               />
 
-            </div>
-            <div style={{ flex: '1', position: 'relative' }}>
-              <EditBlogTitle style={{ margin: '10px 60px' }}>編輯大頭貼</EditBlogTitle>
+            </EditBlogBasicContainer>
+            <EditBlogBasicContainerProfileImg>
+              <EditBlogInputProfileImg>編輯大頭貼</EditBlogInputProfileImg>
               <BlogUserImageDiv
                 onClick={() => {
                   onUserImageClick();
@@ -346,7 +327,7 @@ export default function EditBlog() {
                 />
                 {renderShowProfileImg()}
               </BlogUserImageDiv>
-            </div>
+            </EditBlogBasicContainerProfileImg>
 
           </BlogEditInnerContainer>
 
@@ -416,7 +397,7 @@ export default function EditBlog() {
           <br />
           {renderChangeBlogImg()}
 
-        </CreateDiaryInsideBody>
+        </EditBlogInsideBody>
       );
     }
     return (<Loader />);

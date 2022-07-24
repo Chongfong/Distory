@@ -12,7 +12,7 @@ import { myTheme, ImageEditorSubmitButtonsForm } from './imageEditorTheme';
 import '../../../css/textEditor.css';
 import '../../../css/imageEditor.css';
 import {
-  PopUpBackDiv, PopUpContainerDiv, CircleButtonCancel, CircleButtonPlus,
+  PopUpBackDiv, PopUpContainerDiv, CircleButtonPlusStory, CircleButtonCancelStory,
 } from './ImageEditor.style';
 
 import StickerRow from './ImageEditorSticker';
@@ -143,19 +143,15 @@ export default function CreateStoryPhotoEditor({
                   />
                   <StickerRow onStickerSelected={(path) => addSticker(path)} />
                   <ImageEditorSubmitButtonsForm>
-                    <CircleButtonPlus
+                    <CircleButtonPlusStory
                       type="button"
-                      style={{ lineHeight: '20px', position: 'relative' }}
                       onClick={() => { handleUploadStory(); }}
                     >
                       ＋
 
-                    </CircleButtonPlus>
-                    <CircleButtonCancel
+                    </CircleButtonPlusStory>
+                    <CircleButtonCancelStory
                       type="button"
-                      style={{
-                        fontSize: '25px', position: 'relative',
-                      }}
                       onClick={() => {
                         setOpenImageEditor(false);
                         setImageUrl();
@@ -163,7 +159,7 @@ export default function CreateStoryPhotoEditor({
                     >
                       ×
 
-                    </CircleButtonCancel>
+                    </CircleButtonCancelStory>
                   </ImageEditorSubmitButtonsForm>
 
                 </>

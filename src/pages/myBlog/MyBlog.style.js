@@ -140,3 +140,14 @@ export const ClickableDiv = styled.div`
     opacity: 0.5;
   }
 `;
+
+export const MyBlogBackgroundImage = styled.img`
+  width: 100%;
+  height: 70%;
+  max-height: 400px;
+  border-radius: 25px;
+  cursor: pointer;
+    :hover {
+    opacity: 0.5;
+    }
+`;

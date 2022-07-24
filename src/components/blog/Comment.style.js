@@ -7,10 +7,20 @@ export const CommentDivContainer = styled.div`
   margin-top: 15px;
 `;
 
+export const CommentInputDivContainer = styled(CommentDivContainer)`
+  flex-wrap: wrap;
+  width: 100%;
+`;
+
 export const CommentDetailDiv = styled.div`
   display:flex;
   align-items: flex-start;
   width: 100%;
+`;
+
+export const CommentDetailInputDiv = styled(CommentDetailDiv)`
+  align-items: flex-end;
+  position: relative;
 `;
 
 export const CommentNickName = styled.p`
@@ -18,6 +28,10 @@ export const CommentNickName = styled.p`
   font-size: 1.2rem;
   margin: 3px 3px 3px 10px;
   color: #b8b8b8;
+`;
+
+export const CommentNickNameLogin = styled(CommentNickName)`
+  flex-basis: 88%;
 `;
 
 export const CommentNickNameInput = styled.input`
@@ -91,4 +105,48 @@ export const CommentSubTitle = styled.p`
   text-align: left;
   width: 90%;
   margin-bottom: 40px;
+`;
+
+export const CommentAuthorImg = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+`;
+
+export const CommentLoginAuthorImg = styled.img`
+  max-width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  flex-basis: 10%;
+
+`;
+
+export const CommentCircleButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  cursor: pointer;
+  border: #7f0019 2px solid;
+  background-color: white;
+  color: #7f0019;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  :hover{
+    background-color: #7f0019;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'完成';
+      position: absolute;
+      top: -2px;
+      left: 5px;
+      font-size: 12px;
+    }
+  }
+
 `;

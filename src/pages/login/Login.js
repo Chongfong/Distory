@@ -8,7 +8,7 @@ import { auth } from '../../utils/firestore';
 
 import {
   SignUpBody, SignUpContainer, SignUpTitle, SignUpSubTitle,
-  SignUpInfoTitle, SignUpInfoDetail, SignUpInput, SignUpFlowIconContainer,
+  SignUpInfoTitle, LoginInfoDetail, SignUpInput, SignUpFlowIconContainer,
 } from './SignUp.style';
 
 import { ArrowButton } from '../../components/edit/editors/ImageEditor.style';
@@ -63,15 +63,14 @@ export default function LogIn() {
         />
 
         <SignUpFlowIconContainer style={{ marginTop: '220px' }}>
-          <SignUpInfoDetail
+          <LoginInfoDetail
             onClick={() => { navigate('/signup'); }}
             onKeyUp={() => { navigate('/signup'); }}
             role="button"
             tabIndex={0}
-            style={{ cursor: 'pointer', color: 'rgb(181, 124, 74)' }}
           >
             Signup
-          </SignUpInfoDetail>
+          </LoginInfoDetail>
           <div>
             <ArrowButton
               onClick={() => {

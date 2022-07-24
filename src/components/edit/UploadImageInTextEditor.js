@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { Quill } from 'react-quill';
 import Resizer from 'react-image-file-resizer';
 import {
-  PopUpBackDiv, PopUpImageContainerDiv, CircleButton, CircleButtonCancel,
+  PopUpBackDiv, PopUpImageContainerDiv,
 } from './editors/ImageEditor.style';
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
-  UploadImageFromUrl, UploadImagePreviewImage,
+  UploadImageFromUrl, UploadImagePreviewImage, UploadImageFileUrl, UploadImageWord,
+  UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel,
+  UploadImageCircleButtonCheck, UploadImageCircleButtonCancel,
 } from './UploadImageInTextEditor.style';
 
 import ImageEditorDefaultImage from './ImageEditorDefaultImage';
@@ -77,21 +79,19 @@ export default function UploadImageInTextEditor({
   function renderimageFileUrl() {
     if (imageFileUrl) {
       return (
-        <img
+        <UploadImageFileUrl
           src={imageFileUrl}
           alt="nowImage"
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
         />
       );
     }
     return (
       <>
-        <p style={{ opacity: '0.5' }}>請上傳圖片　</p>
-        <img src={addUploadImage} alt="defaultImage" style={{ opacity: '0.5' }} />
-        <input
+        <UploadImageWord>請上傳圖片　</UploadImageWord>
+        <UploadImageImg src={addUploadImage} alt="defaultImage" />
+        <UplaodImageInput
           type="file"
           accept="image/*"
-          style={{ display: 'none' }}
           id="upload-image"
           onChange={(e) => {
             setImageFileUrl(URL.createObjectURL(e.target.files[0]));
@@ -169,78 +169,65 @@ export default function UploadImageInTextEditor({
 
               </UploadImageNavButtom>
             </UploadNavBar>
-            <UploadImageContainer style={{ height: '84%' }}>
+            <UploadImageContainer>
               {uploadFromFile === 'file'
                 ? (
-                  <form style={{ height: '100%' }}>
-                    <label
+                  <UploadImageForm>
+                    <UploadImageLabel
                       htmlFor="upload-image"
-                      style={{
-                        width: '100%',
-                        height: '90%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '20px',
-                        cursor: 'pointer',
-                      }}
                     >
                       {renderimageFileUrl()}
-                    </label>
+                    </UploadImageLabel>
 
-                  </form>
+                  </UploadImageForm>
                 )
                 : (renderUploadFromUrl()) }
             </UploadImageContainer>
             {uploadFromFile === 'file' ? (
               <>
-                <CircleButton
+                <UploadImageCircleButtonCheck
                   onClick={() => {
                     uploadImage(imageFile);
                     setImageFileUrl();
                     setImageFile();
                     setIsOpen(false);
                   }}
-                  style={{ position: 'relative', top: '-60px' }}
                 >
                   ✓
 
-                </CircleButton>
-                <CircleButtonCancel
+                </UploadImageCircleButtonCheck>
+                <UploadImageCircleButtonCancel
                   onClick={() => {
                     setImageFileUrl();
                     setImageFile();
                     setIsOpen(false);
                   }}
-                  style={{ fontSize: '25px', position: 'relative', top: '-60px' }}
                 >
                   ×
 
-                </CircleButtonCancel>
+                </UploadImageCircleButtonCancel>
               </>
             ) : (
               <>
-                <CircleButton
+                <UploadImageCircleButtonCheck
                   onClick={() => {
                     setImageUrl(url);
                     insertEditablePhoto(url);
                     setIsOpen(false);
                     setUrl();
                   }}
-                  style={{ position: 'relative', top: '-60px' }}
                 >
                   ✓
-                </CircleButton>
-                <CircleButtonCancel
+                </UploadImageCircleButtonCheck>
+                <UploadImageCircleButtonCancel
                   onClick={() => {
                     setIsOpen(false);
                     setUrl();
                   }}
-                  style={{ fontSize: '25px', position: 'relative', top: '-60px' }}
                 >
                   ×
 
-                </CircleButtonCancel>
+                </UploadImageCircleButtonCancel>
               </>
             )}
           </FlexBox>

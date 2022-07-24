@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { EditButton } from './editors/ImageEditor.style';
-
 import {
-  EditDiaryShowImageDiv, EditDiaryShowImageLabel,
-  SetArticlePasswordTitle, SetArticleShowImgPhoto,
-} from '../../pages/createNewDiary/CreateNewDiaries.style';
+  SetArticleShowImageDiv, SetArticleShowImageLabel,
+  SetArticlePasswordTitle, SetArticleShowImgPhoto, SetArticleShowImgContainer,
+  SetArticleShowImgInput, SetArticleButtonCancel, SetArticleButtonPencil,
+} from './SetArticle.style';
 
 export default function SetArticleShowImg(
   {
@@ -15,19 +14,15 @@ export default function SetArticleShowImg(
   },
 ) {
   return (
-    <div style={{
-      flex: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-    }}
-    >
+    <SetArticleShowImgContainer>
       <SetArticlePasswordTitle>預設圖片</SetArticlePasswordTitle>
-      <EditDiaryShowImageDiv>
-        <EditDiaryShowImageLabel
+      <SetArticleShowImageDiv>
+        <SetArticleShowImageLabel
           htmlFor="upload-blogImage"
         >
-          <input
+          <SetArticleShowImgInput
             type="file"
             accept="image/*"
-            style={{ display: 'none' }}
             id="upload-blogImage"
             onChange={(e) => {
               setArticleShowImgUrl(URL.createObjectURL(e.target.files[0]));
@@ -35,41 +30,29 @@ export default function SetArticleShowImg(
             }}
           />
           {articleShowImgFile ? (
-            <EditButton
+            <SetArticleButtonCancel
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setArticleShowImgFile();
                 setArticleShowImgUrl(articleShowImg);
               }}
-              style={{
-                fontSize: '25px', position: 'absolute', bottom: '10px', left: '0px',
-              }}
             >
               ×
 
-            </EditButton>
+            </SetArticleButtonCancel>
           ) : (
-            <EditButton
-              style={{
-                fontSize: '25px',
-                position: 'absolute',
-                bottom: '0px',
-                left: '0px',
-                transform: 'scaleX(-1)',
-              }}
-            >
+            <SetArticleButtonPencil>
               ✎
-
-            </EditButton>
+            </SetArticleButtonPencil>
           )}
           <SetArticleShowImgPhoto
             alt="background"
             src={articleShowImgUrl}
           />
-        </EditDiaryShowImageLabel>
-      </EditDiaryShowImageDiv>
-    </div>
+        </SetArticleShowImageLabel>
+      </SetArticleShowImageDiv>
+    </SetArticleShowImgContainer>
   );
 }
 

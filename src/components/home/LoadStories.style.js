@@ -198,7 +198,7 @@ export const StoryCloseButton = styled.div`
   }
 `;
 
-export const StoryArrowButton = styled.div`
+export const StoryDetailArrowButton = styled.div`
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -221,10 +221,60 @@ export const StoryArrowButton = styled.div`
 }
 `;
 
-export const StoryArrowButtonLeft = styled(StoryArrowButton)`
+export const StoryDetailArrowButtonLeft = styled(StoryDetailArrowButton)`
   left: -70px;
   @media (max-width: 720px) {
     top: 102%;
     left: 0px;
 }
+`;
+
+export const StoryProfileSubTitle = styled.p`
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  color: #d3b092;
+  text-align: left;
+  width: 90%;
+  margin: 0px auto !important;
+`;
+
+export const StoryArrowButtonRight = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 0px;
+  border: rgb(211, 176, 146) 2px solid;
+  background-color: white;
+  color: rgb(211, 176, 146);
+  position: absolute;
+  top: 40%;
+  right: 0px;
+  :hover{
+    background-color: rgb(211, 176, 146);
+    color: white;
+  }
+`;
+
+export const StoryArrowButtonLeft = styled(StoryArrowButtonRight)`
+  left: 0px;
+`;
+
+export const StoryProgressLineContainer = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 10%;
+  background: linear-gradient(180deg, rgba(203,203,203,1) 0%, rgba(255,255,255,0) 80%);
+  z-index: 2;
+`;
+
+export const StoryProgressLine = styled.div`
+  width: 100%;
+  position: relative;
+  border-top: 6px solid #ccc;
 `;

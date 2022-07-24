@@ -59,6 +59,16 @@ export const SignUpInfoDetail = styled(SignUpInfoTitle)`
   font-weight: normal;
 `;
 
+export const SignUpInfoWelcome = styled(SignUpInfoDetail)`
+  text-align: center;
+  color: #d3b092;
+`;
+
+export const LoginInfoDetail = styled(SignUpInfoDetail)`
+  cursor: pointer;
+  color: rgb(181, 124, 74)
+`;
+
 export const SignUpInput = styled.input`
   margin: 10px auto 10px;
   padding-left: 10px;
@@ -91,4 +101,9 @@ export const SignUpFinishIcons = styled.button`
     background-color: #d3b092;
     color: white; 
   }
+`;
+
+export const SignUpDefaultImg = styled.img`
+  width: 100px;
+  height: 100px
 `;

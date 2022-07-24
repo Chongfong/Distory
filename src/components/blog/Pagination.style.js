@@ -117,13 +117,19 @@ export const DiaryImgContainer = styled.div`
 `;
 
 export const DiaryContentFlexContainer = styled.div`
-width: calc( 100% - 172px);
-
-@media (max-width: 912px) {
-  flex: 100%;
-    display: flex;
-    justify-content: space-between;
-    max-width:100%;
-    
+  width: calc( 100% - 172px);
+    @media (max-width: 912px) {
+      flex: 100%;
+      display: flex;
+      justify-content: space-between;
+      max-width:100%; 
 }
+`;
+
+export const DiaryPassWord = styled.p`
+  color: #b8b8b8;
+`;
+
+export const DiaryPassWordLeft = styled(DiaryPassWord)`
+  text-align: left;
 `;

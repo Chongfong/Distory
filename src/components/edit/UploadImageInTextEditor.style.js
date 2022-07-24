@@ -89,8 +89,8 @@ export const FlexBox = styled.div`
 
 export const UploadImageContainer = styled.div`
   width: 100%;
+  height: 84%;
   margin-top: 15px;
-  height: 73%;
   border: solid 1px #ccc;
   border-radius: 20px;
   overflow-y: auto;
@@ -116,6 +116,75 @@ export const UploadImagePreviewImage = styled.img`
   max-width: 80%;
   max-height: 160px;
   margin-top: 10px;
+`;
+
+export const UploadImageFileUrl = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+`;
+
+export const UploadImageWord = styled.p`
+  opacity: 0.5;
+`;
+
+export const UploadImageImg = styled.img`
+  opacity: 0.5;
+`;
+
+export const UplaodImageInput = styled.input`
+  display: none;
+`;
+
+export const UploadImageForm = styled.form`
+  height: 100%;
+`;
+
+export const UploadImageLabel = styled.label`
+  width: 100%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  cursor: pointer
+`;
+
+export const UploadImageCircleButtonCheck = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  cursor: pointer;
+  border: #7f0019 2px solid;
+  background-color: white;
+  position: relative;
+  top: -60px;
+  color: #7f0019;
+  :hover{
+    background-color: #7f0019;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'完成';
+      position: absolute;
+      top: -2px;
+      left: 5px;
+      font-size: 12px;
+    }
+  }
+`;
+
+export const UploadImageCircleButtonCancel = styled(UploadImageCircleButtonCheck)`
+  font-size: 25px;
+  :hover{
+    ::after{
+      content:'取消';
+      }
+      }
 `;
 
 export default function DropDownButton(

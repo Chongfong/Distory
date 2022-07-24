@@ -1,11 +1,14 @@
 import React, { useRef, useState, useContext } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
 import {
-  PopUpBackDiv, PopUpImageContainerDiv, CircleButton, CircleButtonCancel,
+  PopUpBackDiv, PopUpImageContainerDiv,
 } from '../../components/edit/editors/ImageEditor.style';
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
-  UploadImageFromUrl, UploadImagePreviewImage,
+  UploadImageFromUrl, UploadImagePreviewImage, UploadImageFileUrl, UploadImageWord,
+  UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel,
 } from '../../components/edit/UploadImageInTextEditor.style';
 
 import { AppContext } from '../../context/AppContext';
@@ -16,6 +19,44 @@ import addUploadImage from '../../img/image.png';
 import CreateStoryPhotoEditor from '../../components/edit/editors/CreateNewStoryImageEditor';
 
 import Loader from '../../components/share/Loader';
+
+const CreateStoryCircleButtonCheck = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  cursor: pointer;
+  border: #7f0019 2px solid;
+  background-color: white;
+  position: relative;
+  top: -60px;
+  color: #7f0019;
+  :hover{
+    background-color: #7f0019;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'完成';
+      position: absolute;
+      top: -2px;
+      left: 5px;
+      font-size: 12px;
+    }
+  }
+
+`;
+
+const CreateStoryCircleButtonCancel = styled(CreateStoryCircleButtonCheck)`
+  font-size: 25px;
+  :hover{
+    ::after{
+      content:'取消';
+    }
+  }
+`;
 
 export default function CreateNewStory() {
   const { currentUser } = useContext(AppContext);
@@ -62,21 +103,19 @@ export default function CreateNewStory() {
   const renderUploadImg = () => {
     if (imageFileUrl) {
       return (
-        <img
+        <UploadImageFileUrl
           src={imageFileUrl}
           alt="nowImage"
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
         />
       );
     }
     return (
       <>
-        <p style={{ opacity: '0.5' }}>請上傳圖片　</p>
-        <img src={addUploadImage} alt="defaultImage" style={{ opacity: '0.5' }} />
-        <input
+        <UploadImageWord>請上傳圖片　</UploadImageWord>
+        <UploadImageImg src={addUploadImage} alt="defaultImage" />
+        <UplaodImageInput
           type="file"
           accept="image/*"
-          style={{ display: 'none' }}
           id="upload-image"
           onChange={(e) => {
             setImageFileUrl(URL.createObjectURL(e.target.files[0]));
@@ -122,52 +161,48 @@ export default function CreateNewStory() {
     if (uploadFromFile === 'file') {
       return (
         <>
-          <CircleButton
+          <CreateStoryCircleButtonCheck
             onClick={() => {
               uploadImage(imageFile);
             }}
-            style={{ position: 'relative', top: '-60px' }}
           >
             ✓
 
-          </CircleButton>
-          <CircleButtonCancel
+          </CreateStoryCircleButtonCheck>
+          <CreateStoryCircleButtonCancel
             onClick={() => {
               setImageFileUrl();
               setImageFile();
               navigate(`/${userID}`);
             }}
-            style={{ fontSize: '25px', position: 'relative', top: '-60px' }}
           >
             ×
 
-          </CircleButtonCancel>
+          </CreateStoryCircleButtonCancel>
         </>
       );
     }
     return (
       <>
-        <CircleButton
+        <CreateStoryCircleButtonCheck
           onClick={() => {
             setImageUrl(url);
             setOpenImageEditor(true);
             setUrl();
           }}
-          style={{ position: 'relative', top: '-60px' }}
         >
           ✓
-        </CircleButton>
-        <CircleButtonCancel
+        </CreateStoryCircleButtonCheck>
+        <CreateStoryCircleButtonCancel
           onClick={() => {
             setUrl();
             navigate(`/${userID}`);
             setImageUrl();
           }}
-          style={{ fontSize: '25px', position: 'relative', top: '-60px' }}
         >
           ×
 
-        </CircleButtonCancel>
+        </CreateStoryCircleButtonCancel>
       </>
     );
   };
@@ -175,23 +210,14 @@ export default function CreateNewStory() {
   const renderUploadFromFile = () => {
     if (uploadFromFile === 'file') {
       return (
-        <form style={{ height: '100%' }}>
-          <label
+        <UploadImageForm>
+          <UploadImageLabel
             htmlFor="upload-image"
-            style={{
-              width: '100%',
-              height: '90%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '20px',
-              cursor: 'pointer',
-            }}
           >
             {renderUploadImg()}
-          </label>
+          </UploadImageLabel>
 
-        </form>
+        </UploadImageForm>
       );
     }
     return (renderUploadUrl());
@@ -239,7 +265,7 @@ export default function CreateNewStory() {
 
                   </UploadImageNavButtom>
                 </UploadNavBar>
-                <UploadImageContainer style={{ height: '84%' }}>
+                <UploadImageContainer>
                   {renderUploadFromFile()}
                 </UploadImageContainer>
                 {renderFinishCancelButtons()}

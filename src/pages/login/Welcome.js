@@ -6,8 +6,8 @@ import { db } from '../../utils/firestore';
 import { AppContext } from '../../context/AppContext';
 
 import {
-  SignUpBody, SignUpContainer, SignUpTitle, SignUpSubTitle, SignUpInfoDetail, SignUpFinishIcons,
-  SignUpName,
+  SignUpBody, SignUpContainer, SignUpTitle, SignUpSubTitle, SignUpInfoWelcome, SignUpFinishIcons,
+  SignUpName, SignUpDefaultImg,
 } from './SignUp.style';
 
 import Loader from '../../components/share/Loader';
@@ -50,13 +50,12 @@ export default function Welcome(
           <SignUpContainer>
             <SignUpTitle>Distory</SignUpTitle>
             <SignUpSubTitle>完成</SignUpSubTitle>
-            <img
-              style={{ width: '100px', height: '100px' }}
+            <SignUpDefaultImg
               src="https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png"
               alt="default_image"
             />
             <SignUpName>{settingId}</SignUpName>
-            <SignUpInfoDetail style={{ textAlign: 'center', color: '#d3b092' }}>歡迎來到 Distory！</SignUpInfoDetail>
+            <SignUpInfoWelcome>歡迎來到 Distory！</SignUpInfoWelcome>
             <Link to="/">
               <SignUpFinishIcons type="button" onClick={() => { setIsSignUp(false); }}>開始使用</SignUpFinishIcons>
 

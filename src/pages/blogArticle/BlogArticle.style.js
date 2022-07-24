@@ -71,3 +71,40 @@ export const BlogArticleInputPassword = styled.input`
   height: 1.5rem;
   padding: 3px 5px;
 `;
+
+export const BlogArticleCircleButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 20px 10px 5px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  cursor: pointer;
+  border: #7f0019 2px solid;
+  background-color: white;
+  position: relative;
+  color: #7f0019;
+  :hover{
+    background-color: #7f0019;
+    color: #7f0019;
+    ::after{
+      color: white;
+      content:'完成';
+      position: absolute;
+      top: -2px;
+      left: 5px;
+      font-size: 12px;
+    }
+  }
+
+`;
+
+export const BlogArticleBottomLine = styled.div`
+  width: 100%;
+  border-bottom: 1px #d3b092 solid;
+  margin: 20px auto;
+  @media (max-width: 912px) {
+    width: 100%;
+}
+`;

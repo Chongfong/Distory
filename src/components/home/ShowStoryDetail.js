@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { PopUpBackDiv } from '../edit/editors/ImageEditor.style';
 import {
-  StoryPopUpContainer, StoryTime, StoryPhotoContainer, StoryCloseButton, StoryArrowButton,
-  StoryPhotoStatusBar, StoryImg, StoryArrowButtonLeft,
+  StoryPopUpContainer, StoryTime, StoryPhotoContainer, StoryCloseButton, StoryDetailArrowButton,
+  StoryPhotoStatusBar, StoryImg, StoryDetailArrowButtonLeft,
+  StoryProgressLineContainer, StoryProgressLine,
 } from './LoadStories.style';
 
 import { transformTimeToDate } from '../../utils/ShareFunctions';
@@ -41,20 +42,11 @@ export default function ShowStoryDetail({
             ×
           </StoryCloseButton>
           <StoryPopUpContainer>
-            <div style={{
-              position: 'absolute',
-              top: '0px',
-              left: '0px',
-              width: '100%',
-              height: '10%',
-              background: 'linear-gradient(180deg, rgba(203,203,203,1) 0%, rgba(255,255,255,0) 80%)',
-              zIndex: '2',
-            }}
-            />
+            <StoryProgressLineContainer />
             {chosedIndex === 0 ? (
               ''
             ) : (
-              <StoryArrowButtonLeft
+              <StoryDetailArrowButtonLeft
                 onClick={() => {
                   setChosedImg(storiesImgAvailable[chosedIndex - 1]);
                   setChosedIndex(chosedIndex - 1);
@@ -73,12 +65,12 @@ export default function ShowStoryDetail({
                 }}
               >
                 &lt;
-              </StoryArrowButtonLeft>
+              </StoryDetailArrowButtonLeft>
             )}
             {chosedIndex === storiesImgAvailable.length - 1 ? (
               ''
             ) : (
-              <StoryArrowButton
+              <StoryDetailArrowButton
                 onClick={() => {
                   setChosedImg(storiesImgAvailable[chosedIndex + 1]);
                   setChosedIndex(chosedIndex + 1);
@@ -97,13 +89,10 @@ export default function ShowStoryDetail({
                 }}
               >
                 &gt;
-              </StoryArrowButton>
+              </StoryDetailArrowButton>
             )}
             <StoryPhotoContainer>
-              <div style={{
-                width: '100%', position: 'relative', borderTop: '6px solid #ccc',
-              }}
-              >
+              <StoryProgressLine>
                 {loadingPercentage >= 0 && (
                 <StoryPhotoStatusBar
                   key={storiesImgAvailable[chosedIndex]}
@@ -129,7 +118,7 @@ export default function ShowStoryDetail({
                     }, 1000);
                   }}
                 />
-              </div>
+              </StoryProgressLine>
               {storiesTimeAll && (<StoryTime>{`${transformTimeToDate(storiesTimeAll[chosedIndex].seconds * 1000)}`}</StoryTime>)}
             </StoryPhotoContainer>
           </StoryPopUpContainer>

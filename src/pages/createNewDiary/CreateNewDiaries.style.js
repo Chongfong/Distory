@@ -42,6 +42,7 @@ export const CreateDiaryPublish = styled.div`
   background-color: white;
   text-align: center;
   font-size: 25px;
+  font-weight: bold;
   line-height: 50px;
   position: fixed;
   right: 80px;

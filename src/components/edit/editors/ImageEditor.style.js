@@ -70,12 +70,31 @@ export const CircleButtonPlus = styled(CircleButton)`
       }
 `;
 
+export const CircleButtonPlusImgEditor = styled(CircleButton)`
+  position: relative;
+`;
+
+export const CircleButtonPlusStory = styled(CircleButtonPlus)`
+  line-height: 20px;
+  position: relative;
+`;
+
 export const CircleButtonCancel = styled(CircleButton)`
   :hover{
     ::after{
       content:'取消';
       }
       }
+`;
+
+export const CircleButtonCancelImgEditor = styled(CircleButtonCancel)`
+  font-size: 25px;
+  position: relative;
+`;
+
+export const CircleButtonCancelStory = styled(CircleButtonCancel)`
+  font-size: 25px;
+  position: relative;
 `;
 
 export const ArrowButton = styled.button`

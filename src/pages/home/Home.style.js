@@ -257,6 +257,12 @@ export const HomeAuthorImage = styled.img`
 }
 `;
 
+export const HomeWelcomeWordsContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 300px;
+`;
+
 export const HomeWelcomeWords = styled.p`
   font-size: 60px;
   font-weight: bold;

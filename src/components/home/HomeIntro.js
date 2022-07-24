@@ -3,7 +3,7 @@ import React from 'react';
 import {
   HomeIntroContainer, HomeInviteTitle, HomeIntroWord, HomeInviteButtonContainer,
   HomeIntroImgContainer, HomeIntroImg, HomeIntroTitle, HomeIntroDetail,
-} from '../../pages/home/Home.style';
+} from './HomeIntro.style';
 
 import markdown from '../../img/markdown.png';
 import imgeditor from '../../img/imgeditor.png';
@@ -21,7 +21,7 @@ export default function HomeIntro() {
       &nbsp;保存你的每一個驚喜瞬間
 
       </HomeIntroWord>
-      <HomeInviteButtonContainer style={{ display: 'flex' }}>
+      <HomeInviteButtonContainer>
         <HomeIntroImgContainer>
           <HomeIntroImg src={markdown} alt="markdown" />
           <HomeIntroTitle>文字編輯器</HomeIntroTitle>

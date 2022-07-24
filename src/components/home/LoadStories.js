@@ -11,15 +11,12 @@ import { db } from '../../utils/firestore';
 import {
   StoryOuterContainer, StoryContainer, StoryImgContainer, StoryAuthorContainer,
   StoryAuthorImg, StoryAuthorName, StoryTimeAgo, StoryInnerContainer, StoryAuthContainer,
+  StoryProfileSubTitle, StoryArrowButtonRight, StoryArrowButtonLeft,
 } from './LoadStories.style';
-
-import { HomeProfileSubTitle } from '../../pages/home/Home.style';
 
 import ShowStoryDetail from './ShowStoryDetail';
 
 import { timeAgo } from '../../utils/ShareFunctions';
-
-import { ArrowButton } from '../edit/editors/ImageEditor.style';
 
 export default function LoadStories() {
   const [storiesAvailable, setStoriesAvailable] = useState();
@@ -128,7 +125,7 @@ export default function LoadStories() {
 
   return (
     <>
-      <HomeProfileSubTitle>▋&nbsp;探索Distory</HomeProfileSubTitle>
+      <StoryProfileSubTitle>▋&nbsp;探索Distory</StoryProfileSubTitle>
       <StoryOuterContainer style={{ overflow: 'hidden' }}>
         <StoryInnerContainer
           ref={scrollable}
@@ -193,30 +190,24 @@ export default function LoadStories() {
         </StoryInnerContainer>
         {storiesAvailable && (
           (chosedStoryIndex < (storiesAvailable.length - 5) ? (
-            <ArrowButton
-              style={{
-                position: 'absolute', top: '40%', right: '0px', lineHeight: '0px',
-              }}
+            <StoryArrowButtonRight
               onClick={() => {
                 setChosedStoryIndex(chosedStoryIndex + 5);
                 scrollRight();
               }}
             >
               →
-            </ArrowButton>
+            </StoryArrowButtonRight>
           ) : ('')))}
         {chosedStoryIndex >= 5 ? (
-          <ArrowButton
-            style={{
-              position: 'absolute', top: '40%', left: '0px', lineHeight: '0px',
-            }}
+          <StoryArrowButtonLeft
             onClick={() => {
               setChosedStoryIndex(chosedStoryIndex - 5);
               scrollLeft();
             }}
           >
             ←
-          </ArrowButton>
+          </StoryArrowButtonLeft>
         ) : ('')}
       </StoryOuterContainer>
 

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../../utils/firestore';
 import {
   DiaryContainerFlex, DiaryImageDefault, DiaryContentFlex, DiaryTitle, DiaryContent, DiaryPage,
-  DiaryLikes, DiaryImgContainer, DiaryContentFlexContainer,
+  DiaryLikes, DiaryImgContainer, DiaryContentFlexContainer, DiaryPassWord, DiaryPassWordLeft,
 } from './Pagination.style';
 
 import { changeHTMLToPureText } from '../../utils/ShareFunctions';
@@ -87,7 +87,7 @@ export default function Pagination({ userID, currentUserData }) {
             <DiaryContentFlexContainer>
               <DiaryContentFlex>
                 <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8' }}>輸入密碼後方可觀看</p>)}
+                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<DiaryPassWord>輸入密碼後方可觀看</DiaryPassWord>)}
               </DiaryContentFlex>
               <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
                 💗&nbsp;
@@ -128,7 +128,7 @@ export default function Pagination({ userID, currentUserData }) {
             <DiaryContentFlexContainer>
               <DiaryContentFlex>
                 <DiaryTitle>{doc.title.slice(0, 50)}</DiaryTitle>
-                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<p style={{ color: '#b8b8b8', textAlign: 'left' }}>輸入密碼後方可觀看</p>)}
+                {doc.password === '' ? (<DiaryContent>{changeHTMLToPureText(doc.content).slice(0, 80)}</DiaryContent>) : (<DiaryPassWordLeft>輸入密碼後方可觀看</DiaryPassWordLeft>)}
               </DiaryContentFlex>
               <DiaryLikes blogContentOrder={currentUserData.blogContentLayout === 'A'}>
                 💗&nbsp;

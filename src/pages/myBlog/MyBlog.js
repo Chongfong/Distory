@@ -11,12 +11,11 @@ import {
 import { AppContext } from '../../context/AppContext';
 import { db } from '../../utils/firestore';
 
-import { BlogBackgroundImage } from '../editBlog/EditBlog.style';
 import {
   MyBlogFLexContainer, MyBlogFLexLeft, MyBlogFLexRight, ClickableDiv,
   MyBlogVisitorContainer, MyBlogVisitorDiv, MyBlogUserName,
   MyBlogBottomLine, MyBlogProfileSubTitle, MyBlogComeHomeUsers, MyBlogButtonLight,
-  MyBlogProfileImg, MyBlogDiaryInsideBody,
+  MyBlogProfileImg, MyBlogDiaryInsideBody, MyBlogBackgroundImage,
 } from './MyBlog.style';
 
 import BlogArticle from '../blogArticle/BlogArticle';
@@ -227,7 +226,7 @@ export default function MyBlog() {
             style={{ cursor: 'pointer' }}
           >
             <div>
-              <BlogBackgroundImage src={currentUserData.blogImage} alt="blogImage" />
+              <MyBlogBackgroundImage src={currentUserData.blogImage} alt="blogImage" />
               <h1>{currentUserData.blogTitle}</h1>
               <p>{currentUserData.blogIntro}</p>
             </div>

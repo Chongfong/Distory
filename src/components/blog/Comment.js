@@ -9,9 +9,9 @@ import { db } from '../../utils/firestore';
 import {
   CommentsContainer, CommentNickName, CommentTime, CommentDivContainer, CommentDetailDiv,
   CommentDetail, CommentInput, CommentNickNameInput, CommentAuthorImgContainer, CommentSubTitle,
+  CommentAuthorImg, CommentLoginAuthorImg, CommentInputDivContainer, CommentDetailInputDiv,
+  CommentNickNameLogin, CommentCircleButton,
 } from './Comment.style';
-
-import { CircleButton } from '../edit/editors/ImageEditor.style';
 
 export default function Comment({
   currentUser, setCommentAll, commentAuthor,
@@ -118,7 +118,7 @@ export default function Comment({
         <CommentsContainer>
           {commentAll.map((eachComment, index) => (
             <>
-              {eachComment ? (
+              {eachComment && (
                 <CommentDivContainer>
                   {commentAuthorsInfo
                     && (eachComment.commentAuthorID ? ((
@@ -128,9 +128,9 @@ export default function Comment({
                         role="button"
                         tabIndex={0}
                       >
-                        <img src={commentAuthorsInfo[index]} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                        <CommentAuthorImg src={commentAuthorsInfo[index]} alt="loginUser" />
                       </CommentAuthorImgContainer>
-                    )) : ((<div><img src={commentAuthorsInfo[index]} alt="loginUser" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /></div>
+                    )) : ((<div><CommentAuthorImg src={commentAuthorsInfo[index]} alt="loginUser" /></div>
                     )))}
                   <CommentDetailDiv>
                     <div>
@@ -142,7 +142,7 @@ export default function Comment({
                     <CommentDetail>{eachComment?.commentContent}</CommentDetail>
                   </CommentDetailDiv>
                 </CommentDivContainer>
-              ) : ('') }
+              ) }
               {}
             </>
           ))}
@@ -151,20 +151,17 @@ export default function Comment({
       )
         : ('')}
       <CommentSubTitle>▋&nbsp;發表留言</CommentSubTitle>
-      <CommentDivContainer style={{ flexWrap: 'wrap', width: '100%' }}>
+      <CommentInputDivContainer>
         {loginUserDate ? (
           <>
-            <img
+            <CommentLoginAuthorImg
               src={loginUserDate.userImage}
               alt="loginUser"
-              style={{
-                maxWidth: '50px', height: '50px', borderRadius: '50%', flexBasis: '10%',
-              }}
             />
-            <CommentNickName style={{ flexBasis: '88%' }}>
+            <CommentNickNameLogin>
               {loginUserDate.distoryId}
 
-            </CommentNickName>
+            </CommentNickNameLogin>
           </>
         ) : (
           <>
@@ -176,18 +173,13 @@ export default function Comment({
             />
           </>
         )}
-        <CommentDetailDiv style={{ alignItems: 'flex-end', position: 'relative' }}>
+        <CommentDetailInputDiv>
           <CommentInput
             type="text"
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
           />
-          <CircleButton
-            style={{
-              position: 'absolute',
-              bottom: '15px',
-              right: '15px',
-            }}
+          <CommentCircleButton
             role="button"
             tabIndex={0}
             onClick={(e) => { postCommentDB(e); setCommentContent(''); }}
@@ -195,9 +187,9 @@ export default function Comment({
           >
             ✓
 
-          </CircleButton>
-        </CommentDetailDiv>
-      </CommentDivContainer>
+          </CommentCircleButton>
+        </CommentDetailInputDiv>
+      </CommentInputDivContainer>
     </>
   );
 }

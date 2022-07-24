@@ -18,6 +18,7 @@ import {
   HomeInviteDiv, HomeInviteTitle, HomeInviteButton, HomeAuthorImage, HomeInviteButtonContainer,
   HomeWelcomeWords, DiaryContent, DiaryImageBoxNormal, DiaryTitleFirst, DiaryProfileImageBoxNormal,
   DiaryAllContainer, DiaryProfileImg, DiaryIngoBoxFisrt, HomeProfileSubTitle,
+  HomeWelcomeWordsContainer,
 } from './Home.style';
 
 import { changeHTMLToPureText } from '../../utils/ShareFunctions';
@@ -126,12 +127,12 @@ export default function Home() {
                 ? (
                   <>
                     <>
-                      <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                      <HomeWelcomeWordsContainer>
                         <HomeWelcomeWords>
                           Discover your story
                         </HomeWelcomeWords>
 
-                      </div>
+                      </HomeWelcomeWordsContainer>
 
                       <HomeProfileSubTitle>▋&nbsp;網友熱議</HomeProfileSubTitle>
                       <DiaryContainer

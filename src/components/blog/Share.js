@@ -1,9 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
 import share from '../../img/share.png';
 
 import { InteractiveImage } from '../../pages/blogArticle/BlogArticle.style';
+
+const ShareDiv = styled.div`
+  text-align: right;
+  margin-right: 10px;
+`;
 
 export default function Share({ url, title }) {
   const shareData = {
@@ -30,27 +36,19 @@ export default function Share({ url, title }) {
   };
 
   return (
-    <>
-      <div
-        style={{
-          textAlign: 'right',
-          marginRight: '10px',
-        }}
-        onClick={(e) => {
-          shareDistoryUrl(e);
-        }}
-        onKeyUp={(e) => {
-          shareDistoryUrl(e);
-        }}
-        role="button"
-        tabIndex={0}
+    <ShareDiv
+      onClick={(e) => {
+        shareDistoryUrl(e);
+      }}
+      onKeyUp={(e) => {
+        shareDistoryUrl(e);
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      <InteractiveImage src={share} alt="share" />
 
-      >
-        <InteractiveImage src={share} alt="share" />
-
-      </div>
-      {}
-    </>
+    </ShareDiv>
   );
 }
 

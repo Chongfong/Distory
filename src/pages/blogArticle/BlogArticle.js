@@ -14,12 +14,8 @@ import {
   BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
   BlogArticleEditImage, BlogArticleEditImageContainer,
   BlogArticleInteractiveContainer, BlogArticleInteractiveButtonContainer,
-  BlogArticleInputPassword,
+  BlogArticleInputPassword, BlogArticleCircleButton, BlogArticleBottomLine,
 } from './BlogArticle.style';
-
-import { CircleButton } from '../../components/edit/editors/ImageEditor.style';
-
-import { MyBlogBottomLine } from '../myBlog/MyBlog.style';
 
 import Share from '../../components/blog/Share';
 
@@ -177,7 +173,7 @@ export default function BlogArticle() {
                       <Share url={window.location.href} title={eachDiary.title} />
                     </BlogArticleInteractiveButtonContainer>
                   </BlogArticleInteractiveContainer>
-                  <MyBlogBottomLine style={{ width: '100%' }} />
+                  <BlogArticleBottomLine />
                   <Comment
                     currentUser={currentUser}
                     setCommentAll={setCommentAll}
@@ -201,8 +197,7 @@ export default function BlogArticle() {
                     placeholder="請輸入密碼"
                   />
                   <br />
-                  <CircleButton
-                    style={{ marginTop: '20px', position: 'relative' }}
+                  <BlogArticleCircleButton
                     role="button"
                     tabIndex={0}
                     onClick={() => { checkArticlePassword(inputPassword, eachDiary.password); }}
@@ -210,7 +205,7 @@ export default function BlogArticle() {
                   >
                     ✓
 
-                  </CircleButton>
+                  </BlogArticleCircleButton>
                 </div>
               )}
               {}

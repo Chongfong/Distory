@@ -377,9 +377,6 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 
           </CreateDiarySave>
           <CreateDiaryPublish
-            style={{
-              fontWeight: 'bold',
-            }}
             onClick={() => {
               handleSubmit(articleShowImgFile);
             }}
@@ -411,9 +408,6 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 
         </CreateDiarySave>
         <CreateDiaryPublish
-          style={{
-            fontWeight: 'bold',
-          }}
           onClick={() => {
             saveNewDiaryDB();
           }}

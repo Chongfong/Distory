@@ -7,8 +7,11 @@ import {
 import PropTypes from 'prop-types';
 import { db } from '../../utils/firestore';
 import edit from '../../img/edit.png';
-import { BlogArticleEditImage } from '../../pages/blogArticle/BlogArticle.style';
-import { EditDiaryEachDiaryRow } from '../../pages/createNewDiary/CreateNewDiaries.style';
+import {
+  ChooseEditOuterContainer, ChooseEditTitleContainer, ChooseEditTitleDate,
+  ChooseEditTitle, ChooseEditEachDiaryRow, ChooseEditTime, ChooseEditDiaryTitle,
+  ChooseEditDiaryPencilContainer, ChooseEditEditImage,
+} from './ChooseEditArticle.style';
 
 import { transformTimeToDate } from '../../utils/ShareFunctions';
 
@@ -49,22 +52,14 @@ export default function ChooseEditArtices({
 
   return (
     <>
-      {isChoosing ? (
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          width: '100%',
-          height: 'calc( 90vh - 200px)',
-          alignContent: 'flex-start',
-        }}
-        >
-          <div style={{ display: 'flex', flexWrap: 'no-wrap', flexBasis: '100%' }}>
-            <p style={{ flexBasis: 'auto' }}>日期</p>
-            <p style={{ flexBasis: '80%' }}>標題</p>
-          </div>
+      {isChoosing && (
+        <ChooseEditOuterContainer>
+          <ChooseEditTitleContainer>
+            <ChooseEditTitleDate>日期</ChooseEditTitleDate>
+            <ChooseEditTitle>標題</ChooseEditTitle>
+          </ChooseEditTitleContainer>
           {draftDiaries ? (draftDiaries.map((eachDiary) => (
-            <EditDiaryEachDiaryRow
-              style={{ display: 'flex', flexWrap: 'no-wrap', flexBasis: '100%' }}
+            <ChooseEditEachDiaryRow
               onClick={() => {
                 setTitleValue(eachDiary.title);
                 setDiaryContentValue(eachDiary.content);
@@ -78,14 +73,16 @@ export default function ChooseEditArtices({
               role="button"
               tabIndex={0}
             >
-              <p style={{ flexBasis: '10%' }}>{transformTimeToDate(eachDiary.publishAt.seconds * 1000)}</p>
-              <p style={{ flexBasis: '80%', textAlign: 'left', padding: '0px 20px' }}>{eachDiary.title}</p>
-              <p style={{ flexBasis: '5%' }}><BlogArticleEditImage src={edit} alt="edit" /></p>
-            </EditDiaryEachDiaryRow>
+              <ChooseEditTime>
+                {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+              </ChooseEditTime>
+              <ChooseEditDiaryTitle>{eachDiary.title}</ChooseEditDiaryTitle>
+              <ChooseEditDiaryPencilContainer><ChooseEditEditImage src={edit} alt="edit" /></ChooseEditDiaryPencilContainer>
+            </ChooseEditEachDiaryRow>
           ))) : (<p>您沒有編輯中文章喔！</p>)}
 
-        </div>
-      ) : ('')}
+        </ChooseEditOuterContainer>
+      )}
       {}
     </>
   );
