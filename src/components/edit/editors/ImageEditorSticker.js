@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import add from '../../../img/add.png';
+import edit from '../../../img/edit.png';
 import like from '../../../img/like.png';
 import writing from '../../../img/writing.png';
 import sticker from '../../../img/sticker.png';
@@ -14,7 +14,7 @@ import {
 
 export default function StickerRow({ onStickerSelected }) {
   const stickers = [
-    add, like, writing,
+    edit, like, writing,
   ];
 
   const [isOpenSticker, setIsOpenSticker] = useState(false);
