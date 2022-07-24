@@ -18,7 +18,8 @@ export default function HomeIntro() {
       </HomeInviteTitle>
       <HomeIntroWord>
         <span>圖文整合　一次編輯</span>
-      &nbsp;保存你的每一個驚喜瞬間
+        <br />
+        保存你的每一個驚喜瞬間
 
       </HomeIntroWord>
       <HomeInviteButtonContainer>
