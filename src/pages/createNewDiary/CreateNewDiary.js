@@ -457,6 +457,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
 
         </div>
         <br />
+        {(selectEditMode !== 'edit') && (
         <DropDownButton
           setLoadFromFile={setLoadFromFile}
           setLoadFromUrl={setLoadFromUrl}
@@ -466,6 +467,7 @@ export default function CreateNewDiary({ isOpen, setIsOpen }) {
           textEditorCursorIndex={textEditorCursorIndex}
           setTextEditorCursorIndex={setTextEditorCursorIndex}
         />
+        )}
         <UploadImageInTextEditor
           loadFromFile={loadFromFile}
           loadFromUrl={loadFromUrl}

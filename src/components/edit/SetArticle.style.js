@@ -67,7 +67,7 @@ export const SetArticleShowImageLabel = styled.label`
 export const SetArticleShowImgPhoto = styled.img`
     width: 100%;
     max-width: 200px;
-    max-height: 180px;
+    max-height: 150px;
     @media (max-width: 450px) {
     width: 145px;
   }
@@ -96,8 +96,13 @@ export const SetArticleButtonCancel = styled.button`
   background-color: white;
   position: absolute;
   color: #ccc;
-  bottom: 10px;
+  bottom: 0px;
   left: 0px;
+  cursor: pointer;
+  :hover{
+    background-color: #ccc;
+    color: white;
+  }
 `;
 
 export const SetArticleButtonPencil = styled(SetArticleButtonCancel)`

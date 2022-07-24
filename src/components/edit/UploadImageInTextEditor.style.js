@@ -24,8 +24,8 @@ export const CreateDiaryUploadImage = styled('div')`
       color: white;
       content:'加圖';
       position: absolute;
-      top: -2px;
-      left: 8px;
+      top: 0px;
+      left: 7px;
       font-size: 18px;
     }
   }
@@ -89,7 +89,7 @@ export const FlexBox = styled.div`
 
 export const UploadImageContainer = styled.div`
   width: 100%;
-  height: 84%;
+  height: 80%;
   margin-top: 15px;
   border: solid 1px #ccc;
   border-radius: 20px;
@@ -101,6 +101,9 @@ export const UploadImageContainer = styled.div`
   ::-webkit-scrollbar-thumb {
   background: #cabeba;
   border-radius: 10px;
+  @media (max-width: 912px) {
+    height: 76%;
+  }
 }
 `;
 
@@ -110,11 +113,16 @@ export const UploadImageFromUrl = styled.input`
   border:none;
   border-bottom: solid 1px #ccc;
   margin-top: 30px;
+  outline: none;
+  :active, :focus{
+    border: solid 1px #7f0019;
+    border-radius: 5px;
+  }
 `;
 
 export const UploadImagePreviewImage = styled.img`
+  max-height: 400px;
   max-width: 80%;
-  max-height: 160px;
   margin-top: 10px;
 `;
 
@@ -180,11 +188,19 @@ export const UploadImageCircleButtonCheck = styled.button`
 
 export const UploadImageCircleButtonCancel = styled(UploadImageCircleButtonCheck)`
   font-size: 25px;
+  line-height: 25px;
   :hover{
     ::after{
       content:'取消';
+      top: 6px;
+      left: 5px;
       }
       }
+`;
+
+export const UploadImageWarning = styled.div`
+  margin: 50px 10px;
+  opacity: 0.5;
 `;
 
 export default function DropDownButton(

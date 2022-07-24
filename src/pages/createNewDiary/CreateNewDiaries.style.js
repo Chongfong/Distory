@@ -57,8 +57,8 @@ export const CreateDiaryPublish = styled.div`
       content:'完成';
       font-weight: normal;
       position: absolute;
-      top: -2px;
-      left: 8px;
+      top: 0px;
+      left: 7px;
       font-size:18px;
     }
   }
@@ -228,7 +228,7 @@ export const SetArticleSettingsContainer = styled.div`
 export const SetArticleShowImgPhoto = styled.img`
     width: 100%;
     max-width: 200px;
-    max-height: 180px;
+    max-height: 150px;
     @media (max-width: 450px) {
     width: 145px;
   }

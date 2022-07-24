@@ -8,7 +8,7 @@ import {
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage, UploadImageFileUrl, UploadImageWord,
-  UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel,
+  UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel, UploadImageWarning,
 } from '../../components/edit/UploadImageInTextEditor.style';
 
 import { AppContext } from '../../context/AppContext';
@@ -137,12 +137,19 @@ export default function CreateNewStory() {
             onChange={(e) => setUrl(e.target.value)}
           />
           <br />
-          {url && (
-          <UploadImagePreviewImage
-            alt="previewImageUrl"
-            style={{ maxHeight: '400px' }}
-            src={url}
-          />
+          {url ? (
+            <UploadImagePreviewImage
+              alt="previewImageUrl"
+              style={{ maxHeight: '400px' }}
+              src={url}
+            />
+          ) : (
+            <UploadImageWarning>
+              因應網頁瀏覽安全，部分網址圖片不支援編輯功能
+              <br />
+              <br />
+              此處將顯示圖片預覽
+            </UploadImageWarning>
           )}
         </form>
       );

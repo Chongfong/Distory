@@ -9,7 +9,7 @@ import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage, UploadImageFileUrl, UploadImageWord,
   UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel,
-  UploadImageCircleButtonCheck, UploadImageCircleButtonCancel,
+  UploadImageCircleButtonCheck, UploadImageCircleButtonCancel, UploadImageWarning,
 } from './UploadImageInTextEditor.style';
 
 import ImageEditorDefaultImage from './ImageEditorDefaultImage';
@@ -100,7 +100,14 @@ export default function UploadImageInTextEditor({
             onChange={(e) => setUrl(e.target.value)}
           />
           <br />
-          {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
+          {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : (
+            <UploadImageWarning>
+              因應網頁瀏覽安全，部分網址圖片不支援編輯功能
+              <br />
+              <br />
+              此處將顯示圖片預覽
+            </UploadImageWarning>
+          )}
         </form>
       );
     }
