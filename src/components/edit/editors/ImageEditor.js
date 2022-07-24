@@ -23,34 +23,31 @@ export default function PhotoEditor({
   const editorRef = useRef();
   const BlockEmbed = Quill.import('blots/block/embed');
   const Delta = Quill.import('delta');
-
-  class ClickButtonBlot extends BlockEmbed {
+  class ImageBlot extends BlockEmbed {
     static create(value) {
       const node = super.create();
-      node.setAttribute('src', value.url);
+      const clickButton = document.createElement('clickButton');
+      const customImage = document.createElement('img');
+
       node.setAttribute('class', value.class);
-      node.addEventListener('click', (e) => {
+      node.setAttribute('src', value.url);
+
+      customImage.setAttribute('alt', value.alt);
+      customImage.setAttribute('src', value.url);
+      customImage.setAttribute('class', 'diary_image');
+
+      clickButton.setAttribute('src', value.url);
+      clickButton.setAttribute('class', 'diary_click_button');
+      clickButton.addEventListener('click', (e) => {
         e.preventDefault();
         setOpenImageEditor(true);
         setImageUrl(value.url);
         setTextEditorCursorIndex(textEditorRef.current.editor.getSelection().index);
+        console.log(clickButton);
       }, false);
-      return node;
-    }
 
-    static value(node) {
-      return {
-        url: node.getAttribute('src'),
-        class: node.getAttribute('class'),
-      };
-    }
-  }
-  class ImageBlot extends BlockEmbed {
-    static create(value) {
-      const node = super.create();
-      node.setAttribute('alt', value.alt);
-      node.setAttribute('src', value.url);
-      node.setAttribute('class', value.class);
+      node.appendChild(customImage);
+      node.appendChild(clickButton);
       return node;
     }
 
@@ -59,16 +56,12 @@ export default function PhotoEditor({
         alt: node.getAttribute('alt'),
         url: node.getAttribute('src'),
         class: node.getAttribute('class'),
-
       };
     }
   }
-  ImageBlot.blotName = 'image';
-  ImageBlot.tagName = 'img';
-  ClickButtonBlot.blotName = 'clickButton';
-  ClickButtonBlot.tagName = 'clickButton';
+  ImageBlot.blotName = 'customImg';
+  ImageBlot.tagName = 'div';
   Quill.register(ImageBlot);
-  Quill.register(ClickButtonBlot);
 
   const imageRef = useRef();
   const testURL = useRef();
@@ -128,20 +121,22 @@ export default function PhotoEditor({
               if (textEditorCursorIndex !== 0) {
                 textEditorRef.current.editor.updateContents(new Delta()
                   .retain(textEditorCursorIndex - 1)
-                  .delete(1)
+                  .insert('\n')
                   .insert({
-                    image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
+                    image: `${downloadURL}`,
                   })
                   .delete(2)
+                  .insert('\n')
                   .retain(textEditorCursorIndex));
               } else {
                 textEditorRef.current.editor.updateContents(new Delta()
                   .retain(textEditorCursorIndex)
                   .insert({
-                    image: { alt: 'text', url: `${downloadURL}`, class: 'text-img' },
+                    image: `${downloadURL}`,
                   })
                   .retain(textEditorCursorIndex - 1)
-                  .delete(2));
+                  .delete(2)
+                  .insert('\n'));
               }
 
               setDiaryContentValue(

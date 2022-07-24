@@ -942,8 +942,10 @@
     border-radius: 10px;
   }
 
-  .text-img{
+  .diary img{
     width: 95%;
+    max-width: 500px;
+    max-height: 500px;
   }
 
   .ql-clipboard {

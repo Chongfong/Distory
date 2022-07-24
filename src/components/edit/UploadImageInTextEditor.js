@@ -20,7 +20,6 @@ export default function UploadImageInTextEditor({
   textEditorRef,
   isOpen,
   setIsOpen,
-  textEditorCursorIndex,
 }) {
   const [uploadFromFile, setUploadFromFile] = useState('default');
   const [imageFileUrl, setImageFileUrl] = useState();
@@ -50,23 +49,11 @@ export default function UploadImageInTextEditor({
       uploadImageUrl = upload;
     }
     const cursorPosition = textEditorRef.current.editor.selection.savedRange.index;
-    textEditorRef.current.editor.insertEmbed(cursorPosition, 'image', {
+    textEditorRef.current.editor.insertEmbed(cursorPosition, 'customImg', {
       alt: `image${Date.now()}`,
       url: uploadImageUrl,
-      class: 'diary_image',
+      class: 'diary_image_div',
     }, Quill.sources.USER);
-
-    const Delta = Quill.import('delta');
-
-    textEditorRef.current.editor.insertEmbed(cursorPosition, 'clickButton', {
-      url: uploadImageUrl,
-      class: 'diary_click_button',
-    }, Quill.sources.USER);
-    if (textEditorCursorIndex.current !== 0) {
-      textEditorRef.current.editor.updateContents(new Delta()
-        .retain(textEditorCursorIndex.current + 2)
-        .delete(1));
-    }
 
     textEditorRef.current.editor.setSelection(cursorPosition);
   };
@@ -246,7 +233,6 @@ UploadImageInTextEditor.propTypes = {
   textEditorRef: PropTypes.string,
   isOpen: PropTypes.bool,
   setIsOpen: PropTypes.func,
-  textEditorCursorIndex: PropTypes.string,
 };
 
 UploadImageInTextEditor.defaultProps = {
@@ -256,5 +242,4 @@ UploadImageInTextEditor.defaultProps = {
   textEditorRef: '',
   isOpen: false,
   setIsOpen: () => {},
-  textEditorCursorIndex: '',
 };
