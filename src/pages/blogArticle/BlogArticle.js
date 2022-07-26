@@ -9,6 +9,7 @@ import {
 import DOMPurify from 'dompurify';
 import { db } from '../../utils/firestore';
 import { AppContext } from '../../context/AppContext';
+import '../../css/loadDiary.css';
 
 import {
   BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
