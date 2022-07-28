@@ -188,11 +188,10 @@ export const UploadImageCircleButtonCheck = styled.button`
 
 export const UploadImageCircleButtonCancel = styled(UploadImageCircleButtonCheck)`
   font-size: 25px;
-  line-height: 25px;
   :hover{
     ::after{
       content:'取消';
-      top: 6px;
+      top: 0px;
       left: 5px;
       }
       }

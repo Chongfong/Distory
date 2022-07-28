@@ -43,7 +43,6 @@ export default function PhotoEditor({
         setOpenImageEditor(true);
         setImageUrl(value.url);
         setTextEditorCursorIndex(textEditorRef.current.editor.getSelection().index);
-        console.log(clickButton);
       }, false);
 
       node.appendChild(customImage);

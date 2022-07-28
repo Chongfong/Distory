@@ -18,7 +18,7 @@ export const myTheme = {
 export const ImageEditorStickerButton = styled.img`
   width: 25px;
   height: 22px;
-  display: ${({ isOpenSticker }) => (isOpenSticker ? 'none' : 'block')};
+  display: block;
   filter: brightness(0) invert(1);
   opacity: 0.4;
   margin: 0 auto;
@@ -78,4 +78,7 @@ export const ImageEditorSubmitButtonsForm = styled.form`
     right: 25px;
     bottom: 16px;
     z-index: 3;
+    @media (min-height: 912px) {
+    bottom: 30px;
+  }
 `;

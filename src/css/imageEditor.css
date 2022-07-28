@@ -364,7 +364,7 @@
     background-color: #fff;
     color: #444;
     position: absolute;
-    width: 196px;
+    width: auto;
     height: 276px;
     padding: 4px 2px;
     box-shadow: 0 2px 6px 0 rgba(0,0,0,0.15);
@@ -1145,7 +1145,8 @@
     float: left;
     width: 17px;
     height: 17px;
-    border: 0
+    border: 0;
+    color: rgba(0,0,0,0) !important;
 }
 
 .tui-image-editor-container .color-picker-control {

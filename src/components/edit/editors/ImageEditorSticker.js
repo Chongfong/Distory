@@ -32,7 +32,7 @@ export default function StickerRow({ onStickerSelected }) {
         role="button"
         tabIndex={0}
       >
-        <ImageEditorStickerButton isOpenSticker={isOpenSticker} src={sticker} alt="sticker" />
+        <ImageEditorStickerButton src={sticker} alt="sticker" />
       </ImageEditorStickerOpenContainer>
       <ImageEditorStickerContainer isOpenSticker={isOpenSticker} className="sticker-container">
         {stickers.map((path, i) => (

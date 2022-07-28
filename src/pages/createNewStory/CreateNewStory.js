@@ -27,7 +27,7 @@ const CreateStoryCircleButtonCheck = styled.button`
   margin: 5px 10px;
   text-align: center;
   font-size: 20px;
-  line-height: 40px;
+  line-height: 25px;
   cursor: pointer;
   border: #7f0019 2px solid;
   background-color: white;
@@ -41,7 +41,7 @@ const CreateStoryCircleButtonCheck = styled.button`
       color: white;
       content:'完成';
       position: absolute;
-      top: -2px;
+      top: 5px;
       left: 5px;
       font-size: 12px;
     }
@@ -50,10 +50,12 @@ const CreateStoryCircleButtonCheck = styled.button`
 `;
 
 const CreateStoryCircleButtonCancel = styled(CreateStoryCircleButtonCheck)`
+  line-height: 25px;
   font-size: 25px;
   :hover{
     ::after{
       content:'取消';
+      top: 5px;
     }
   }
 `;
