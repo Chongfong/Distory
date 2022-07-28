@@ -46,7 +46,7 @@ export default function Comment({
     loadingDiaryComments();
   }, [diaryRef, setCommentAll]);
 
-  const postCommentDB = () => {
+  const postCommentDB = async () => {
     const articlesCollection = collection(db, 'articles');
     const commentDiarydoc = doc(articlesCollection, diaryID);
     const commentDetail = {
@@ -55,7 +55,7 @@ export default function Comment({
       commentContent,
       commentTime: Timestamp.now().toDate(),
     };
-    updateDoc(
+    await updateDoc(
       commentDiarydoc,
       {
         comments: arrayUnion(commentDetail),
