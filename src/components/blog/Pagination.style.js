@@ -20,10 +20,15 @@ export const DiaryContainerFlex = styled.div`
 }
 `;
 
-export const DiaryImageDefault = styled.img`
+export const DiaryImageDefault = styled.div`
   width: 150px;
   height: 150px;
   background-color: #ffead7;
+  background-image: ${({ diaryImgUrl }) => (diaryImgUrl
+    ? `url(${diaryImgUrl})`
+    : 'url(https://file.coffee/u/NeyXW_Jb49mXSdLikJm6S.jpg)')};
+  background-size: cover;
+  background-position: center;
   border: 1px solid #ccc;
   margin-right: 20px;
   cursor:pointer;

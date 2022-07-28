@@ -111,8 +111,7 @@ export default function Pagination({ userID, currentUserData }) {
               ? (
                 <DiaryImgContainer>
                   <DiaryImageDefault
-                    src={doc.showImg}
-                    alt={`preview-diary-${index}`}
+                    diaryImgUrl={doc.showImg}
                   />
                 </DiaryImgContainer>
               )
