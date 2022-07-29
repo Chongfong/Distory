@@ -11,13 +11,7 @@
 </p>
 
 ## ▌Introduction
-<table>
-<tr>
-<td>
   Share your story with customized editors integrating text and images.
-</td>
-</tr>
-</table>
 
 ---
 
@@ -132,4 +126,4 @@
 ## ▌Contact
 [Chung-Lin WU](https://github.com/Chongfong)
 
-Email: wl0079665@gmail.com# Distory
+Email: wl0079665@gmail.com
