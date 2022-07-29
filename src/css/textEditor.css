@@ -1,0 +1,31 @@
+.quill {
+  margin: 20px auto;
+  margin-top: 0;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  position: relative;
+}
+
+@media(max-width: 912px){
+  .quill {
+    height:95%;
+  }
+}
+
+
+.ql-toolbar{
+  border: none;
+}
+
+.ql-snow{
+  border: none;
+}
+
+.diary_click_button::after {
+    content: url('../img/pencil.png');
+    position: relative;
+    left:10px;    
+    cursor:pointer;
+    font-size: 1.5rem;
+  }
