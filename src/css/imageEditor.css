@@ -147,6 +147,18 @@
     margin: 0 4px
 }
 
+@media(max-width: 550px){
+    .tui-image-editor-container .tui-image-editor-menu > .tui-image-editor-item,.tui-image-editor-container .tui-image-editor-help-menu > .tui-image-editor-item {
+        padding: 7px 3px 3px 3px;
+    }
+  }
+
+@media(max-width: 450px){
+    .tui-image-editor-container .tui-image-editor-menu > .tui-image-editor-item,.tui-image-editor-container .tui-image-editor-help-menu > .tui-image-editor-item {
+        padding: 7px 0px 3px 1px;
+    }
+  }
+
 .tui-image-editor-container .tui-image-editor-menu > .tui-image-editor-item[tooltip-content]:hover:before,.tui-image-editor-container .tui-image-editor-help-menu > .tui-image-editor-item[tooltip-content]:hover:before {
     content: '';
     position: absolute;
@@ -181,6 +193,15 @@
     background-color: #fff;
     transition: all .3s ease
 }
+
+@media(max-width: 700px){
+    li.tie-btn-icon.tui-image-editor-item.normal{
+        display:none;
+    }
+    .tui-image-editor-menu-icon{
+        overflow-x: auto;
+    }
+  }
 
 .tui-image-editor-container .tui-image-editor-wrap {
     position: absolute
@@ -277,9 +298,36 @@
     margin: 0 9px 0 9px
 }
 
+@media(max-width: 940px){
+    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-button {
+        margin: 0 1px 0 1px;
+    }
+  }
+  
+@media(max-width: 900px){
+    .tui-image-editor-menu-filter{
+        overflow: auto;
+    }
+    .tui-image-editor-menu-filter > .tui-image-editor-submenu-item{
+        width: 300px;
+    }
+  }
+
+@media(max-width: 700px){
+    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-button {
+        margin: 0;
+    }
+  }
+
 .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-button.preset {
-    margin: 0 9px 20px 5px
+    margin: 0 9px 20px 5px;
 }
+
+@media(max-width: 450px){
+    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-button.preset {
+        margin: 0 1px 20px 1px;
+    }
+  }
 
 .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-submenu-item label > span {
     display: inline-block;
@@ -313,13 +361,26 @@
     width: 1px;
     height: 52px;
     border-left: 1px solid #3c3c3c;
-    margin: 0 8px 0 8px
+    margin: 0 8px 0 8px;
 }
+
+@media(max-width: 450px){
+    .tui-image-editor-container .tui-image-editor-partition > div {
+        margin: 0;
+    }
+  }
+
 
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-filter .tui-image-editor-partition > div {
     height: 108px;
     margin: 0 29px 0 0
 }
+
+@media(max-width: 1040px){
+    .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-filter .tui-image-editor-partition > div {
+        margin: 0;
+    }
+  }
 
 .tui-image-editor-container .tui-image-editor-submenu-align {
     text-align: left;
@@ -1059,8 +1120,15 @@
 
 .tui-image-editor-container .svg_ic-submenu {
     width: 32px;
-    height: 32px
+    height: 32px;
 }
+
+@media(max-width: 700px){
+    .tui-image-editor-container .svg_ic-submenu {
+        width: 20px !important;
+        height: 20px !important;
+    }
+  }
 
 .tui-image-editor-container .svg_img-bi {
     width: 257px;
@@ -1342,4 +1410,9 @@
 .text-img{
     max-width: 500px;
     max-height: 500px;
+}
+
+ul.tui-colorpicker-clearfix{
+    display: flex;
+    flex-wrap: wrap;
 }

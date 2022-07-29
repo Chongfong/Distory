@@ -37,7 +37,7 @@ export const DiaryImageDefault = styled.div`
   }
   @media (max-width: 912px) {
     width: 100%;
-    height: 100%;
+    height: 300px;
     flex: 100%;
 }
 `;
@@ -52,7 +52,7 @@ export const DiaryContentFlex = styled.div`
     opacity: 0.5;
   }
   @media (max-width: 912px) {
-    max-width: 90%;
+    width: 70%;
     flex: 100%;
     margin-left: 5px;
 }

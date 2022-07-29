@@ -187,6 +187,7 @@ export const UploadImageCircleButtonCheck = styled.button`
 `;
 
 export const UploadImageCircleButtonCancel = styled(UploadImageCircleButtonCheck)`
+  line-height: 36px;
   font-size: 25px;
   :hover{
     ::after{

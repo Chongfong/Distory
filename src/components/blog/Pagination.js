@@ -74,13 +74,13 @@ export default function Pagination({ userID, currentUserData }) {
             {doc.showImg
               ? (
                 <DiaryImageDefault
-                  src={doc.showImg}
+                  diaryImgUrl={doc.showImg}
                   alt={`preview-diary-${index}`}
                 />
               )
               : (
                 <DiaryImageDefault
-                  src={previewImagesArray[(index % 5)]}
+                  diaryImgUrl={previewImagesArray[(index % 5)]}
                   alt={`preview-diary-${index}`}
                 />
               )}
@@ -118,7 +118,7 @@ export default function Pagination({ userID, currentUserData }) {
               : (
                 <DiaryImgContainer>
                   <DiaryImageDefault
-                    src={previewImagesArray[(index % 5)]}
+                    diaryImgUrl={previewImagesArray[(index % 5)]}
                     alt={`preview-diary-${index}`}
                   />
                 </DiaryImgContainer>
