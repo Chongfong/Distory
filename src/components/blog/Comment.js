@@ -17,9 +17,10 @@ import {
 } from './Comment.style';
 
 export default function Comment({
-  setCommentAll, commentAuthor,
-  commentAll, loginUserDate, setCommentAuthor,
+  setCommentAll,
+  commentAll, loginUserDate,
 }) {
+  const [commentAuthor, setCommentAuthor] = useState('');
   const { currentUser } = useContext(AppContext);
   const [commentContent, setCommentContent] = useState();
   const [commentAuthorsInfo, setCommentAuthorsInfo] = useState();
@@ -55,7 +56,7 @@ export default function Comment({
     const commentDiarydoc = doc(articlesCollection, diaryID);
     const commentDetail = {
       commentAuthorID: (currentUser ? currentUser.uid : ''),
-      commentAuthor,
+      commentAuthor: (commentAuthor || loginUserDate.distoryId),
       commentContent,
       commentTime: Timestamp.now().toDate(),
     };
@@ -158,7 +159,7 @@ export default function Comment({
         : ('')}
       <CommentSubTitle>▋&nbsp;發表留言</CommentSubTitle>
       <CommentInputDivContainer>
-        {loginUserDate ? (
+        {Object.keys(loginUserDate).length !== 0 ? (
           <>
             <CommentLoginAuthorImg
               src={loginUserDate.userImage}
@@ -175,7 +176,7 @@ export default function Comment({
             <CommentNickNameInput
               type="text"
               value={commentAuthor}
-              onChange={(e) => setCommentAuthor(e.target.value)}
+              onChange={(e) => { setCommentAuthor(e.target.value); }}
             />
           </>
         )}
@@ -202,16 +203,12 @@ export default function Comment({
 
 Comment.propTypes = {
   setCommentAll: PropTypes.func,
-  commentAuthor: PropTypes.string,
   commentAll: PropTypes.arrayOf(PropTypes.shape()),
   loginUserDate: PropTypes.shape(),
-  setCommentAuthor: PropTypes.func,
 };
 
 Comment.defaultProps = {
   setCommentAll: () => {},
-  commentAuthor: '',
   commentAll: [],
   loginUserDate: {},
-  setCommentAuthor: () => {},
 };

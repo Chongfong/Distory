@@ -35,7 +35,6 @@ export default function BlogArticle() {
   const [userDiaries, setUserDiaries] = useState([]);
   const [commentAll, setCommentAll] = useState();
   const [loginUserDate, setLoginUserData] = useState();
-  const [commentAuthor, setCommentAuthor] = useState();
   const [isShowDiary, setIsShowDiary] = useState(false);
   const [inputPassword, setInputPassword] = useState();
   const [deleteArticle, setDeleteArticle] = useState(false);
@@ -74,7 +73,6 @@ export default function BlogArticle() {
         const querySnapshot = await fetchLoginUser();
         const nowLoginUser = querySnapshot.data();
         setLoginUserData(nowLoginUser);
-        setCommentAuthor(nowLoginUser.distoryId);
         return (nowLoginUser);
       } catch (e) {
         return e.response;
@@ -221,10 +219,8 @@ export default function BlogArticle() {
                   <BlogArticleBottomLine />
                   <Comment
                     setCommentAll={setCommentAll}
-                    commentAuthor={commentAuthor}
                     commentAll={commentAll}
                     loginUserDate={loginUserDate}
-                    setCommentAuthor={setCommentAuthor}
                   />
 
                 </>
