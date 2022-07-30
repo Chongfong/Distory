@@ -107,7 +107,7 @@ export default function Search() {
     {' '}
     的結果
   </SearchTitle>
-  <div className="diary" style={{ display: 'flex', flexWrap: 'wrap' }}>
+  <div className="search" style={{ display: 'flex', flexWrap: 'wrap' }}>
     {(searchTitleResult.map((eachDiary, index) => (
 
       <DiarySmallContainer
