@@ -4,8 +4,9 @@ import React, {
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
-  doc, getDoc, getDocs, collection, query, where,
+  doc, getDoc, getDocs, collection, query, where, deleteDoc,
 } from 'firebase/firestore';
+import { MdDelete } from 'react-icons/md';
 import DOMPurify from 'dompurify';
 import { db } from '../../utils/firestore';
 import { AppContext } from '../../context/AppContext';
@@ -13,9 +14,11 @@ import '../../css/loadDiary.css';
 
 import {
   BlogArticleTitle, BlogArticleDate, BlogAtricleDetailContainer,
-  BlogArticleEditImage, BlogArticleEditImageContainer,
+  BlogArticleEditImage, BlogArticleEditImageContainer, BlogArticleDeleteImageContainer,
   BlogArticleInteractiveContainer, BlogArticleInteractiveButtonContainer,
   BlogArticleInputPassword, BlogArticleCircleButton, BlogArticleBottomLine,
+  BlogArticleDeleteContainer, BlogArticleDeleteWord, BlogArticleDeleteButtonContainer,
+  BlogArticleDeleteButton,
 } from './BlogArticle.style';
 
 import Share from '../../components/blog/Share';
@@ -35,6 +38,7 @@ export default function BlogArticle() {
   const [commentAuthor, setCommentAuthor] = useState();
   const [isShowDiary, setIsShowDiary] = useState(false);
   const [inputPassword, setInputPassword] = useState();
+  const [deleteArticle, setDeleteArticle] = useState(false);
 
   const { userID, diaryID } = useParams();
   const navigate = useNavigate();
@@ -146,19 +150,57 @@ export default function BlogArticle() {
                   <div className="diary" style={{ position: 'relative' }}>
                     <BlogArticleTitle>{eachDiary.title}</BlogArticleTitle>
                     {currentUser ? (userID === currentUser.uid && (
-                    <BlogArticleEditImageContainer
-                      onClick={() => {
-                        navigate(`/${userID}/edit/${diaryID}`);
-                      }}
-                      onKeyUp={() => {
-                        navigate(`/${userID}/edit/${diaryID}`);
-                      }}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <BlogArticleEditImage src={edit} alt="edit" />
+                      <>
+                        {deleteArticle && (
+                        <BlogArticleDeleteContainer>
+                          <BlogArticleDeleteWord>確定要刪除嗎？</BlogArticleDeleteWord>
+                          <BlogArticleDeleteButtonContainer>
+                            <BlogArticleDeleteButton
+                              type="button"
+                              onClick={() => {
+                                setDeleteArticle(false);
+                                const eachDiarydocRef = doc(db, 'articles', diaryID);
+                                deleteDoc(eachDiarydocRef).then(
+                                  toast('文章已刪除', {
+                                    autoClose: 3500,
+                                  }),
+                                  navigate(`/${userID}/`),
+                                );
+                              }}
+                            >
+                              確定
 
-                    </BlogArticleEditImageContainer>
+                            </BlogArticleDeleteButton>
+                            <BlogArticleDeleteButton type="button" onClick={() => setDeleteArticle(false)}>取消</BlogArticleDeleteButton>
+                          </BlogArticleDeleteButtonContainer>
+                        </BlogArticleDeleteContainer>
+                        )}
+                        <BlogArticleDeleteImageContainer
+                          onClick={(() => { setDeleteArticle(true); })}
+                          onKeyUp={() => {
+                            navigate(`/${userID}/edit/${diaryID}`);
+                          }}
+                          role="button"
+                          tabIndex={0}
+                        >
+                          <MdDelete style={{ fontSize: '30px' }} />
+
+                        </BlogArticleDeleteImageContainer>
+                        <BlogArticleEditImageContainer
+                          onClick={() => {
+                            navigate(`/${userID}/edit/${diaryID}`);
+                          }}
+                          onKeyUp={() => {
+                            navigate(`/${userID}/edit/${diaryID}`);
+                          }}
+                          role="button"
+                          tabIndex={0}
+                        >
+                          <BlogArticleEditImage src={edit} alt="edit" />
+
+                        </BlogArticleEditImageContainer>
+
+                      </>
                     )) : ('')}
                     <BlogArticleDate>
                       {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
