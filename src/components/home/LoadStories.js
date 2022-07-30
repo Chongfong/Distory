@@ -113,14 +113,79 @@ export default function LoadStories() {
 
   const scrollable = useRef(null);
 
-  const scrollRight = () => {
-    const scrollWidth = scrollable.current.offsetWidth + 20;
-    scrollable.current.scrollBy({ left: scrollWidth, behavior: 'smooth' });
+  const scrollRight = (mode, reverse) => {
+    let scrollWidth;
+    if (mode === 'web') {
+      scrollWidth = scrollable.current.offsetWidth + 20;
+    }
+    if (mode === 'mobile') {
+      scrollWidth = scrollable.current.offsetWidth + 10;
+    }
+    if (reverse === true) {
+      scrollable.current.scrollBy({ left: -scrollWidth, behavior: 'smooth' });
+    } else { scrollable.current.scrollBy({ left: scrollWidth, behavior: 'smooth' }); }
   };
 
-  const scrollLeft = () => {
-    const scrollWidth = scrollable.current.offsetWidth + 20;
-    scrollable.current.scrollBy({ left: -scrollWidth, behavior: 'smooth' });
+  const renderScrollStoriesRight = () => {
+    if (storiesAvailable) {
+      if (scrollable.current.offsetWidth > 812) {
+        if (chosedStoryIndex < (storiesAvailable.length - 5)) {
+          return (
+            <StoryArrowButtonRight
+              onClick={() => {
+                setChosedStoryIndex(chosedStoryIndex + 5);
+                scrollRight('web', false);
+              }}
+            >
+              &gt;
+            </StoryArrowButtonRight>
+          );
+        }
+      } if (chosedStoryIndex < (storiesAvailable.length - 3)) {
+        return (
+          <StoryArrowButtonRight
+            onClick={() => {
+              setChosedStoryIndex(chosedStoryIndex + 3);
+              scrollRight('mobile', false);
+            }}
+          >
+            &gt;
+          </StoryArrowButtonRight>
+
+        );
+      }
+    } return true;
+  };
+
+  const renderScrollStoriesLeft = () => {
+    if (storiesAvailable) {
+      if (scrollable.current.offsetWidth > 812) {
+        if (chosedStoryIndex >= 5) {
+          return (
+            <StoryArrowButtonLeft
+              onClick={() => {
+                setChosedStoryIndex(chosedStoryIndex - 5);
+                scrollRight('web', true);
+              }}
+            >
+              &lt;
+            </StoryArrowButtonLeft>
+
+          );
+        }
+      } if (chosedStoryIndex >= 3) {
+        return (
+          <StoryArrowButtonLeft
+            onClick={() => {
+              setChosedStoryIndex(chosedStoryIndex - 3);
+              scrollRight('mobile', true);
+            }}
+          >
+            &lt;
+          </StoryArrowButtonLeft>
+        );
+      }
+    } return true;
   };
 
   return (
@@ -131,7 +196,7 @@ export default function LoadStories() {
           ref={scrollable}
         >
           {storiesAvailable
-            ? (
+            && (
               <>
                 {(openStory && chosedIndex <= storiesAvailable.length - 1) && (
                 <ShowStoryDetail
@@ -153,7 +218,7 @@ export default function LoadStories() {
                   .map((eachStory, index) => (
                     <StoryContainer key={`story-${Date.now() + index}`}>
 
-                      {storyAuthorsInfo ? (
+                      {storyAuthorsInfo && (
                         <>
                           <StoryImgContainer
                             storyImgUrl={eachStory.imageUrl}
@@ -182,33 +247,14 @@ export default function LoadStories() {
                           </StoryAuthorContainer>
 
                         </>
-                      ) : ('')}
+                      )}
                     </StoryContainer>
                   ))}
               </>
-            ) : (<p>目前未有動態</p>)}
+            )}
         </StoryInnerContainer>
-        {storiesAvailable && (
-          (chosedStoryIndex < (storiesAvailable.length - 5) ? (
-            <StoryArrowButtonRight
-              onClick={() => {
-                setChosedStoryIndex(chosedStoryIndex + 5);
-                scrollRight();
-              }}
-            >
-              →
-            </StoryArrowButtonRight>
-          ) : ('')))}
-        {chosedStoryIndex >= 5 ? (
-          <StoryArrowButtonLeft
-            onClick={() => {
-              setChosedStoryIndex(chosedStoryIndex - 5);
-              scrollLeft();
-            }}
-          >
-            ←
-          </StoryArrowButtonLeft>
-        ) : ('')}
+        {renderScrollStoriesRight()}
+        {renderScrollStoriesLeft()}
       </StoryOuterContainer>
 
     </>

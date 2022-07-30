@@ -25,13 +25,13 @@ import Loader from '../../components/share/Loader';
 
 export default function EditBlog() {
   const { currentUser, currentUserData, setCurrentUserData } = useContext(AppContext);
-  const [blogTitle, setBlogTitle] = useState();
-  const [blogIntro, setBlogIntro] = useState();
+  const [blogTitle, setBlogTitle] = useState('');
+  const [blogIntro, setBlogIntro] = useState('');
   const [blogImage, setBlogImage] = useState();
   const [blogImageFile, setBlogImageFile] = useState();
   const [, setBlogImageUrl] = useState();
-  const [blogLayout, setBlogLayout] = useState();
-  const [blogContentLayout, setBlogContentLayout] = useState();
+  const [blogLayout, setBlogLayout] = useState('A');
+  const [blogContentLayout, setBlogContentLayout] = useState('A');
   const navigate = useNavigate();
 
   const [currentUserImage, setCurrentUserImage] = useState();

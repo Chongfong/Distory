@@ -1,10 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState, useCallback, useEffect, useContext,
+} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   arrayUnion, collection, doc, getDoc, Timestamp, updateDoc, query, getDocs, where,
 } from 'firebase/firestore';
 import { db } from '../../utils/firestore';
+import { AppContext } from '../../context/AppContext';
 
 import {
   CommentsContainer, CommentNickName, CommentTime, CommentDivContainer, CommentDetailDiv,
@@ -14,9 +17,11 @@ import {
 } from './Comment.style';
 
 export default function Comment({
-  currentUser, setCommentAll, commentAuthor,
-  commentAll, loginUserDate, setCommentAuthor,
+  setCommentAll,
+  commentAll, loginUserDate,
 }) {
+  const [commentAuthor, setCommentAuthor] = useState('');
+  const { currentUser } = useContext(AppContext);
   const [commentContent, setCommentContent] = useState();
   const [commentAuthorsInfo, setCommentAuthorsInfo] = useState();
   const navigate = useNavigate();
@@ -46,16 +51,16 @@ export default function Comment({
     loadingDiaryComments();
   }, [diaryRef, setCommentAll]);
 
-  const postCommentDB = () => {
+  const postCommentDB = async () => {
     const articlesCollection = collection(db, 'articles');
     const commentDiarydoc = doc(articlesCollection, diaryID);
     const commentDetail = {
       commentAuthorID: (currentUser ? currentUser.uid : ''),
-      commentAuthor,
+      commentAuthor: (commentAuthor || loginUserDate.distoryId),
       commentContent,
       commentTime: Timestamp.now().toDate(),
     };
-    updateDoc(
+    await updateDoc(
       commentDiarydoc,
       {
         comments: arrayUnion(commentDetail),
@@ -117,7 +122,9 @@ export default function Comment({
       {commentAll ? (
         <CommentsContainer>
           {commentAll.map((eachComment, index) => (
-            <>
+            <React.Fragment
+              key={`comment-container-${Date.now() + index}`}
+            >
               {eachComment && (
                 <CommentDivContainer>
                   {commentAuthorsInfo
@@ -144,7 +151,7 @@ export default function Comment({
                 </CommentDivContainer>
               ) }
               {}
-            </>
+            </React.Fragment>
           ))}
 
         </CommentsContainer>
@@ -152,7 +159,7 @@ export default function Comment({
         : ('')}
       <CommentSubTitle>▋&nbsp;發表留言</CommentSubTitle>
       <CommentInputDivContainer>
-        {loginUserDate ? (
+        {Object.keys(loginUserDate).length !== 0 ? (
           <>
             <CommentLoginAuthorImg
               src={loginUserDate.userImage}
@@ -169,7 +176,7 @@ export default function Comment({
             <CommentNickNameInput
               type="text"
               value={commentAuthor}
-              onChange={(e) => setCommentAuthor(e.target.value)}
+              onChange={(e) => { setCommentAuthor(e.target.value); }}
             />
           </>
         )}
@@ -195,19 +202,13 @@ export default function Comment({
 }
 
 Comment.propTypes = {
-  currentUser: PropTypes.string,
-  setCommentAll: PropTypes.string,
-  commentAuthor: PropTypes.string,
-  commentAll: PropTypes.string,
-  loginUserDate: PropTypes.string,
-  setCommentAuthor: PropTypes.string,
+  setCommentAll: PropTypes.func,
+  commentAll: PropTypes.arrayOf(PropTypes.shape()),
+  loginUserDate: PropTypes.shape(),
 };
 
 Comment.defaultProps = {
-  currentUser: '',
-  setCommentAll: '',
-  commentAuthor: '',
-  commentAll: '',
-  loginUserDate: '',
-  setCommentAuthor: '',
+  setCommentAll: () => {},
+  commentAll: [],
+  loginUserDate: {},
 };

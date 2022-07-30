@@ -20,10 +20,15 @@ export const DiaryContainerFlex = styled.div`
 }
 `;
 
-export const DiaryImageDefault = styled.img`
+export const DiaryImageDefault = styled.div`
   width: 150px;
   height: 150px;
   background-color: #ffead7;
+  background-image: ${({ diaryImgUrl }) => (diaryImgUrl
+    ? `url(${diaryImgUrl})`
+    : 'url(https://file.coffee/u/NeyXW_Jb49mXSdLikJm6S.jpg)')};
+  background-size: cover;
+  background-position: center;
   border: 1px solid #ccc;
   margin-right: 20px;
   cursor:pointer;
@@ -32,7 +37,7 @@ export const DiaryImageDefault = styled.img`
   }
   @media (max-width: 912px) {
     width: 100%;
-    height: 100%;
+    height: 300px;
     flex: 100%;
 }
 `;
@@ -47,7 +52,7 @@ export const DiaryContentFlex = styled.div`
     opacity: 0.5;
   }
   @media (max-width: 912px) {
-    max-width: 90%;
+    width: 70%;
     flex: 100%;
     margin-left: 5px;
 }

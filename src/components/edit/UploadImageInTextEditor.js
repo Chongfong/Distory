@@ -9,7 +9,7 @@ import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage, UploadImageFileUrl, UploadImageWord,
   UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel,
-  UploadImageCircleButtonCheck, UploadImageCircleButtonCancel,
+  UploadImageCircleButtonCheck, UploadImageCircleButtonCancel, UploadImageWarning,
 } from './UploadImageInTextEditor.style';
 
 import ImageEditorDefaultImage from './ImageEditorDefaultImage';
@@ -20,7 +20,6 @@ export default function UploadImageInTextEditor({
   textEditorRef,
   isOpen,
   setIsOpen,
-  textEditorCursorIndex,
 }) {
   const [uploadFromFile, setUploadFromFile] = useState('default');
   const [imageFileUrl, setImageFileUrl] = useState();
@@ -50,23 +49,11 @@ export default function UploadImageInTextEditor({
       uploadImageUrl = upload;
     }
     const cursorPosition = textEditorRef.current.editor.selection.savedRange.index;
-    textEditorRef.current.editor.insertEmbed(cursorPosition, 'image', {
+    textEditorRef.current.editor.insertEmbed(cursorPosition, 'customImg', {
       alt: `image${Date.now()}`,
       url: uploadImageUrl,
-      class: 'diary_image',
+      class: 'diary_image_div',
     }, Quill.sources.USER);
-
-    const Delta = Quill.import('delta');
-
-    textEditorRef.current.editor.insertEmbed(cursorPosition, 'clickButton', {
-      url: uploadImageUrl,
-      class: 'diary_click_button',
-    }, Quill.sources.USER);
-    if (textEditorCursorIndex.current !== 0) {
-      textEditorRef.current.editor.updateContents(new Delta()
-        .retain(textEditorCursorIndex.current + 2)
-        .delete(1));
-    }
 
     textEditorRef.current.editor.setSelection(cursorPosition);
   };
@@ -113,7 +100,14 @@ export default function UploadImageInTextEditor({
             onChange={(e) => setUrl(e.target.value)}
           />
           <br />
-          {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : ('')}
+          {url.length !== 0 ? (<UploadImagePreviewImage alt="previewImageUrl" src={url} />) : (
+            <UploadImageWarning>
+              因應網頁瀏覽安全，部分網址圖片不支援編輯功能
+              <br />
+              <br />
+              此處將顯示圖片預覽
+            </UploadImageWarning>
+          )}
         </form>
       );
     }
@@ -243,18 +237,16 @@ UploadImageInTextEditor.propTypes = {
   setImageUrl: PropTypes.func,
   url: PropTypes.string,
   setUrl: PropTypes.func,
-  textEditorRef: PropTypes.string,
+  textEditorRef: PropTypes.shape(),
   isOpen: PropTypes.bool,
   setIsOpen: PropTypes.func,
-  textEditorCursorIndex: PropTypes.string,
 };
 
 UploadImageInTextEditor.defaultProps = {
   setImageUrl: () => {},
   url: '',
   setUrl: () => {},
-  textEditorRef: '',
+  textEditorRef: {},
   isOpen: false,
   setIsOpen: () => {},
-  textEditorCursorIndex: '',
 };

@@ -58,8 +58,9 @@ export default function ChooseEditArtices({
             <ChooseEditTitleDate>日期</ChooseEditTitleDate>
             <ChooseEditTitle>標題</ChooseEditTitle>
           </ChooseEditTitleContainer>
-          {draftDiaries ? (draftDiaries.map((eachDiary) => (
+          {draftDiaries ? (draftDiaries.map((eachDiary, index) => (
             <ChooseEditEachDiaryRow
+              key={`draft-diary-${Date.now() + index}`}
               onClick={() => {
                 setTitleValue(eachDiary.title);
                 setDiaryContentValue(eachDiary.content);
@@ -91,13 +92,13 @@ export default function ChooseEditArtices({
 ChooseEditArtices.propTypes = {
   setTitleValue: PropTypes.func,
   setDiaryContentValue: PropTypes.func,
-  isChoosing: PropTypes.string,
+  isChoosing: PropTypes.bool,
   setIsChoosing: PropTypes.func,
 };
 
 ChooseEditArtices.defaultProps = {
   setTitleValue: () => {},
   setDiaryContentValue: () => {},
-  isChoosing: '',
+  isChoosing: false,
   setIsChoosing: () => {},
 };

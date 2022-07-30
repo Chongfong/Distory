@@ -4,6 +4,7 @@ export const Body = styled.div`
   width: 98vw;
   position: relative;
   height: auto;
+  z-index: -1;
   padding-bottom: 30px;
 `;
 
@@ -24,5 +25,6 @@ export const FooterWords = styled.div`
   bottom: 20px;
   text-align: center;
   color: #b8b8b8;
+  z-index: -1;
   margin: 0px auto 20px;
   `;

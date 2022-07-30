@@ -33,9 +33,10 @@ export const DiarySmallContainer = styled.div`
   flex-wrap: wrap;
   margin: 9px;
   justify-content: space-between;
-  padding: 20px;
+  padding:  15px 20px 33px;
   cursor: pointer;
   border-bottom: 1px solid #BEB3B4;
+  max-height: 180px;
   @media (max-width: 912px) {
     flex: 0 1 100%;
 
@@ -117,7 +118,9 @@ export const DiaryTitleInsideBox = styled.div`
   display:flex;
   flex-wrap: wrap;
   text-align: left;
-  padding-left: 10px;
+  padding-left: 15px;
+  height: calc( 100% - 50px);
+  align-content: space-between;
   :hover, :active, :focus{
     opacity: 0.7
   }
@@ -130,7 +133,7 @@ export const DiaryImageInsideBox = styled.div`
 export const DiaryTitle = styled.p`
   color: #72677E;
   font-size: 1.3em;
-  margin-bottom: 1.5%;
+  margin: 0;
   font-weight: bold;
   line-height: 140%;
   flex: 100%;
@@ -165,6 +168,7 @@ export const DiaryPublishTime = styled.p`
   flex: 100%;
   font-size: 1.2rem;
   padding: 5px 0 !important;
+  margin: 5px 0px;
 `;
 
 export const DiaryProfileImg = styled.img`
@@ -294,7 +298,7 @@ export const HomeProfileSubTitle = styled.p`
   color: #d3b092;
   text-align: left;
   width: 90%;
-  margin: 0px auto !important;
+  margin: 0px auto 50px !important;
 `;
 
 export const HomeIntroContainer = styled(HomeInviteDiv)`

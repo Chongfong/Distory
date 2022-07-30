@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   collection, doc, updateDoc, arrayUnion, arrayRemove,
 } from 'firebase/firestore';
@@ -7,11 +7,13 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { db } from '../../utils/firestore';
 import { BlogArticleLikesContainer, InteractiveImage, NonInteractiveImage } from '../../pages/blogArticle/BlogArticle.style';
+import { AppContext } from '../../context/AppContext';
 
 import heart from '../../img/heart.png';
 import heartPink from '../../img/heart-pink.png';
 
-export default function Like({ currentUser, nowlikeUsers }) {
+export default function Like({ nowlikeUsers }) {
+  const { currentUser } = useContext(AppContext);
   const [likeUsers, setLikeUsers] = useState(nowlikeUsers);
   const { userID, diaryID } = useParams();
 
@@ -157,11 +159,9 @@ export default function Like({ currentUser, nowlikeUsers }) {
 }
 
 Like.propTypes = {
-  currentUser: PropTypes.string,
-  nowlikeUsers: PropTypes.string,
+  nowlikeUsers: PropTypes.arrayOf(PropTypes.string),
 };
 
 Like.defaultProps = {
-  currentUser: '',
-  nowlikeUsers: '',
+  nowlikeUsers: [],
 };

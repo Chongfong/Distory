@@ -118,7 +118,7 @@ export default function Home() {
         <HomeBody>
           <DiaryOutContainer>
             <DiaryAllContainer
-              className="diary"
+              className="home-diary"
             >
               {allDiaries.map((eachDiary, index) => (
                 <React.Fragment key={`${Date.now() + index}`}>

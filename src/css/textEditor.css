@@ -24,8 +24,19 @@
 
 .diary_click_button::after {
     content: url('../img/pencil.png');
-    position: relative;
-    left:10px;    
+    position: absolute;
+    left:10px;
+    bottom:10px;    
     cursor:pointer;
     font-size: 1.5rem;
   }
+
+.diary_image_div{
+  position: relative;
+}
+
+.ql-editor img{
+  width: 95%;
+  max-width: 500px;
+  max-height: 500px;
+}
