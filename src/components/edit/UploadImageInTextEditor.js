@@ -237,7 +237,7 @@ UploadImageInTextEditor.propTypes = {
   setImageUrl: PropTypes.func,
   url: PropTypes.string,
   setUrl: PropTypes.func,
-  textEditorRef: PropTypes.string,
+  textEditorRef: PropTypes.shape(),
   isOpen: PropTypes.bool,
   setIsOpen: PropTypes.func,
 };
@@ -246,7 +246,7 @@ UploadImageInTextEditor.defaultProps = {
   setImageUrl: () => {},
   url: '',
   setUrl: () => {},
-  textEditorRef: '',
+  textEditorRef: {},
   isOpen: false,
   setIsOpen: () => {},
 };

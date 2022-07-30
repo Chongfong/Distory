@@ -258,8 +258,10 @@ export default function MyBlog() {
                   <MyBlogProfileSubTitle style={{ width: '80%' }}>Visitors</MyBlogProfileSubTitle>
                   <MyBlogVisitorContainer>
                     {visitMyHomeAll
-                      .map((eachVisitor) => (
-                        <MyBlogVisitorDiv>
+                      .map((eachVisitor, index) => (
+                        <MyBlogVisitorDiv
+                          key={`myblog-visitor-${Date.now() + index}`}
+                        >
                           <ClickableDiv
                             role="button"
                             tabIndex={0}

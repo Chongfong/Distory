@@ -212,8 +212,8 @@ PhotoEditor.propTypes = {
   openImageEditor: PropTypes.bool,
   setOpenImageEditor: PropTypes.func,
   setUrl: PropTypes.func,
-  textEditorRef: PropTypes.string,
-  textEditorCursorIndex: PropTypes.string,
+  textEditorRef: PropTypes.shape(),
+  textEditorCursorIndex: PropTypes.number,
   setTextEditorCursorIndex: PropTypes.func,
 };
 
@@ -224,7 +224,7 @@ PhotoEditor.defaultProps = {
   openImageEditor: false,
   setOpenImageEditor: () => {},
   setUrl: () => {},
-  textEditorRef: '',
-  textEditorCursorIndex: '',
+  textEditorRef: {},
+  textEditorCursorIndex: 0,
   setTextEditorCursorIndex: () => {},
 };

@@ -132,21 +132,21 @@ export default function ShowStoryDetail({
 ShowStoryDetail.propTypes = {
   setChosedImg: PropTypes.func,
   setOpenStory: PropTypes.func,
-  storiesImgAvailable: PropTypes.string,
-  chosedIndex: PropTypes.string,
+  storiesImgAvailable: PropTypes.arrayOf(PropTypes.string),
+  chosedIndex: PropTypes.number,
   setChosedIndex: PropTypes.func,
-  storiesTimeAll: PropTypes.string,
-  imgLoading: PropTypes.string,
+  storiesTimeAll: PropTypes.arrayOf(PropTypes.shape()),
+  imgLoading: PropTypes.bool,
   setImgLoading: PropTypes.func,
 };
 
 ShowStoryDetail.defaultProps = {
   setChosedImg: () => {},
   setOpenStory: () => {},
-  storiesImgAvailable: '',
-  chosedIndex: '',
+  storiesImgAvailable: [],
+  chosedIndex: 0,
   setChosedIndex: () => {},
-  storiesTimeAll: '',
-  imgLoading: '',
+  storiesTimeAll: [],
+  imgLoading: true,
   setImgLoading: () => {},
 };

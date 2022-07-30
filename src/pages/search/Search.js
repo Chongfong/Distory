@@ -110,7 +110,9 @@ export default function Search() {
   <div className="diary" style={{ display: 'flex', flexWrap: 'wrap' }}>
     {(searchTitleResult.map((eachDiary, index) => (
 
-      <DiarySmallContainer>
+      <DiarySmallContainer
+        key={`search-diary-container-${Date.now() + index}`}
+      >
         <DiaryImageBoxNormal
           role="button"
           tabIndex={0}

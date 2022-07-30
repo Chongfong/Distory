@@ -137,8 +137,10 @@ export default function BlogArticle() {
     <>
       {currentUserData ? (
         <ul>
-          {userDiaries.map((eachDiary) => (
-            <>
+          {userDiaries.map((eachDiary, index) => (
+            <React.Fragment
+              key={`article-detail-container-${Date.now() + index}`}
+            >
               {eachDiary.password === '' || isShowDiary ? (
                 <>
                   <div className="diary" style={{ position: 'relative' }}>
@@ -168,7 +170,7 @@ export default function BlogArticle() {
                   </div>
                   <BlogArticleInteractiveContainer>
                     <BlogArticleInteractiveButtonContainer>
-                      <Like currentUser={currentUser} nowlikeUsers={eachDiary.likeDiary} />
+                      <Like nowlikeUsers={eachDiary.likeDiary} />
                     </BlogArticleInteractiveButtonContainer>
                     <BlogArticleInteractiveButtonContainer>
                       <Share url={window.location.href} title={eachDiary.title} />
@@ -176,7 +178,6 @@ export default function BlogArticle() {
                   </BlogArticleInteractiveContainer>
                   <BlogArticleBottomLine />
                   <Comment
-                    currentUser={currentUser}
                     setCommentAll={setCommentAll}
                     commentAuthor={commentAuthor}
                     commentAll={commentAll}
@@ -211,7 +212,7 @@ export default function BlogArticle() {
               )}
               {}
 
-            </>
+            </React.Fragment>
           ))}
         </ul>
       ) : <Loader />}

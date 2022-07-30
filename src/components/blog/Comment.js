@@ -1,10 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState, useCallback, useEffect, useContext,
+} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   arrayUnion, collection, doc, getDoc, Timestamp, updateDoc, query, getDocs, where,
 } from 'firebase/firestore';
 import { db } from '../../utils/firestore';
+import { AppContext } from '../../context/AppContext';
 
 import {
   CommentsContainer, CommentNickName, CommentTime, CommentDivContainer, CommentDetailDiv,
@@ -14,9 +17,10 @@ import {
 } from './Comment.style';
 
 export default function Comment({
-  currentUser, setCommentAll, commentAuthor,
+  setCommentAll, commentAuthor,
   commentAll, loginUserDate, setCommentAuthor,
 }) {
+  const { currentUser } = useContext(AppContext);
   const [commentContent, setCommentContent] = useState();
   const [commentAuthorsInfo, setCommentAuthorsInfo] = useState();
   const navigate = useNavigate();
@@ -117,7 +121,9 @@ export default function Comment({
       {commentAll ? (
         <CommentsContainer>
           {commentAll.map((eachComment, index) => (
-            <>
+            <React.Fragment
+              key={`comment-container-${Date.now() + index}`}
+            >
               {eachComment && (
                 <CommentDivContainer>
                   {commentAuthorsInfo
@@ -144,7 +150,7 @@ export default function Comment({
                 </CommentDivContainer>
               ) }
               {}
-            </>
+            </React.Fragment>
           ))}
 
         </CommentsContainer>
@@ -195,19 +201,17 @@ export default function Comment({
 }
 
 Comment.propTypes = {
-  currentUser: PropTypes.string,
-  setCommentAll: PropTypes.string,
+  setCommentAll: PropTypes.func,
   commentAuthor: PropTypes.string,
-  commentAll: PropTypes.string,
-  loginUserDate: PropTypes.string,
-  setCommentAuthor: PropTypes.string,
+  commentAll: PropTypes.arrayOf(PropTypes.shape()),
+  loginUserDate: PropTypes.shape(),
+  setCommentAuthor: PropTypes.func,
 };
 
 Comment.defaultProps = {
-  currentUser: '',
-  setCommentAll: '',
+  setCommentAll: () => {},
   commentAuthor: '',
-  commentAll: '',
-  loginUserDate: '',
-  setCommentAuthor: '',
+  commentAll: [],
+  loginUserDate: {},
+  setCommentAuthor: () => {},
 };
