@@ -16,6 +16,7 @@ export const ChooseEditTitleContainer = styled.div`
 
 export const ChooseEditTitleDate = styled.p`
   flex-basis: auto;
+  margin: auto 5px;
 `;
 
 export const ChooseEditTitle = styled.p`
@@ -29,19 +30,28 @@ export const ChooseEditEachDiaryRow = styled.div`
   cursor: pointer;
   border-bottom: 1px solid #ccc;
   margin: 5px;
+  align-items: center;
+  max-width: 100%;
+  justify-content: space-around;
+  @media (max-width: 912px) {
+    max-width: calc( 100% - 10px);
+}
   :hover, :active, :focus{
     opacity: 0.5;
   }
 `;
 
 export const ChooseEditTime = styled.p`
-  flex-basis: 10%;
+  flex-basis: auto;
 `;
 
 export const ChooseEditDiaryTitle = styled.p`
   flex-basis: 80%;
   text-align: left;
   padding: 0px 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const ChooseEditDiaryPencilContainer = styled.div`

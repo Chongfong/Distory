@@ -115,6 +115,7 @@ export const StoryAuthorImg = styled.img`
 export const StoryAuthorName = styled.p`
   flex: 100%;
   width: 85%;
+  margin: 10px;
   font-size: 1.2rem;
   text-shadow:0px 0px 4px #fff;
 `;
@@ -246,7 +247,7 @@ export const StoryArrowButtonRight = styled.button`
   text-align: center;
   font-size: 20px;
   cursor: pointer;
-  line-height: 0px;
+  line-height: 38px;
   border: rgb(211, 176, 146) 2px solid;
   background-color: white;
   color: rgb(211, 176, 146);

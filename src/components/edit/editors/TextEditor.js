@@ -60,13 +60,13 @@ export default function TextEditor(
 TextEditor.propTypes = {
   diaryContentValue: PropTypes.string,
   setDiaryContentValue: PropTypes.func,
-  textEditorRef: PropTypes.string,
+  textEditorRef: PropTypes.shape(),
   setTextEditorCursorIndex: PropTypes.func,
 };
 
 TextEditor.defaultProps = {
   diaryContentValue: '',
   setDiaryContentValue: () => {},
-  textEditorRef: '',
+  textEditorRef: {},
   setTextEditorCursorIndex: () => {},
 };

@@ -61,6 +61,7 @@ export default function Pagination({ userID, currentUserData }) {
       { page !== 0
         ? (list.slice(page * 3, page * 3 + 3).map((doc, index) => (
           <DiaryContainerFlex
+            key={`diary-container-${Date.now() + index}`}
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
             tabIndex={0}
@@ -74,13 +75,13 @@ export default function Pagination({ userID, currentUserData }) {
             {doc.showImg
               ? (
                 <DiaryImageDefault
-                  src={doc.showImg}
+                  diaryImgUrl={doc.showImg}
                   alt={`preview-diary-${index}`}
                 />
               )
               : (
                 <DiaryImageDefault
-                  src={previewImagesArray[(index % 5)]}
+                  diaryImgUrl={previewImagesArray[(index % 5)]}
                   alt={`preview-diary-${index}`}
                 />
               )}
@@ -97,6 +98,7 @@ export default function Pagination({ userID, currentUserData }) {
           </DiaryContainerFlex>
         ))) : ((list.slice(0, 3).map((doc, index) => (
           <DiaryContainerFlex
+            key={`diary-container-${Date.now() + index}`}
             blogContentOrder={currentUserData.blogContentLayout === 'A'}
             role="button"
             tabIndex={0}
@@ -111,15 +113,14 @@ export default function Pagination({ userID, currentUserData }) {
               ? (
                 <DiaryImgContainer>
                   <DiaryImageDefault
-                    src={doc.showImg}
-                    alt={`preview-diary-${index}`}
+                    diaryImgUrl={doc.showImg}
                   />
                 </DiaryImgContainer>
               )
               : (
                 <DiaryImgContainer>
                   <DiaryImageDefault
-                    src={previewImagesArray[(index % 5)]}
+                    diaryImgUrl={previewImagesArray[(index % 5)]}
                     alt={`preview-diary-${index}`}
                   />
                 </DiaryImgContainer>
@@ -139,8 +140,9 @@ export default function Pagination({ userID, currentUserData }) {
 
         ))))}
       {totalPages ? (Array.from(Array(totalPages.current).keys())).map(
-        (eachPage) => (
+        (eachPage, index) => (
           <DiaryPage
+            key={`diary-page-${Date.now() + index}`}
             onClick={() => setPage(eachPage)}
             onKeyUp={() => setPage(eachPage)}
             role="button"
@@ -156,11 +158,11 @@ export default function Pagination({ userID, currentUserData }) {
 }
 
 Pagination.propTypes = {
-  userID: PropTypes.objectOf(PropTypes.string),
-  currentUserData: PropTypes.string,
+  userID: PropTypes.string,
+  currentUserData: PropTypes.shape(),
 };
 
 Pagination.defaultProps = {
-  userID: {},
-  currentUserData: '',
+  userID: '',
+  currentUserData: {},
 };

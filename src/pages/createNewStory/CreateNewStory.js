@@ -8,7 +8,7 @@ import {
 import {
   FlexBox, UploadImageTitle, UploadNavBar, UploadImageNavButtom, UploadImageContainer,
   UploadImageFromUrl, UploadImagePreviewImage, UploadImageFileUrl, UploadImageWord,
-  UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel,
+  UploadImageImg, UplaodImageInput, UploadImageForm, UploadImageLabel, UploadImageWarning,
 } from '../../components/edit/UploadImageInTextEditor.style';
 
 import { AppContext } from '../../context/AppContext';
@@ -27,7 +27,7 @@ const CreateStoryCircleButtonCheck = styled.button`
   margin: 5px 10px;
   text-align: center;
   font-size: 20px;
-  line-height: 40px;
+  line-height: 25px;
   cursor: pointer;
   border: #7f0019 2px solid;
   background-color: white;
@@ -41,7 +41,7 @@ const CreateStoryCircleButtonCheck = styled.button`
       color: white;
       content:'完成';
       position: absolute;
-      top: -2px;
+      top: 5px;
       left: 5px;
       font-size: 12px;
     }
@@ -50,10 +50,12 @@ const CreateStoryCircleButtonCheck = styled.button`
 `;
 
 const CreateStoryCircleButtonCancel = styled(CreateStoryCircleButtonCheck)`
+  line-height: 25px;
   font-size: 25px;
   :hover{
     ::after{
       content:'取消';
+      top: 5px;
     }
   }
 `;
@@ -137,12 +139,19 @@ export default function CreateNewStory() {
             onChange={(e) => setUrl(e.target.value)}
           />
           <br />
-          {url && (
-          <UploadImagePreviewImage
-            alt="previewImageUrl"
-            style={{ maxHeight: '400px' }}
-            src={url}
-          />
+          {url ? (
+            <UploadImagePreviewImage
+              alt="previewImageUrl"
+              style={{ maxHeight: '400px' }}
+              src={url}
+            />
+          ) : (
+            <UploadImageWarning>
+              因應網頁瀏覽安全，部分網址圖片不支援編輯功能
+              <br />
+              <br />
+              此處將顯示圖片預覽
+            </UploadImageWarning>
           )}
         </form>
       );

@@ -18,26 +18,37 @@ export const myTheme = {
 export const ImageEditorStickerButton = styled.img`
   width: 25px;
   height: 22px;
-  display: ${({ isOpenSticker }) => (isOpenSticker ? 'none' : 'block')};
+  display: block;
   filter: brightness(0) invert(1);
   opacity: 0.4;
   margin: 0 auto;
   cursor: pointer;
+  :hover{
+    opacity: 0.7;
+  }
 `;
 
 export const ImageEditorSticker = styled.img`
+  max-width: 50px;
+  max-height: 50px;
   margin: 5px 10px;
+  cursor: pointer;
+  :hover {
+    opacity: 0.5;
+  }
 `;
 
 export const ImageEditorStickerContainer = styled.div`
   position: absolute;
-  top: 70px;
+  bottom: 112px;
   left: 0;
   width: 100%;
-  height: 25%;
+  height: auto;
   background-color: #FCFAF2;
   display: ${({ isOpenSticker }) => (isOpenSticker ? 'block' : 'none')};
-
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 0px;
 `;
 
 export const ImageEditorStickerOpenContainer = styled.div`
@@ -78,4 +89,7 @@ export const ImageEditorSubmitButtonsForm = styled.form`
     right: 25px;
     bottom: 16px;
     z-index: 3;
+    @media (min-height: 912px) {
+    bottom: 30px;
+  }
 `;

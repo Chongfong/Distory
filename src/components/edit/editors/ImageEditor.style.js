@@ -80,9 +80,11 @@ export const CircleButtonPlusStory = styled(CircleButtonPlus)`
 `;
 
 export const CircleButtonCancel = styled(CircleButton)`
+  line-height: 36px;
   :hover{
     ::after{
       content:'取消';
+      top: 0px;
       }
       }
 `;

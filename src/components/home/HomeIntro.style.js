@@ -21,14 +21,14 @@ export const HomeInviteTitle = styled.p`
 
 export const HomeIntroContainer = styled.div`
   width: 100%;
-  height: 700px;
+  height: auto;
   display: flex;
   flex-wrap: wrap;
   border-top: 1px solid #b8b8b8;
   margin-bottom: 120px;
   justify-content: center;
   @media (max-width: 912px) {
-    height: auto;
+    margin-bottom: 80px;
 }
 `;
 
