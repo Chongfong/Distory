@@ -19,6 +19,7 @@ import {
   BlogUserImageDiv, BlogEditInnerContainer, EditBlogBasicContainer, BlogEditPencil,
   BlogEditCircleButton, EditBlogProfileImg, EditBlogInsideBody, EditBlogNavTitle,
   EditBlogInputTitle, EditBlogPublish, EditBlogInputProfileImg, EditBlogBasicContainerProfileImg,
+  EditBlogTitleDetail,
 } from './EditBlog.style';
 
 import Loader from '../../components/share/Loader';
@@ -332,6 +333,7 @@ export default function EditBlog() {
           </BlogEditInnerContainer>
 
           <EditBlogTitle>進版畫面設定</EditBlogTitle>
+          <EditBlogTitleDetail>（長寬將自動縮放）</EditBlogTitleDetail>
 
           <BlogBackgroundImageLabel
             htmlFor="upload-blogImage"
