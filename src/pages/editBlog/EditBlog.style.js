@@ -1,8 +1,13 @@
 import styled from 'styled-components';
 
-export const EditBlogTitle = styled.div`
+export const EditBlogTitle = styled.span`
   margin: 10px 0px;
   font-size: 1.25rem;
+`;
+
+export const EditBlogTitleDetail = styled(EditBlogTitle)`
+  font-size: 0.8rem;
+  color: #bbb;
 `;
 
 export const EditBlogLayout = styled.img`
