@@ -22,7 +22,7 @@ export default function SignUp({ setIsSignUp }) {
   const [isLoading, setIsLoading] = useState(false);
   const [signUpEmail, setSignUpEmail] = useState();
   const [signUpPassword, setSignUpPassword] = useState();
-  const [signupImageUrl] = useState('https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png');
+  const signupImageUrl = 'https://3.bp.blogspot.com/-dTyV6hN6QN4/Viio5AlSBnI/AAAAAAAAzqg/HNtoJT4ecTc/s800/book_inu_yomu.png';
 
   const navigate = useNavigate();
 
