@@ -28,7 +28,9 @@ export default function Share({ url, title }) {
         });
       }
     } else {
-      e.clipboardData.setData('text/plain', `${url}`);
+      document.designMode = 'on';
+      e.preventDefault();
+      await e.clipboardData.setData('text/plain', `${url}`);
       toast('已複製網址至剪貼簿', {
         autoClose: 3500,
       });
