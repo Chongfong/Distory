@@ -139,9 +139,9 @@ export default function BlogArticle() {
     <>
       {currentUserData ? (
         <ul>
-          {userDiaries.map((eachDiary, index) => (
+          {userDiaries.map((eachDiary) => (
             <React.Fragment
-              key={`article-detail-container-${Date.now() + index}`}
+              key={`article-detail-container-${eachDiary.diaryID}`}
             >
               {eachDiary.password === '' || isShowDiary ? (
                 <>
@@ -233,7 +233,10 @@ export default function BlogArticle() {
                     {eachDiary.passwordHint}
                   </p>
                   <BlogArticleInputPassword
-                    onChange={(e) => setInputPassword(e.target.value)}
+                    onChange={(e) => {
+                      setInputPassword(e.target.value);
+                    }}
+                    value={inputPassword}
                     placeholder="請輸入密碼"
                   />
                   <br />

@@ -218,7 +218,7 @@ export const HeaderLoginOptionsSpecial = styled(HeaderLoginOptions)`
 `;
 
 export const HeaderOptionsExplain = styled.div`
-  width: 50px;
+  width: 57px;
   font-size: 12px;
   height: 20px;
   background-color: white;
@@ -227,7 +227,8 @@ export const HeaderOptionsExplain = styled.div`
   text-align: center;
   position: absolute;
   padding: 0px 3px;
-  right: 0px;
+  right: 50%;
+  transform: translate(50%);
   bottom: -10px;
   color: black;
   display: ${({ isHovered }) => (isHovered ? 'block' : 'none')};

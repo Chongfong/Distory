@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useCallback,
+  useEffect, useState, useCallback, useContext,
 } from 'react';
 import {
   collection,
@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../../utils/firestore';
+import { AppContext } from '../../context/AppContext';
 
 import {
   HomeBody, DiaryContainer, DiaryImageBox, DiaryInfoBox,
@@ -37,6 +38,8 @@ export const previewImagesArray = [
   'https://file.coffee/u/4VidEWw87CJvCU7o7h29i.jpg'];
 
 export default function Home() {
+  const { currentUser } = useContext(AppContext);
+
   const fetchDiaries = () => new Promise((resolve) => {
     const diariesCollection = collection(db, 'articles');
     const q = query(diariesCollection, where('status', '==', 'published'), where('password', '==', ''), orderBy('publishAt', 'desc'));
@@ -170,17 +173,28 @@ export default function Home() {
                       <LoadStories />
                       <HomeInviteDiv>
                         <HomeInviteTitle>
-                          加入&nbsp;
+                          歡迎光臨&nbsp;
                           <span style={{ color: '#b57c4a' }}>Distory</span>
                           &nbsp;的世界
                         </HomeInviteTitle>
                         <HomeInviteButtonContainer>
-                          <Link to="/signup">
-                            <HomeInviteButton>免費註冊</HomeInviteButton>
-                          </Link>
-                          <Link to="/login">
-                            <HomeInviteButton>立即登入</HomeInviteButton>
-                          </Link>
+                          {currentUser
+                            ? (
+                              <Link to={`/${currentUser.uid}`}>
+                                <HomeInviteButton>我的小窩</HomeInviteButton>
+                              </Link>
+                            )
+                            : (
+                              <>
+                                <Link to="/signup">
+                                  <HomeInviteButton>免費註冊</HomeInviteButton>
+                                </Link>
+                                <Link to="/login">
+                                  <HomeInviteButton>立即登入</HomeInviteButton>
+                                </Link>
+
+                              </>
+                            )}
                         </HomeInviteButtonContainer>
                       </HomeInviteDiv>
                     </>

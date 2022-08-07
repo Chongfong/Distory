@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const CommentDivContainer = styled.div`
   display:flex;
-  align-items: center;
+  align-items: flex-start;
   width: 90%;
   margin-top: 15px;
 `;
@@ -28,6 +28,10 @@ export const CommentNickName = styled.p`
   font-size: 1.2rem;
   margin: 3px 3px 3px 10px;
   color: #b8b8b8;
+  max-width: 85px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const CommentNickNameLogin = styled(CommentNickName)`
@@ -55,7 +59,11 @@ export const CommentTime = styled.p`
 `;
 
 export const CommentDetail = styled.p`
+  padding-left: 5px;
   margin: 3px;
+  max-width: calc(100% - 98px);
+  word-wrap: break-word;
+  text-align: left;
 `;
 
 export const CommentsContainer = styled.div`
@@ -111,6 +119,7 @@ export const CommentAuthorImg = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  padding-top: 5px;
 `;
 
 export const CommentLoginAuthorImg = styled.img`
