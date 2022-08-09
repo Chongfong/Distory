@@ -53,6 +53,7 @@ export default function Header({
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && searchkey !== '') {
       navigate(`/search/${searchkey}`);
+      setSearchKey('');
     }
   };
 
@@ -121,8 +122,8 @@ export default function Header({
                 <HeaderSearchIconContainer
                   role="button"
                   tabIndex={0}
-                  onClick={() => navigate(`/search/${searchkey}`)}
-                  onKeyUp={() => navigate(`/search/${searchkey}`)}
+                  onClick={() => { navigate(`/search/${searchkey}`); setSearchKey(''); }}
+                  onKeyUp={() => { navigate(`/search/${searchkey}`); setSearchKey(''); }}
                 >
                   <img
                     src={search}
