@@ -10,12 +10,12 @@ import { previewImagesArray } from '../home/Home';
 
 import {
   HomeBody, DiaryOutContainer, DiarySmallContainer, HomeImageNormal, DiaryInfoBox,
-  DiaryTitleInsideBox, DiaryTitle, DiaryPublishTime,
+  DiaryTitleInsideBox, DiaryTitle, DiaryPublishTime, SearchDiv,
   DiaryImageBoxNormal, DiaryProfileImageBoxNormal, DiaryProfileImg, SearchTitle,
 } from '../home/Home.style';
 
 export default function Search() {
-  const [searchTitleResult, setSearchTitleResult] = useState();
+  const [searchTitleResult, setSearchTitleResult] = useState([]);
   const navigate = useNavigate();
 
   const { searchkey } = useParams();
@@ -44,7 +44,7 @@ export default function Search() {
           });
           setSearchTitleResult(userDiariesAll);
           return userDiariesAll;
-        }
+        }setSearchTitleResult([]);
       } catch (e) {
         toast('施工中，返回首頁', {
           autoClose: 2000,
@@ -97,74 +97,78 @@ export default function Search() {
 
   return (
     <HomeBody>
-      {searchTitleResult
-&& (
-<DiaryOutContainer>
-  <SearchTitle>
-    搜尋
-    {' '}
-    {searchkey}
-    {' '}
-    的結果
-  </SearchTitle>
-  <div className="search" style={{ display: 'flex', flexWrap: 'wrap' }}>
-    {(searchTitleResult.map((eachDiary, index) => (
+      <DiaryOutContainer>
+        <SearchTitle>
+          搜尋
+          {' '}
+          {searchkey}
+          {' '}
+          的結果
+        </SearchTitle>
+        <SearchDiv className="search">
+          {searchTitleResult.length !== 0 ? (searchTitleResult.map((eachDiary, index) => (
+            <DiarySmallContainer
+              key={`search-diary-container-${Date.now() + index}`}
+            >
+              <DiaryImageBoxNormal
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                }}
+                onKeyUp={() => {
+                  navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                }}
+              >
+                {eachDiary.showImg ? (<HomeImageNormal src={eachDiary.showImg} alt={`diary-${index}`} />)
+                  : (<HomeImageNormal src={previewImagesArray[Math.floor(Math.random() * 5)]} alt={`diary-${index}`} />)}
+              </DiaryImageBoxNormal>
+              <DiaryInfoBox>
+                <DiaryTitleInsideBox
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                  }}
+                  onKeyUp={() => {
+                    navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
+                  }}
+                >
+                  <DiaryTitle>{eachDiary.title.slice(0, 60)}</DiaryTitle>
+                  <DiaryPublishTime>
+                    {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
+                  </DiaryPublishTime>
+                </DiaryTitleInsideBox>
 
-      <DiarySmallContainer
-        key={`search-diary-container-${Date.now() + index}`}
-      >
-        <DiaryImageBoxNormal
-          role="button"
-          tabIndex={0}
-          onClick={() => {
-            navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-          }}
-          onKeyUp={() => {
-            navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-          }}
-        >
-          {eachDiary.showImg ? (<HomeImageNormal src={eachDiary.showImg} alt={`diary-${index}`} />)
-            : (<HomeImageNormal src={previewImagesArray[Math.floor(Math.random() * 5)]} alt={`diary-${index}`} />)}
-        </DiaryImageBoxNormal>
-        <DiaryInfoBox>
-          <DiaryTitleInsideBox
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-            }}
-            onKeyUp={() => {
-              navigate(`/${eachDiary.author}/${eachDiary.diaryID}`);
-            }}
-          >
-            <DiaryTitle>{eachDiary.title.slice(0, 60)}</DiaryTitle>
-            <DiaryPublishTime>
-              {transformTimeToDate(eachDiary.publishAt.seconds * 1000)}
-            </DiaryPublishTime>
-          </DiaryTitleInsideBox>
+                <DiaryProfileImageBoxNormal
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    navigate(`/${eachDiary.author}`);
+                  }}
+                  onKeyUp={() => {
+                    navigate(`/${eachDiary.author}`);
+                  }}
+                >
+                  <DiaryProfileImg
+                    alt="author"
+                    src={allDiariesAuthorImg[index]}
+                  />
+                </DiaryProfileImageBoxNormal>
+              </DiaryInfoBox>
+            </DiarySmallContainer>
+          ))) : (
+            <div>
+              查無
+              {' '}
+              {searchkey}
+              {' '}
+              的相關結果
+            </div>
+          )}
 
-          <DiaryProfileImageBoxNormal
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              navigate(`/${eachDiary.author}`);
-            }}
-            onKeyUp={() => {
-              navigate(`/${eachDiary.author}`);
-            }}
-          >
-            <DiaryProfileImg
-              alt="author"
-              src={allDiariesAuthorImg[index]}
-            />
-          </DiaryProfileImageBoxNormal>
-        </DiaryInfoBox>
-      </DiarySmallContainer>
-    )))}
-
-  </div>
-</DiaryOutContainer>
-)}
+        </SearchDiv>
+      </DiaryOutContainer>
     </HomeBody>
   );
 }

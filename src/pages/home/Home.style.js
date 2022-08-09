@@ -290,6 +290,13 @@ export const HomeWelcomeWords = styled.p`
 export const SearchTitle = styled.p`
   font-size: 1.5rem;
   margin-bottom: 100px;
+  width: 100%;
+`;
+
+export const SearchDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 `;
 
 export const HomeProfileSubTitle = styled.p`
