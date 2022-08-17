@@ -253,15 +253,21 @@ export const StoryArrowButtonRight = styled.button`
   color: rgb(211, 176, 146);
   position: absolute;
   top: 40%;
-  right: 0px;
+  right: -10px;
   :hover{
     background-color: rgb(211, 176, 146);
     color: white;
   }
+  @media (max-width: 912px) {
+    right: -5px;
+}
 `;
 
 export const StoryArrowButtonLeft = styled(StoryArrowButtonRight)`
-  left: 0px;
+  left: -10px;
+  @media (max-width: 912px) {
+    left: -5px;
+}
 `;
 
 export const StoryProgressLineContainer = styled.div`
