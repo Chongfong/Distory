@@ -15,28 +15,19 @@ export default function ShowStoryDetail({
 }) {
   const intervalRef = useRef();
 
-  useEffect(() => {
-    clearInterval(intervalRef.current);
-  }, [imgLoading]);
-
   const [loadingPercentage, setLoadingPercentage] = useState(0);
 
   useEffect(() => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      if (loadingPercentage < 5) {
-        setLoadingPercentage((prev) => prev + 1);
-      } else {
-        setLoadingPercentage(0);
-        clearInterval(intervalRef.current);
-        setChosedIndex((prev) => prev + 1);
-      }
-    }, 1000);
-  }, [loadingPercentage, imgLoading, setChosedIndex]);
+    if (loadingPercentage > 5) {
+      clearInterval(intervalRef.current);
+      setLoadingPercentage(0);
+      setChosedIndex((prev) => prev + 1);
+    }
+  }, [loadingPercentage, setChosedIndex, imgLoading]);
 
   return (
     <>
-      {chosedIndex <= storiesImgAvailable.length - 1 ? (
+      {chosedIndex <= storiesImgAvailable.length - 1 && (
         <PopUpBackDiv>
           <StoryCloseButton onClick={() => { setOpenStory(false); }}>
             ×
@@ -53,15 +44,6 @@ export default function ShowStoryDetail({
                   setLoadingPercentage(0);
                   setImgLoading(false);
                   clearInterval(intervalRef.current);
-                  intervalRef.current = setInterval(() => {
-                    if (loadingPercentage < 5) {
-                      setLoadingPercentage((prev) => prev + 1);
-                    } else {
-                      setLoadingPercentage(0);
-                      clearInterval(intervalRef.current);
-                      setChosedIndex((prev) => prev + 1);
-                    }
-                  }, 1000);
                 }}
               >
                 &lt;
@@ -77,15 +59,6 @@ export default function ShowStoryDetail({
                   setLoadingPercentage(0);
                   setImgLoading(false);
                   clearInterval(intervalRef.current);
-                  intervalRef.current = setInterval(() => {
-                    if (loadingPercentage < 5) {
-                      setLoadingPercentage((prev) => prev + 1);
-                    } else {
-                      setLoadingPercentage(0);
-                      clearInterval(intervalRef.current);
-                      setChosedIndex((prev) => prev + 1);
-                    }
-                  }, 1000);
                 }}
               >
                 &gt;
@@ -104,9 +77,6 @@ export default function ShowStoryDetail({
                   alt="imageUrl"
                   style={imgLoading[chosedIndex] ? { backgroundColor: 'black', opacity: '0' } : { opacity: '1' }}
                   onLoad={() => {
-                    setLoadingPercentage(0);
-                    setImgLoading(false);
-                    clearInterval(intervalRef.current);
                     intervalRef.current = setInterval(() => {
                       if (loadingPercentage < 5) {
                         setLoadingPercentage((prev) => prev + 1);
@@ -123,7 +93,7 @@ export default function ShowStoryDetail({
             </StoryPhotoContainer>
           </StoryPopUpContainer>
         </PopUpBackDiv>
-      ) : ('') }
+      )}
       {}
     </>
   );
