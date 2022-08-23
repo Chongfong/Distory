@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import {
   ImageEditorDefaultImageContainer, ImageEditorDefaultImageInnerImage,
   ImageEditorDefaultImageInnerImageContainer,
 } from './editors/imageEditorTheme';
+import { SpinnerDiv } from '../share/Loader';
 
 export const defaultImageStoryUrls = [
   'https://file.coffee/u/T4mBFiUOJI6xANqCfVCai.jpg',
@@ -22,12 +23,24 @@ export default function ImageEditorDefaultImage(
     url, setUrl, setImageUrl, insertEditablePhoto, setIsOpen, setOpenImageEditor,
   },
 ) {
+  const [imgLoading, setImgLoading] = useState(
+    [true, true, true, true, true, true, true, true],
+  );
+
+  const handleOnload = (index) => {
+    setImgLoading((prev) => {
+      const newImgLoading = [...prev];
+      newImgLoading[index] = false;
+      return newImgLoading;
+    });
+  };
+
   return (
     <ImageEditorDefaultImageContainer>
       {defaultImageStoryUrls.map((eachDefaultImageUrl, index) => (
         (eachDefaultImageUrl === 'https://file.coffee/u/sZeBwM7pCZmIcdcUYAGvn.png' ? (
           <ImageEditorDefaultImageInnerImageContainer
-            key={`default_image-${Date.now() + index}`}
+            key={`default_image-${eachDefaultImageUrl}`}
             onClick={() => { setUrl('https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'); }}
             selected={url === 'https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'}
             onDoubleClick={() => {
@@ -38,11 +51,17 @@ export default function ImageEditorDefaultImage(
               setUrl();
             }}
           >
-            <ImageEditorDefaultImageInnerImage src={eachDefaultImageUrl} alt={`default-${index}`} />
+            <SpinnerDiv imgLoading={imgLoading[index]} />
+            <ImageEditorDefaultImageInnerImage
+              imgLoading={imgLoading[index]}
+              src={eachDefaultImageUrl}
+              alt={`default-${index}`}
+              onLoad={() => { handleOnload(index); }}
+            />
           </ImageEditorDefaultImageInnerImageContainer>
         ) : (
           <ImageEditorDefaultImageInnerImageContainer
-            key={`default_image-${Date.now() + index}`}
+            key={`default_image-${eachDefaultImageUrl}`}
             onClick={() => { setUrl(eachDefaultImageUrl); }}
             selected={url === eachDefaultImageUrl}
             onDoubleClick={() => {
@@ -53,12 +72,18 @@ export default function ImageEditorDefaultImage(
               setUrl();
             }}
           >
-            <ImageEditorDefaultImageInnerImage src={eachDefaultImageUrl} alt={`default-${index}`} />
+            <SpinnerDiv imgLoading={imgLoading[index]} />
+            <ImageEditorDefaultImageInnerImage
+              imgLoading={imgLoading[index]}
+              src={eachDefaultImageUrl}
+              alt={`default-${index}`}
+              onLoad={() => {
+                handleOnload(index);
+              }}
+            />
           </ImageEditorDefaultImageInnerImageContainer>
         ))
-
       ))}
-
     </ImageEditorDefaultImageContainer>
   );
 }
