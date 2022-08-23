@@ -72,6 +72,7 @@ export const ImageEditorDefaultImageInnerImageContainer = styled.div`
   margin: 5px;
   cursor: pointer;
   outline: ${({ selected }) => (selected ? '2px solid #ccc' : 'none')};
+  position:relative;
   @media (max-width: 650px) {
     flex: 80%;
 }
@@ -82,6 +83,8 @@ export const ImageEditorDefaultImageInnerImageContainer = styled.div`
 
 export const ImageEditorDefaultImageInnerImage = styled.img`
   width: 100%;
+  opacity: ${(props) => (props.imgLoading ? '0' : '1')};
+  transition: ${(props) => (props.imgLoading ? 'none' : 'opacity 1.5s;')};
 `;
 
 export const ImageEditorSubmitButtonsForm = styled.form`

@@ -105,8 +105,8 @@ export default function Home() {
               diaryAuthorsArray.push(querySnapshotEach.data().userImage);
             }
           });
+          setIsLoading(false);
         }); setAllDiariesAuthorImg(diaryAuthorsArray);
-        setIsLoading(false);
       }
     }; getAuthorInfoFunc();
   }, [allDiaries]);
