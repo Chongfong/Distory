@@ -73,6 +73,7 @@ export const ImageEditorDefaultImageInnerImageContainer = styled.div`
   cursor: pointer;
   outline: ${({ selected }) => (selected ? '2px solid #ccc' : 'none')};
   position:relative;
+  min-height: 250px;
   @media (max-width: 650px) {
     flex: 80%;
 }
