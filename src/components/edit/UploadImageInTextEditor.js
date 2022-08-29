@@ -147,6 +147,7 @@ export default function UploadImageInTextEditor({
                 uploadImageMethod={uploadImageMethod}
                 onClick={() => {
                   setUploadFromFile('url');
+                  setUrl();
                 }}
               >
                 網址
