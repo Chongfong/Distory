@@ -43,13 +43,6 @@ export default function ImageEditorDefaultImage(
             key={`default_image-${eachDefaultImageUrl}`}
             onClick={() => { setUrl('https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'); }}
             selected={url === 'https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'}
-            onDoubleClick={() => {
-              setImageUrl(url);
-              insertEditablePhoto(url);
-              setIsOpen(false);
-              setOpenImageEditor(true);
-              setUrl();
-            }}
           >
             <SpinnerDiv imgLoading={imgLoading[index]} />
             <ImageEditorDefaultImageInnerImage
@@ -57,6 +50,13 @@ export default function ImageEditorDefaultImage(
               src={eachDefaultImageUrl}
               alt={`default-${index}`}
               onLoad={() => { handleOnload(index); }}
+              onDoubleClick={() => {
+                setImageUrl(url);
+                insertEditablePhoto(url);
+                setIsOpen(false);
+                setOpenImageEditor(true);
+                setUrl();
+              }}
             />
           </ImageEditorDefaultImageInnerImageContainer>
         ) : (
@@ -64,13 +64,6 @@ export default function ImageEditorDefaultImage(
             key={`default_image-${eachDefaultImageUrl}`}
             onClick={() => { setUrl(eachDefaultImageUrl); }}
             selected={url === eachDefaultImageUrl}
-            onDoubleClick={() => {
-              setImageUrl(url);
-              insertEditablePhoto(url);
-              setIsOpen(false);
-              setOpenImageEditor(true);
-              setUrl();
-            }}
           >
             <SpinnerDiv imgLoading={imgLoading[index]} />
             <ImageEditorDefaultImageInnerImage
@@ -79,6 +72,13 @@ export default function ImageEditorDefaultImage(
               alt={`default-${index}`}
               onLoad={() => {
                 handleOnload(index);
+              }}
+              onDoubleClick={() => {
+                setImageUrl(url);
+                insertEditablePhoto(url);
+                setIsOpen(false);
+                setOpenImageEditor(true);
+                setUrl();
               }}
             />
           </ImageEditorDefaultImageInnerImageContainer>

@@ -258,6 +258,7 @@ export default function CreateNewStory() {
                     uploadImageMethod={uploadImageMethod}
                     onClick={() => {
                       setUploadFromFile('url');
+                      setUrl();
                     }}
                   >
                     網址
