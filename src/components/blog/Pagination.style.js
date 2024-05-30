@@ -26,7 +26,7 @@ export const DiaryImageDefault = styled.div`
   background-color: #ffead7;
   background-image: ${({ diaryImgUrl }) => (diaryImgUrl
     ? `url(${diaryImgUrl})`
-    : 'url(https://file.coffee/u/NeyXW_Jb49mXSdLikJm6S.jpg)')};
+    : 'url(https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/yDBwlsE2SWC_ABi4wrdfL.jpg?alt=media&token=da571ffb-fab6-4430-987a-b2fddf303e4b)')};
   background-size: cover;
   background-position: center;
   border: 1px solid #ccc;

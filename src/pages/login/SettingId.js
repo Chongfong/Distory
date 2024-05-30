@@ -21,7 +21,7 @@ import {
 import { ArrowButton } from '../../components/edit/editors/ImageEditor.style';
 
 export default function SettingId({ settingId, setSettingId }) {
-  const [settingImageUrl] = useState('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
+  const [settingImageUrl] = useState('https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/pb8xZKCszWCEOtM9HC3yH.png?alt=media&token=5347c34d-a1f0-492c-a33f-96f3874fa494');
 
   const navigate = useNavigate();
   const userCollection = collection(db, 'users');
@@ -33,7 +33,7 @@ export default function SettingId({ settingId, setSettingId }) {
       userImage: settingImageUrl,
       createAt: Timestamp.now().toDate(),
       userUID: uid,
-      blogImage: 'https://file.coffee/u/5hzGTlSZl34G_c1HMtTuI.png',
+      blogImage: 'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/5hzGTlSZl34G_c1HMtTuI.png?alt=media&token=9801b809-5a88-43fc-81fb-14f1a9446f91',
       blogTitle: `${settingId}的部落格`,
       blogIntro: `Hello I'm ${settingId}`,
       blogLayout: 'A',

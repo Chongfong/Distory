@@ -8,14 +8,12 @@ import {
 import { SpinnerDiv } from '../share/Loader';
 
 export const defaultImageStoryUrls = [
-  'https://file.coffee/u/T4mBFiUOJI6xANqCfVCai.jpg',
-  'https://file.coffee/u/mmoV1bEYOKsyvtXcdkX4i.jpg',
-  'https://file.coffee/u/HMJIhQO3AaVYxd426ZZnu.png',
-  'https://file.coffee/u/viDXwAAZfeQLeqMNRCJcn.png',
-  'https://file.coffee/u/SUYgXbTjoIvd1jnSlHWHD.png',
-  'https://file.coffee/u/zpu-DF2qmAkhKBvFeRc5k.png',
-  'https://file.coffee/u/KqmKVeiocq_bn4Rc-uqBq.png',
-  'https://file.coffee/u/sZeBwM7pCZmIcdcUYAGvn.png',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/HMJIhQO3AaVYxd426ZZnu.png?alt=media&token=9cfaa728-49f9-47c0-97f3-48fac9d59fee',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/KqmKVeiocq_bn4Rc-uqBq.png?alt=media&token=ef2e072e-9c5c-4e9a-b6c3-f16ba8780a7a',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/SUYgXbTjoIvd1jnSlHWHD.png?alt=media&token=2196d957-5306-45f0-95c8-6ee62a7869ab',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/viDXwAAZfeQLeqMNRCJcn.png?alt=media&token=4ea9b259-5f0b-4362-a6fc-001e7f8d85b6',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/T4mBFiUOJI6xANqCfVCai.jpg?alt=media&token=b2e760ae-c58d-40d9-bb8b-7654196918ce',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/mmoV1bEYOKsyvtXcdkX4i.jpg?alt=media&token=bcf6a7a4-a62f-4424-ba8a-27c62a703869',
 ];
 
 export default function ImageEditorDefaultImage(
@@ -38,11 +36,11 @@ export default function ImageEditorDefaultImage(
   return (
     <ImageEditorDefaultImageContainer>
       {defaultImageStoryUrls.map((eachDefaultImageUrl, index) => (
-        (eachDefaultImageUrl === 'https://file.coffee/u/sZeBwM7pCZmIcdcUYAGvn.png' ? (
+        (eachDefaultImageUrl === 'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/HMJIhQO3AaVYxd426ZZnu.png?alt=media&token=9cfaa728-49f9-47c0-97f3-48fac9d59fee' ? (
           <ImageEditorDefaultImageInnerImageContainer
             key={`default_image-${eachDefaultImageUrl}`}
-            onClick={() => { setUrl('https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'); }}
-            selected={url === 'https://file.coffee/u/1TeilKNgShmshtxryhp5d.png'}
+            onClick={() => { setUrl('https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/mmoV1bEYOKsyvtXcdkX4i.jpg?alt=media&token=bcf6a7a4-a62f-4424-ba8a-27c62a703869'); }}
+            selected={url === 'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/mmoV1bEYOKsyvtXcdkX4i.jpg?alt=media&token=bcf6a7a4-a62f-4424-ba8a-27c62a703869'}
           >
             <SpinnerDiv imgLoading={imgLoading[index]} />
             <ImageEditorDefaultImageInnerImage

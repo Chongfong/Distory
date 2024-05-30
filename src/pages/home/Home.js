@@ -31,11 +31,11 @@ import HomeIntro from '../../components/home/HomeIntro';
 import Loader from '../../components/share/Loader';
 
 export const previewImagesArray = [
-  'https://file.coffee/u/pk6HROQiXzoh8qxIxho0F.jpg',
-  'https://file.coffee/u/k9JaFxf5SM95WDSLyEZ8-.jpg',
-  'https://file.coffee/u/yDBwlsE2SWC_ABi4wrdfL.jpg',
-  'https://file.coffee/u/NeyXW_Jb49mXSdLikJm6S.jpg',
-  'https://file.coffee/u/4VidEWw87CJvCU7o7h29i.jpg'];
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/4VidEWw87CJvCU7o7h29i.jpg?alt=media&token=f3b6e155-9adb-40a5-94f6-8e77950305cc',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/NeyXW_Jb49mXSdLikJm6S.jpg?alt=media&token=75cb5f9b-b090-4b4b-8da2-fa9a81154c68',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/k9JaFxf5SM95WDSLyEZ8-.jpg?alt=media&token=0313c19a-d5e0-4ff6-bae5-652a5baa713f',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/pk6HROQiXzoh8qxIxho0F.jpg?alt=media&token=cdfe15dc-e93d-47e3-982f-41a704bf7f2e',
+  'https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/yDBwlsE2SWC_ABi4wrdfL.jpg?alt=media&token=da571ffb-fab6-4430-987a-b2fddf303e4b'];
 
 export default function Home() {
   const { currentUser } = useContext(AppContext);

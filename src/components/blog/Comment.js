@@ -96,7 +96,7 @@ export default function Comment({
         }));
         story.forEach((querySnapshot) => {
           if (querySnapshot.empty) {
-            storyAuthorsArray.push('https://file.coffee/u/pb8xZKCszWCEOtM9HC3yH.png');
+            storyAuthorsArray.push('https://firebasestorage.googleapis.com/v0/b/distory-1b7a6.appspot.com/o/pb8xZKCszWCEOtM9HC3yH.png?alt=media&token=5347c34d-a1f0-492c-a33f-96f3874fa494');
           } else {
             querySnapshot.forEach((querySnapshotEach) => {
               if (!querySnapshotEach.empty) {
